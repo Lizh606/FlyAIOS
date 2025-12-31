@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   ChevronRight, RefreshCw, 
@@ -39,14 +38,14 @@ const ROUTES = {
 
 const DroneMarker = ({ x, y, angle = 0, isPaused = false }: { x: number, y: number, angle?: number, isPaused?: boolean }) => (
   <g transform={`translate(${x}, ${y}) rotate(${angle})`}>
-    <circle r="18" fill={isPaused ? "rgba(245, 158, 11, 0.1)" : "rgba(38, 100, 255, 0.1)"} className={isPaused ? "" : "animate-ping"} />
+    <circle r="18" fill={isPaused ? "rgba(var(--fa-warning), 0.1)" : "rgba(var(--fa-brand), 0.1)"} className={isPaused ? "" : "animate-ping"} />
     <path d="M-12,-12 L12,12 M-12,12 L12,-12" stroke="white" strokeWidth="3" strokeLinecap="round" />
-    <circle cx="-12" cy="-12" r="4" fill={isPaused ? "#F59E0B" : "#2664FF"} stroke="white" strokeWidth="1.5" />
-    <circle cx="12" cy="12" r="4" fill={isPaused ? "#F59E0B" : "#2664FF"} stroke="white" strokeWidth="1.5" />
-    <circle cx="-12" cy="12" r="4" fill={isPaused ? "#F59E0B" : "#2664FF"} stroke="white" strokeWidth="1.5" />
-    <circle cx="12" cy="-12" r="4" fill={isPaused ? "#F59E0B" : "#2664FF"} stroke="white" strokeWidth="1.5" />
-    <rect x="-6" y="-6" width="12" height="12" fill="#111827" rx="2" stroke="white" strokeWidth="1" />
-    <circle cx="0" cy="-6" r="1.5" fill={isPaused ? "#F59E0B" : "#EF4444"} />
+    <circle cx="-12" cy="-12" r="4" fill={isPaused ? "rgb(var(--fa-warning))" : "rgb(var(--fa-brand))"} stroke="white" strokeWidth="1.5" />
+    <circle cx="12" cy="12" r="4" fill={isPaused ? "rgb(var(--fa-warning))" : "rgb(var(--fa-brand))"} stroke="white" strokeWidth="1.5" />
+    <circle cx="-12" cy="12" r="4" fill={isPaused ? "rgb(var(--fa-warning))" : "rgb(var(--fa-brand))"} stroke="white" strokeWidth="1.5" />
+    <circle cx="12" cy="-12" r="4" fill={isPaused ? "rgb(var(--fa-warning))" : "rgb(var(--fa-brand))"} stroke="white" strokeWidth="1.5" />
+    <rect x="-6" y="-6" width="12" height="12" fill="rgb(var(--fa-bg-topbar))" rx="2" stroke="white" strokeWidth="1" />
+    <circle cx="0" cy="-6" r="1.5" fill={isPaused ? "rgb(var(--fa-warning))" : "rgb(var(--fa-error))"} />
   </g>
 );
 
@@ -64,10 +63,8 @@ const MissionControlPage: React.FC = () => {
   const [selectedProfileId, setSelectedProfileId] = useState('standard');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isBottomPanelCollapsed, setIsBottomPanelCollapsed] = useState(false);
-  
-  // Fix: Add setter for isReturning as it is used in handleExecute
-  const [isPaused] = useState(false);
   const [isReturning, setIsReturning] = useState(false);
+  const [isPaused] = useState(false);
 
   const currentRoute = useMemo(() => ROUTES[patternType] || [], [patternType]);
   const activeProfile = useMemo(() => CAPTURE_PROFILES.find(p => p.id === selectedProfileId), [selectedProfileId]);
@@ -138,21 +135,21 @@ const MissionControlPage: React.FC = () => {
   };
 
   return (
-    <div className="h-[calc(100vh-56px)] flex flex-col bg-[#F3F4F6] overflow-hidden">
+    <div className="h-[calc(100vh-56px)] flex flex-col bg-bgPage overflow-hidden">
       {/* Sub Header */}
-      <div className="bg-white border-b border-[#E5E7EB] px-6 h-12 flex items-center justify-between shrink-0 z-30 shadow-sm">
+      <div className="bg-bgCard border-b border-borderDefault px-6 h-12 flex items-center justify-between shrink-0 z-30 shadow-sm">
         <div className="flex items-center gap-5">
           <nav className="flex items-center gap-2">
-            <Link to="/" className="flex items-center gap-1.5 text-gray-400 hover:text-[#2664FF] transition-colors">
+            <Link to="/" className="flex items-center gap-1.5 text-textTertiary hover:text-brand transition-colors">
               <Box size={14} />
-              <span className="text-[11px] font-bold uppercase tracking-[0.1em]">{t('nav.projects')}</span>
+              <span className="fa-t6 font-bold uppercase tracking-widest">{t('nav.projects')}</span>
             </Link>
-            <ChevronRight size={10} className="text-gray-300" />
+            <ChevronRight size={10} className="text-textTertiary/40" />
             <div className="flex items-center gap-2">
-              <h1 className="text-[12px] font-bold text-gray-900 uppercase tracking-tight">{t('mission.title')}</h1>
-              <div className="flex items-center gap-1.5 bg-green-50 px-2 py-0.5 rounded-full border border-green-100 ml-1">
-                <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-[9px] font-black text-green-700 tracking-widest uppercase">D-729 {t('mission.dockOnline')}</span>
+              <h1 className="fa-t6 font-bold text-textPrimary uppercase tracking-tight">{t('mission.title')}</h1>
+              <div className="flex items-center gap-1.5 bg-success/10 px-2 py-0.5 rounded-full border border-success/20 ml-1">
+                <div className="w-1.5 h-1.5 bg-success rounded-full animate-pulse"></div>
+                <span className="text-[9px] font-black text-success tracking-widest uppercase">D-729 {t('mission.dockOnline')}</span>
               </div>
             </div>
           </nav>
@@ -161,16 +158,16 @@ const MissionControlPage: React.FC = () => {
         <div className="flex items-center gap-3">
           <button 
             onClick={() => navigate(`/project/history/${id || '8271'}`)} 
-            className="h-8 px-4 bg-white border border-gray-200 text-gray-600 rounded-lg text-[11px] font-bold hover:bg-gray-50 transition-all uppercase tracking-wider flex items-center gap-2 shadow-sm"
+            className="h-8 px-4 bg-bgCard border border-borderDefault text-textSecondary rounded-control fa-t6 font-bold hover:bg-actionHover transition-all uppercase tracking-wider flex items-center gap-2"
           >
-            <History size={14} className="text-gray-600 shrink-0" /> {t('mission.viewHistory')}
+            <History size={14} className="shrink-0" /> {t('mission.viewHistory')}
           </button>
         </div>
       </div>
 
       <div className="flex-1 flex overflow-hidden min-0 relative">
         {/* Detail Sidebar */}
-        <div className={`bg-white border-r border-[#E5E7EB] flex flex-col relative z-20 shrink-0 transition-all duration-300 ${isSidebarCollapsed ? 'w-[56px]' : 'w-[280px]'}`}>
+        <div className={`bg-bgPanel border-r border-borderDefault flex flex-col relative z-20 shrink-0 transition-all duration-300 ${isSidebarCollapsed ? 'w-sidebar-collapsed' : 'w-sidebar-expanded'}`}>
           <div className="absolute top-1/2 -translate-y-1/2 left-full">
             <FACollapseHandle 
               side="right" 
@@ -183,16 +180,16 @@ const MissionControlPage: React.FC = () => {
             <div className={`flex-1 overflow-y-auto custom-scrollbar transition-all duration-300 ${isSidebarCollapsed ? 'px-2 py-4 pt-2 space-y-2 flex flex-col items-center' : 'p-4 space-y-8'}`}>
               <section className="w-full">
                 <div className={`flex items-center gap-2 ${isSidebarCollapsed ? 'justify-center h-10' : 'mb-3'}`}>
-                  <Monitor size={18} className="text-[#2664FF] shrink-0" />
-                  {!isSidebarCollapsed && <h2 className="text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400">{t('mission.step1')}</h2>}
+                  <Monitor size={18} className="text-brand shrink-0" />
+                  {!isSidebarCollapsed && <h2 className="fa-t6 font-bold uppercase tracking-widest text-textTertiary">{t('mission.step1')}</h2>}
                 </div>
                 {!isSidebarCollapsed && (
-                  <div className="p-3 border border-blue-100 bg-blue-50/30 rounded-lg flex items-center justify-between shadow-sm overflow-hidden group">
+                  <div className="p-3 border border-brand/20 bg-brand/5 rounded-control flex items-center justify-between shadow-sm overflow-hidden group">
                     <div className="flex items-center gap-2.5 min-w-0 flex-1 mr-2">
-                      <Zap size={16} className="text-[#2664FF] shrink-0" />
+                      <Zap size={16} className="text-brand shrink-0" />
                       <div className="min-w-0 flex-1">
-                        <p className="text-[13px] font-bold text-gray-900 leading-tight truncate">DJI Dock Alpha-X</p>
-                        <p className="text-[11px] text-gray-400 font-mono mt-0.5 uppercase truncate tracking-tighter">D-729-DOCK-HUB</p>
+                        <p className="fa-t5-strong text-textPrimary leading-tight truncate">DJI Dock Alpha-X</p>
+                        <p className="fa-t7-mono text-textTertiary uppercase truncate tracking-tighter">D-729-DOCK-HUB</p>
                       </div>
                     </div>
                   </div>
@@ -201,14 +198,14 @@ const MissionControlPage: React.FC = () => {
 
               <section className="w-full">
                 <div className={`flex items-center gap-2 ${isSidebarCollapsed ? 'justify-center h-10' : 'mb-3'}`}>
-                  <PencilRuler size={18} className="text-[#2664FF] shrink-0" />
-                  {!isSidebarCollapsed && <h2 className="text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400">{t('mission.step2')}</h2>}
+                  <PencilRuler size={18} className="text-brand shrink-0" />
+                  {!isSidebarCollapsed && <h2 className="fa-t6 font-bold uppercase tracking-widest text-textTertiary">{t('mission.step2')}</h2>}
                 </div>
                 {!isSidebarCollapsed && (
                   <div className="grid grid-cols-2 gap-2">
                     {patternIds.map(pid => (
-                      <button key={pid} disabled={isExecuting} onClick={() => { setPatternType(pid); setIsValidated(false); setExecutionProgress(0); }} className={`h-11 text-left px-3 rounded-lg border transition-all ${patternType === pid ? 'bg-blue-50 border-[#2664FF] text-[#2664FF] shadow-sm' : 'bg-white border-gray-100 text-gray-600 hover:border-gray-200'} ${isExecuting ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                        <p className="text-[11px] font-bold leading-tight uppercase tracking-tight">{t('pattern.' + pid)}</p>
+                      <button key={pid} disabled={isExecuting} onClick={() => { setPatternType(pid); setIsValidated(false); setExecutionProgress(0); }} className={`h-11 text-left px-3 rounded-control border transition-all ${patternType === pid ? 'bg-brand/10 border-brand text-brand shadow-sm' : 'bg-bgCard border-borderDefault text-textSecondary hover:border-borderStrong'} ${isExecuting ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                        <p className="fa-t7-mono font-bold leading-tight uppercase tracking-tight">{t('pattern.' + pid)}</p>
                       </button>
                     ))}
                   </div>
@@ -217,8 +214,8 @@ const MissionControlPage: React.FC = () => {
 
               <section className="w-full">
                 <div className={`flex items-center gap-2 ${isSidebarCollapsed ? 'justify-center h-10' : 'mb-3'}`}>
-                  <SlidersHorizontal size={18} className="text-[#2664FF] shrink-0" />
-                  {!isSidebarCollapsed && <h2 className="text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400">{t('mission.step3')}</h2>}
+                  <SlidersHorizontal size={18} className="text-brand shrink-0" />
+                  {!isSidebarCollapsed && <h2 className="fa-t6 font-bold uppercase tracking-widest text-textTertiary">{t('mission.step3')}</h2>}
                 </div>
                 {!isSidebarCollapsed && (
                   <div className="space-y-2">
@@ -227,9 +224,9 @@ const MissionControlPage: React.FC = () => {
                         key={profile.id}
                         disabled={isExecuting}
                         onClick={() => { setSelectedProfileId(profile.id); setIsValidated(false); }}
-                        className={`w-full p-2.5 text-left rounded-lg border transition-all ${selectedProfileId === profile.id ? 'bg-blue-50 border-[#2664FF]' : 'bg-white border-gray-100 text-gray-500'}`}
+                        className={`w-full p-2.5 text-left rounded-control border transition-all ${selectedProfileId === profile.id ? 'bg-brand/10 border-brand' : 'bg-bgCard border-borderDefault text-textTertiary'}`}
                       >
-                        <p className="text-[11px] font-bold uppercase tracking-wide">{profile.name}</p>
+                        <p className="fa-t6 font-bold uppercase tracking-wide text-textSecondary">{profile.name}</p>
                         <p className="text-[10px] opacity-60 mt-0.5">{profile.description} • {profile.altitude}m</p>
                       </button>
                     ))}
@@ -238,10 +235,10 @@ const MissionControlPage: React.FC = () => {
               </section>
 
               {isValidated && !isSidebarCollapsed && (
-                <section className="bg-gray-900 rounded-lg p-4 space-y-4 text-white shadow-xl animate-in fade-in zoom-in-95">
+                <section className="bg-bgTopbar rounded-control p-4 space-y-4 text-textOnTopbar shadow-overlay animate-in fade-in zoom-in-95">
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-green-400" />
-                    <h3 className="text-[10px] font-bold uppercase tracking-[0.12em] text-gray-400">{t('mission.snapshot')}</h3>
+                    <CheckCircle2 size={14} className="text-success" />
+                    <h3 className="fa-t7-mono font-bold uppercase tracking-widest text-textOnTopbar/60">{t('mission.snapshot')}</h3>
                   </div>
                   <div className="space-y-2.5">
                     <ValidationItem label={t('mission.v_nfz')} status="OK" />
@@ -252,10 +249,10 @@ const MissionControlPage: React.FC = () => {
               )}
             </div>
 
-            <div className={`shrink-0 border-t border-gray-100 w-full flex justify-center bg-white ${isSidebarCollapsed ? 'p-2' : 'p-4'}`}>
+            <div className={`shrink-0 border-t border-divider w-full flex justify-center bg-bgPanel ${isSidebarCollapsed ? 'p-2' : 'p-4'}`}>
               <button 
                 onClick={!isValidated ? handleValidate : handleExecute} 
-                className={`group relative overflow-hidden transition-all shadow-md active:scale-95 ${!isValidated ? 'bg-[#111827] hover:bg-black' : 'bg-[#2664FF] hover:bg-blue-700'} text-white font-bold uppercase tracking-[0.15em] flex items-center justify-center gap-2 ${isSidebarCollapsed ? 'w-10 h-10 rounded-full' : 'w-full h-11 rounded-lg text-[11px]'}`}
+                className={`group relative overflow-hidden transition-all shadow-overlay active:scale-95 ${!isValidated ? 'bg-bgTopbar hover:bg-black' : 'bg-brand hover:bg-brand-hover'} text-textOnTopbar font-bold uppercase tracking-widest flex items-center justify-center gap-2 ${isSidebarCollapsed ? 'w-10 h-10 rounded-full' : 'w-full h-11 rounded-control fa-t6'}`}
               >
                 {isValidating ? <Loader2 className="animate-spin" size={18} /> : (currentStatus === ExecutionStatus.PREPARING ? <RefreshCw className="animate-spin" size={18} /> : <Zap size={18} fill="currentColor" />)}
                 {!isSidebarCollapsed && (
@@ -270,17 +267,17 @@ const MissionControlPage: React.FC = () => {
         </div>
 
         {/* Canvas Area */}
-        <div className="flex-1 flex flex-col bg-[#0F172A] relative overflow-hidden min-w-0">
-          <div className="flex-1 relative min-h-0">
+        <div className="flex-1 flex flex-col bg-bgPage relative overflow-hidden min-w-0">
+          <div className="flex-1 relative min-h-0 bg-[#0A0F1E]">
             <svg className="w-full h-full" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet">
-              <polyline points={currentRoute.map(p => `${p.x},${p.y}`).join(' ')} fill="none" stroke="rgba(38, 100, 255, 0.15)" strokeWidth="1.5" strokeDasharray="8" />
+              <polyline points={currentRoute.map(p => `${p.x},${p.y}`).join(' ')} fill="none" stroke="rgba(var(--fa-brand), 0.15)" strokeWidth="1.5" strokeDasharray="8" />
               {isExecuting && <DroneMarker x={dronePos.x} y={dronePos.y} angle={dronePos.angle} isPaused={isPaused} />}
             </svg>
           </div>
           
-          {/* Execution Panel with FACollapseHandle */}
+          {/* Execution Panel */}
           {(isExecuting || currentStatus === ExecutionStatus.COMPLETED) && (
-            <div className={`bg-white border-t border-gray-200 flex flex-col shrink-0 z-40 transition-all duration-500 shadow-[0_-10px_40px_rgba(0,0,0,0.15)] relative ${isBottomPanelCollapsed ? 'h-[6px]' : 'h-[72px]'}`}>
+            <div className={`bg-bgCard border-t border-borderDefault flex flex-col shrink-0 z-40 transition-all duration-500 shadow-overlay relative ${isBottomPanelCollapsed ? 'h-[6px]' : 'h-[72px]'}`}>
               <div className="absolute -top-[16px] left-1/2 -translate-x-1/2">
                 <FACollapseHandle 
                   side="top" 
@@ -288,19 +285,19 @@ const MissionControlPage: React.FC = () => {
                   onClick={() => setIsBottomPanelCollapsed(!isBottomPanelCollapsed)} 
                 />
               </div>
-              <div className="h-1 bg-gray-100 flex overflow-visible w-full shrink-0 relative">
-                <div className={`h-full transition-all duration-300 ${isReturning ? 'bg-orange-500' : 'bg-[#2664FF]'}`} style={{ width: `${executionProgress}%` }}></div>
+              <div className="h-1 bg-bgPage flex overflow-visible w-full shrink-0 relative">
+                <div className={`h-full transition-all duration-300 ${isReturning ? 'bg-warning' : 'bg-brand'}`} style={{ width: `${executionProgress}%` }}></div>
               </div>
               <div className={`flex-1 px-6 flex items-center justify-between transition-opacity duration-300 ${isBottomPanelCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-                <div className="flex items-center gap-3 shrink-0 pr-6 border-r border-gray-100">
-                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center shadow-inner ${isPaused ? 'bg-orange-50 text-orange-500' : 'bg-blue-50 text-[#2664FF]'}`}>
+                <div className="flex items-center gap-3 shrink-0 pr-6 border-r border-divider">
+                  <div className={`w-9 h-9 rounded-control flex items-center justify-center shadow-inner ${isPaused ? 'bg-warning/10 text-warning' : 'bg-brand/10 text-brand'}`}>
                     {isPaused ? <CircleStop size={18} /> : <Activity size={18} />}
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-[11px] font-bold text-gray-900 uppercase tracking-wide truncate">
+                    <h3 className="fa-t6 font-bold text-textPrimary uppercase tracking-wide truncate">
                       {isPaused ? t('status.paused') : t('status.' + currentStatus.toLowerCase())}
                     </h3>
-                    <span className="text-[10px] font-mono text-blue-600 font-bold uppercase truncate block">{currentPhase}</span>
+                    <span className="fa-t7-mono text-brand font-bold uppercase truncate block">{currentPhase}</span>
                   </div>
                 </div>
 
@@ -312,8 +309,8 @@ const MissionControlPage: React.FC = () => {
                   <MetricItem label={t('playback.metrics.media')} value={`${Math.round(executionProgress * 1.28)} / 128`} icon={<Camera size={11}/>} />
                 </div>
 
-                <div className="shrink-0 pl-6 border-l border-gray-100">
-                  <button onClick={() => navigate(`/execution/${id || '8271'}`)} className="h-8 px-4 bg-[#111827] text-white text-[10px] font-bold rounded-lg uppercase tracking-wider hover:bg-black flex items-center gap-2 transition-all active:scale-95 shadow-md">
+                <div className="shrink-0 pl-6 border-l border-divider">
+                  <button onClick={() => navigate(`/execution/${id || '82731'}`)} className="h-8 px-4 bg-bgTopbar text-textOnTopbar fa-t6 font-bold rounded-control uppercase tracking-wider hover:bg-black flex items-center gap-2 transition-all active:scale-95">
                     {currentStatus === ExecutionStatus.COMPLETED ? (
                       <> {t('projects.viewPlayback')} <CheckCircle2 size={12} /> </>
                     ) : (
@@ -331,9 +328,9 @@ const MissionControlPage: React.FC = () => {
 };
 
 const ValidationItem = ({ label, status }: { label: string, status: string }) => (
-  <div className="flex items-center justify-between text-[11px]">
-    <span className="text-gray-500 uppercase tracking-widest">{label}</span>
-    <span className="text-green-400 font-bold font-mono tracking-tighter">{status}</span>
+  <div className="flex items-center justify-between fa-t6">
+    <span className="text-textOnTopbar/60 uppercase tracking-widest">{label}</span>
+    <span className="text-success font-bold font-mono tracking-tighter">{status}</span>
   </div>
 );
 
@@ -341,12 +338,12 @@ const MetricItem = ({ label, value, icon, warning, dock }: any) => {
   const isNumeric = /\d/.test(value);
   return (
     <div className="flex flex-col min-w-0">
-      <div className="flex items-center gap-1.5 text-[9px] font-bold text-gray-400 uppercase mb-0.5 overflow-hidden">
-        <span className="shrink-0 text-blue-500/70 flex items-center justify-center w-4 h-4">{icon}</span>
-        <span className="truncate tracking-wider flex-1">{label}</span>
-        {dock && <span className="shrink-0 text-[8px] bg-gray-100 px-1 rounded text-gray-500 font-mono uppercase ml-auto">Dock</span>}
+      <div className="flex items-center gap-1.5 fa-t7-mono text-textTertiary uppercase mb-0.5 overflow-hidden">
+        <span className="shrink-0 text-brand/70 flex items-center justify-center w-4 h-4">{icon}</span>
+        <span className="truncate tracking-wider flex-1 font-bold">{label}</span>
+        {dock && <span className="shrink-0 text-[8px] bg-bgPage px-1 rounded text-textTertiary font-mono uppercase ml-auto">Dock</span>}
       </div>
-      <div className={`font-bold leading-none tracking-tight whitespace-nowrap ${isNumeric ? 'text-[15px] font-mono' : 'text-[14px] font-sans antialiased'} ${warning ? 'text-orange-500' : 'text-gray-900'}`}>
+      <div className={`font-bold leading-none tracking-tight whitespace-nowrap ${isNumeric ? 'fa-t7-mono text-[15px]' : 'fa-t5'} ${warning ? 'text-error' : 'text-textPrimary'}`}>
         {value}
       </div>
     </div>

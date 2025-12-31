@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface FACardProps {
@@ -13,6 +12,11 @@ interface FACardProps {
   onClick?: () => void;
 }
 
+/**
+ * FACard - FlyAIOS 标准卡片封装
+ * 符合 v0.8 6.5 章节规范：靠描边成立，12px 圆角
+ * 增加 flex-col 支持，方便内部 content 滚动
+ */
 const FACard: React.FC<FACardProps> = ({
   children,
   header,
@@ -29,25 +33,32 @@ const FACard: React.FC<FACardProps> = ({
   return (
     <div 
       onClick={onClick}
-      className={`fa-card flex flex-col fa-card--${density} ${hoverable ? 'fa-card--hover' : ''} ${isClickable ? 'cursor-pointer' : ''} ${className}`}
+      className={`
+        bg-bg-card border border-border rounded-card overflow-hidden transition-all duration-200
+        flex flex-col
+        ${density === 'compact' ? 'p-3' : 'p-4'}
+        ${hoverable ? 'hover:border-brand/40 hover:shadow-card' : ''}
+        ${isClickable ? 'cursor-pointer active:scale-[0.99]' : ''}
+        ${className}
+      `}
     >
       {(header || title) && (
-        <div className="fa-card__header shrink-0">
+        <div className="mb-4 shrink-0">
           {header ? header : (
             <div className="flex items-center justify-between w-full">
-              <h4 className="fa-t4 text-[var(--fa-text-primary)] m-0">{title}</h4>
+              <h4 className="text-fa-t4 font-fa-semibold text-text-primary m-0 leading-tight">{title}</h4>
               {extra && <div className="shrink-0">{extra}</div>}
             </div>
           )}
         </div>
       )}
       
-      <div className="fa-card__body flex-1">
+      <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
         {children}
       </div>
 
       {footer && (
-        <div className="fa-card__footer shrink-0">
+        <div className="mt-4 pt-4 border-t border-border shrink-0">
           {footer}
         </div>
       )}

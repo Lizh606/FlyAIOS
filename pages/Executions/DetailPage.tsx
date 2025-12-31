@@ -1,10 +1,9 @@
-
 import React, { useMemo } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { Tabs, Button, Divider, Dropdown, Tooltip, Popover, Tag } from 'antd';
+import { Tabs, Button, Divider, Dropdown, Tooltip, Popover } from 'antd';
 import { 
   ArrowLeft, Activity, Monitor, GitBranch, 
-  History, Settings, Zap, Info, Clock, ExternalLink,
+  Settings, Info, Clock, ExternalLink,
   Copy, MoreVertical, HelpCircle, MapPin, ChevronDown
 } from 'lucide-react';
 import { ColumnsType } from 'antd/es/table';
@@ -28,6 +27,7 @@ const ExecutionDetailPage: React.FC = () => {
   , [id]);
 
   const activeTab = searchParams.get('tab') || 'overview';
+  const isLiveMode = activeTab === 'live';
 
   const tabItems = [
     { key: 'overview', label: t('executions.tab.overview'), icon: <Activity size={14} /> },
@@ -47,17 +47,13 @@ const ExecutionDetailPage: React.FC = () => {
     }
   };
 
-  /**
-   * Route Logs Table Columns Definition
-   * Following v0.8 Section 6.2.3 Column Priority Rules
-   */
   const routeColumns: ColumnsType<RouteLog> = [
     {
       title: t('executions.route.col.time'),
       dataIndex: 'timestamp',
       key: 'timestamp',
       width: 100,
-      render: (text) => <span className="fa-t7-mono text-gray-400 tabular-nums">{text}</span>
+      render: (text) => <span className="text-fa-t7 font-fa-medium text-text-tertiary tabular-nums">{text}</span>
     },
     {
       title: t('executions.route.col.event'),
@@ -66,8 +62,8 @@ const ExecutionDetailPage: React.FC = () => {
       width: 180,
       render: (text) => (
         <div className="flex items-center gap-2">
-          <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${text.includes('Reached') ? 'bg-brand' : 'bg-gray-300'}`} />
-          <span className="fa-t6 text-gray-700 font-medium truncate">{text}</span>
+          <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${text.includes('Reached') ? 'bg-brand' : 'bg-border-strong'}`} />
+          <span className="text-fa-t6 font-fa-medium text-text-primary truncate">{text}</span>
         </div>
       )
     },
@@ -75,11 +71,11 @@ const ExecutionDetailPage: React.FC = () => {
       title: t('executions.route.col.coord'),
       dataIndex: 'coordinate',
       key: 'coordinate',
-      responsive: ['md'], // P1 Column
+      responsive: ['md'],
       render: (text) => (
         <div className="flex items-center gap-2 group">
-          <MapPin size={11} className="text-gray-300 group-hover:text-brand transition-colors shrink-0" />
-          <span className="fa-t7-mono text-[11px] text-gray-500 tabular-nums tracking-tighter">{text}</span>
+          <MapPin size={11} className="text-text-tertiary group-hover:text-brand transition-colors shrink-0" />
+          <span className="text-fa-t7 font-fa-medium text-text-secondary tabular-nums tracking-tighter">{text}</span>
         </div>
       )
     },
@@ -89,9 +85,9 @@ const ExecutionDetailPage: React.FC = () => {
       key: 'altitude',
       align: 'right',
       width: 100,
-      responsive: ['sm'], // P1 Column
+      responsive: ['sm'],
       render: (val) => (
-        <span className="fa-t7-mono text-[11px] text-gray-700 font-bold tabular-nums">
+        <span className="text-fa-t7 font-fa-semibold text-text-primary tabular-nums">
           {val.toFixed(1)}m
         </span>
       )
@@ -101,53 +97,54 @@ const ExecutionDetailPage: React.FC = () => {
   const statusContent = (
     <div className="w-[320px] p-1 space-y-4">
       <div className="flex items-center justify-between">
-        <span className="fa-t7-mono text-gray-400 font-bold uppercase tracking-widest">{t('executions.status.panelTitle')}</span>
-        <HelpCircle size={14} className="text-gray-300" />
+        <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tracking-widest">{t('executions.status.panelTitle')}</span>
+        <HelpCircle size={14} className="text-text-tertiary" />
       </div>
       <div className="space-y-3">
         <StatusField label={t('executions.status.what')} value={t(`executions.status.${execution.status.toLowerCase()}`)} highlight />
         <StatusField label={t('executions.status.why')} value={execution.status === ExecutionStatus.FAILED ? '信号接入超时' : '任务正常校验'} />
         <StatusField label={t('executions.status.when')} value={execution.startTime.split(' ')[1]} tabular />
       </div>
-      <Divider className="my-2 opacity-5" />
-      <Button type="primary" size="small" ghost block className="h-8 fa-t6 font-bold uppercase" onClick={() => setSearchParams({ tab: 'live' })}>
+      <Divider className="my-2 opacity-10" />
+      <Button type="primary" size="small" ghost block className="h-8 text-fa-t6 font-fa-semibold uppercase" onClick={() => setSearchParams({ tab: 'live' })}>
         {t('common.openLive')}
       </Button>
     </div>
   );
 
   return (
-    <div className="h-screen flex flex-col bg-[#F8FAFC] overflow-hidden">
-      <div className="px-6 pt-4 bg-white border-b border-gray-200 shrink-0 z-20">
-        <div className="max-w-[1320px] mx-auto w-full">
-          <div className="flex items-center justify-between mb-4">
+    <div className="h-screen flex flex-col bg-bg-page overflow-hidden">
+      {/* 优化后的 Header: 移除了外层 border-b，通过 Tabs 底部线分割 */}
+      <div className="bg-bg-card shrink-0 z-20">
+        <div className="max-w-[1440px] mx-auto w-full px-6 pt-6">
+          <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4 min-w-0">
               <button 
                 onClick={() => navigate('/executions')}
-                className="p-1.5 -ml-1 text-gray-400 hover:text-brand hover:bg-brand/5 rounded-lg transition-all"
+                className="p-2 -ml-2 text-text-tertiary hover:text-brand hover:bg-brand-bg rounded-lg transition-all"
               >
                 <ArrowLeft size={20} />
               </button>
               <div className="min-w-0">
                  <div className="flex items-center gap-3">
-                   <h1 className="fa-t2 text-gray-900 truncate leading-none">Execution #{execution.id.slice(-5).toUpperCase()}</h1>
+                   <h1 className="text-fa-t2 font-fa-semibold text-text-primary truncate m-0 leading-none tracking-tight">Execution #{execution.id.slice(-5).toUpperCase()}</h1>
                    <Popover content={statusContent} trigger="hover" placement="bottomLeft" overlayClassName="fa-popover-v2">
                       <div className="cursor-help inline-flex items-center">
                         <FAStatus status={getStatusType(execution.status) as any} label={t(`executions.status.${execution.status.toLowerCase()}`)} />
                       </div>
                    </Popover>
                  </div>
-                 <div className="flex items-center gap-2 mt-1.5">
-                    <span className="fa-t6 font-semibold text-gray-400">
+                 <div className="flex items-center gap-2 mt-2">
+                    <span className="text-fa-t6 font-fa-medium text-text-secondary">
                       {execution.projectName} • {execution.dockName || execution.deviceName}
                     </span>
-                    <Divider type="vertical" className="bg-gray-200" />
-                    <span className="fa-t7-mono text-gray-400 tabular-nums text-[11px]">启动于 {execution.startTime}</span>
+                    <Divider type="vertical" className="bg-divider h-3" />
+                    <span className="text-fa-t7 font-fa-medium text-text-tertiary tabular-nums">启动于 {execution.startTime}</span>
                  </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-3 shrink-0">
               <Dropdown 
                 menu={{ items: [
                   { key: 'copy', label: '复制 ID', icon: <Copy size={14} />, onClick: () => navigator.clipboard.writeText(execution.id) },
@@ -155,7 +152,7 @@ const ExecutionDetailPage: React.FC = () => {
                 ] }} 
                 placement="bottomRight"
               >
-                <Button type="primary" size="middle" className="font-bold uppercase tracking-widest h-9 px-5 shadow-sm flex items-center gap-2">
+                <Button type="primary" size="middle" className="text-fa-t6 font-fa-semibold uppercase tracking-widest h-9 px-5 shadow-md flex items-center gap-2">
                   {t('common.actions')} <ChevronDown size={14} />
                 </Button>
               </Dropdown>
@@ -169,7 +166,7 @@ const ExecutionDetailPage: React.FC = () => {
               items={tabItems.map(item => ({
                 key: item.key,
                 label: (
-                  <div className="flex items-center gap-1.5 px-1">
+                  <div className="flex items-center gap-2 px-1">
                     {item.icon}
                     {item.label}
                   </div>
@@ -180,13 +177,13 @@ const ExecutionDetailPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto custom-scrollbar bg-[#F8FAFC]">
-        <div className="max-w-[1320px] mx-auto w-full p-4 lg:p-6 min-h-full flex flex-col">
+      <div className={`flex-1 min-h-0 bg-bg-page ${isLiveMode ? 'overflow-hidden' : 'overflow-y-auto custom-scrollbar'}`}>
+        <div className={`max-w-[1440px] mx-auto w-full flex flex-col ${isLiveMode ? 'h-full p-4' : 'p-4 lg:p-6 min-h-full'}`}>
           {activeTab === 'overview' && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 animate-in fade-in duration-300">
                <div className="lg:col-span-8 space-y-4">
                   <FACard title={t('executions.detail.telemetry')} density="comfort">
-                    <div className="grid grid-cols-4 gap-4 py-1">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-1">
                       <MetricItem label={t('executions.detail.metrics.duration')} value={execution.duration || '—'} tabular />
                       <MetricItem label={t('executions.detail.metrics.alerts')} value={execution.alertsCount.toString()} warning={execution.alertsCount > 0} />
                       <MetricItem label={t('executions.detail.metrics.session')} value={execution.streamSessionId || 'None'} tabular />
@@ -194,9 +191,9 @@ const ExecutionDetailPage: React.FC = () => {
                     </div>
                   </FACard>
                   
-                  <FACard title={t('executions.detail.routeLogs')} density="comfort" extra={<History size={14} className="text-gray-300" />}>
+                  <FACard title={t('executions.detail.routeLogs')} density="comfort" extra={<Clock size={14} className="text-text-tertiary" />}>
                     <div className="mb-4">
-                      <p className="fa-t6 text-gray-400">{t('executions.detail.routeLogsDesc')}</p>
+                      <p className="text-fa-t6 text-text-secondary">{t('executions.detail.routeLogsDesc')}</p>
                     </div>
                     
                     <FATable 
@@ -206,12 +203,12 @@ const ExecutionDetailPage: React.FC = () => {
                       density="comfort"
                       pagination={{ pageSize: 10, size: 'small' }}
                       scroll={{ y: 420 }}
-                      className="border-gray-100"
+                      className="border-divider"
                       locale={{
                         emptyText: (
                           <div className="py-20 flex flex-col items-center justify-center grayscale opacity-30">
-                            <Clock size={40} className="text-gray-300 mb-3" />
-                            <span className="fa-t6 font-bold uppercase tracking-widest text-gray-400">正在等待实时数据接入...</span>
+                            <Clock size={40} className="text-text-tertiary mb-3" />
+                            <span className="text-fa-t6 font-fa-semibold uppercase tracking-widest text-text-tertiary">正在等待实时数据接入...</span>
                           </div>
                         )
                       }}
@@ -229,7 +226,7 @@ const ExecutionDetailPage: React.FC = () => {
                     </div>
                   </FACard>
                   <FACard title={t('executions.detail.timeline')} density="comfort" className="flex-1 min-h-[300px]">
-                    <div className="space-y-6 ml-2 pl-6 border-l border-gray-100 relative pt-1">
+                    <div className="space-y-6 ml-2 pl-6 border-l border-divider relative pt-1">
                        <TimelineNode time={execution.startTime.split(' ')[1]} text="任务开始执行" status="success" />
                        <TimelineNode time="实时" text="边缘心跳探测活跃" active />
                     </div>
@@ -239,7 +236,7 @@ const ExecutionDetailPage: React.FC = () => {
           )}
 
           {activeTab === 'live' && (
-            <div className="flex-1 flex flex-col min-h-0 animate-in fade-in duration-300">
+            <div className="flex-1 flex flex-col min-h-0 animate-in fade-in duration-300 h-full overflow-hidden">
               <LiveWorkbench execution={execution} />
             </div>
           )}
@@ -253,11 +250,24 @@ const ExecutionDetailPage: React.FC = () => {
       </div>
 
       <style>{`
-        .fa-tabs-v2 .ant-tabs-nav { margin-bottom: 0 !important; }
-        .fa-tabs-v2 .ant-tabs-nav::before { border-bottom: none !important; }
-        .fa-tabs-v2 .ant-tabs-tab { padding: 12px 0 !important; margin-right: 24px !important; }
-        .fa-tabs-v2 .ant-tabs-tab-btn { font-size: 13px !important; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700 !important; }
-        .fa-popover-v2 .ant-popover-inner { border-radius: 12px; padding: 12px; box-shadow: 0 12px 32px -4px rgba(0,0,0,0.1); }
+        .fa-popover-v2 .ant-popover-inner { border-radius: 12px; padding: 12px; box-shadow: var(--fa-shadow-overlay); }
+        
+        /* 强制覆盖 Tabs 样式以对齐 Header 底部 */
+        .fa-tabs-v2 .ant-tabs-nav {
+          margin-bottom: 0 !important;
+        }
+        .fa-tabs-v2 .ant-tabs-nav::before {
+          border-bottom: 1px solid rgba(var(--fa-divider), var(--fa-divider-alpha)) !important;
+        }
+        .fa-tabs-v2 .ant-tabs-tab {
+          padding: 12px 0 !important;
+          margin-right: 32px !important;
+        }
+        .fa-tabs-v2 .ant-tabs-tab-btn {
+          font-weight: 600 !important;
+          text-transform: uppercase;
+          letter-spacing: 0.02em;
+        }
       `}</style>
     </div>
   );
@@ -265,17 +275,17 @@ const ExecutionDetailPage: React.FC = () => {
 
 const StatusField = ({ label, value, tabular, highlight }: any) => (
   <div className="flex justify-between items-center">
-    <span className="fa-t7-mono text-[10px] text-gray-400 font-bold uppercase tracking-widest">{label}</span>
-    <span className={`fa-t6 font-bold ${tabular ? 'tabular-nums font-mono' : ''} ${highlight ? 'text-brand' : 'text-gray-700'}`}>
+    <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tracking-widest">{label}</span>
+    <span className={`text-fa-t6 font-fa-semibold ${tabular ? 'tabular-nums font-mono' : ''} ${highlight ? 'text-brand' : 'text-text-secondary'}`}>
       {value}
     </span>
   </div>
 );
 
 const MetricItem = ({ label, value, tabular, warning, highlight }: any) => (
-  <div className="flex flex-col gap-0.5">
-    <span className="fa-t7-mono text-gray-400 font-bold text-[10px] uppercase tracking-tight">{label}</span>
-    <span className={`fa-t4 ${tabular ? 'tabular-nums font-mono text-[18px]' : ''} ${warning ? 'text-error' : highlight ? 'text-brand' : 'text-gray-900'}`}>
+  <div className="flex flex-col gap-1">
+    <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tracking-tight leading-none">{label}</span>
+    <span className={`text-fa-t3 font-fa-semibold ${tabular ? 'tabular-nums font-mono' : ''} ${warning ? 'text-error' : highlight ? 'text-brand' : 'text-text-primary'}`}>
       {value}
     </span>
   </div>
@@ -283,23 +293,23 @@ const MetricItem = ({ label, value, tabular, warning, highlight }: any) => (
 
 const InfoRow = ({ label, value, tabular }: any) => (
   <div className="flex items-center gap-4 h-6">
-    <span className="fa-t6 text-gray-400 font-medium w-[88px] shrink-0">{label}</span>
-    <span className={`fa-t5-strong text-gray-700 truncate ${tabular ? 'tabular-nums font-mono' : ''}`}>{value}</span>
+    <span className="text-fa-t6 font-fa-medium text-text-tertiary w-[88px] shrink-0">{label}</span>
+    <span className={`text-fa-t5 font-fa-semibold text-text-secondary truncate ${tabular ? 'tabular-nums font-mono' : ''}`}>{value}</span>
   </div>
 );
 
 const TimelineNode = ({ time, text, status, active }: any) => (
   <div className="relative">
-    <div className={`absolute -left-[28.5px] top-1.5 w-2.5 h-2.5 rounded-full border-2 border-white shadow-sm ${
-      active ? 'bg-brand ring-4 ring-brand/10' : status === 'success' ? 'bg-green-500' : 'bg-gray-300'
+    <div className={`absolute -left-[28.5px] top-1.5 w-2.5 h-2.5 rounded-full border-2 border-bg-card shadow-sm ${
+      active ? 'bg-brand ring-4 ring-brand-bg' : status === 'success' ? 'bg-success' : 'bg-text-disabled'
     }`} />
     <div className="flex items-center gap-3">
       {active ? (
-        <span className="fa-t7-mono text-[9px] px-1.5 py-0.5 bg-brand/10 text-brand rounded leading-none font-bold uppercase">当前</span>
+        <span className="text-fa-t7 font-fa-semibold px-1.5 py-0.5 bg-brand-bg text-brand rounded leading-none uppercase">当前</span>
       ) : (
-        <span className="fa-t7-mono text-[10px] text-gray-400 font-bold uppercase tabular-nums">{time}</span>
+        <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tabular-nums">{time}</span>
       )}
-      <p className="fa-t5-strong text-gray-800 leading-none">{text}</p>
+      <p className="text-fa-t5 font-fa-semibold text-text-secondary leading-none m-0">{text}</p>
     </div>
   </div>
 );

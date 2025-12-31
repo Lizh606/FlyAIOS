@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useI18n } from '../../i18n/index';
@@ -42,14 +41,14 @@ const IntegrationsPage: React.FC = () => {
   }, [activeTab, searchText]);
 
   return (
-    <div className="px-6 py-8 max-w-[1440px] mx-auto w-full animate-in fade-in duration-500">
+    <div className="px-6 py-8 max-w-[1440px] mx-auto w-full animate-in fade-in duration-500 bg-bg-page">
       <FAPageHeader 
         title={t('integrations.title')}
         subtitle={t('integrations.subtitle')}
         actions={
           <div className="flex items-center gap-3">
-             <Button icon={<RefreshCcw size={14}/>} className="text-gray-400 border-gray-200" />
-             <Button type="primary" icon={<Plus size={16}/>} className="fa-t5-strong uppercase tracking-widest shadow-lg h-10 px-6">
+             <Button icon={<RefreshCcw size={14}/>} className="text-text-tertiary border-border bg-bg-card" />
+             <Button type="primary" icon={<Plus size={16}/>} className="text-fa-t5 font-fa-semibold uppercase tracking-widest shadow-lg h-10 px-6">
                {t('integrations.newConnection')}
              </Button>
           </div>
@@ -57,7 +56,7 @@ const IntegrationsPage: React.FC = () => {
       />
 
       {/* Standard Toolbar Layout (v0.8 Section 6.2.1) */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 border-b border-[var(--fa-border-default)]">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 border-b border-border">
         <div className="fa-tabs-v2 shrink-0">
           <Tabs
             activeKey={activeTab}
@@ -71,9 +70,9 @@ const IntegrationsPage: React.FC = () => {
         </div>
         <div className="pb-3 w-full md:w-80">
           <Input 
-            prefix={<Search size={14} className="text-gray-400" />}
+            prefix={<Search size={14} className="text-text-tertiary" />}
             placeholder={t('integrations.searchPlaceholder')}
-            className="h-9 shadow-sm"
+            className="h-9 shadow-sm rounded-control"
             allowClear
             value={searchText}
             onChange={e => setSearchText(e.target.value)}
@@ -103,7 +102,7 @@ const IntegrationsPage: React.FC = () => {
         .fa-tabs-v2 .ant-tabs-nav { margin-bottom: 0 !important; }
         .fa-tabs-v2 .ant-tabs-nav::before { border-bottom: none !important; }
         .fa-tabs-v2 .ant-tabs-tab { padding: 12px 0 !important; margin-right: 24px !important; }
-        .fa-tabs-v2 .ant-tabs-tab-btn { font-size: 13px !important; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600 !important; }
+        .fa-tabs-v2 .ant-tabs-tab-btn { font-size: 14px !important; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600 !important; }
         .fa-tabs-v2 .ant-tabs-ink-bar { bottom: 0 !important; }
       `}</style>
     </div>

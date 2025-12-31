@@ -10,13 +10,11 @@ const RunTimeline: React.FC<{ run: RunInstance }> = ({ run }) => {
 
   return (
     <div className="pt-2">
-      {/* 1. Header Area within Card Body */}
       <AuditChainStatusBar />
       
-      {/* 2. Timeline Container - pl-4 for consistent base padding */}
       <div className="relative pl-4 space-y-0">
-        {/* Vertical Line: Centered with 32px icons (Center = padding + icon_w/2 = 16px + 16px = 32px) */}
-        <div className="absolute left-[31.5px] top-8 bottom-8 w-[1.5px] bg-gray-100" />
+        {/* Standardized Vertical Line using divider token */}
+        <div className="absolute left-[31.5px] top-8 bottom-8 w-[1.5px] bg-border-divider" />
         
         <TimelineStep 
           icon={<Zap size={14} />}
@@ -27,11 +25,11 @@ const RunTimeline: React.FC<{ run: RunInstance }> = ({ run }) => {
               <Badge 
                 count="置信度 0.94" 
                 style={{ 
-                  backgroundColor: 'rgba(38, 100, 255, 0.08)', 
-                  color: 'var(--fa-brand-primary)', 
-                  border: '1px solid rgba(38, 100, 255, 0.1)', 
+                  backgroundColor: 'rgba(var(--fa-brand-bg), var(--fa-brand-bg-alpha))', 
+                  color: 'rgba(var(--fa-brand), 1)', 
+                  border: '1px solid rgba(var(--fa-brand), 0.1)', 
                   fontSize: '10px', 
-                  fontWeight: 'bold' 
+                  fontWeight: 600
                 }} 
               />
             </div>
@@ -91,15 +89,14 @@ const TimelineStep = ({ icon, title, conclusion, time, absoluteTime, status, det
   };
 
   const statusStyles = {
-    success: 'bg-green-500 text-white shadow-sm',
-    error: 'bg-red-500 text-white shadow-sm',
-    running: 'bg-brand text-white animate-pulse',
-    neutral: 'bg-gray-100 text-gray-400 shadow-none'
+    success: 'bg-success text-text-inverse shadow-sm',
+    error: 'bg-error text-text-inverse shadow-sm',
+    running: 'bg-brand text-text-inverse animate-pulse',
+    neutral: 'bg-bg-page text-text-tertiary border border-border shadow-none'
   };
 
   return (
     <div className={`relative flex gap-6 ${isLast ? '' : 'pb-10'} group`}>
-      {/* Icon Circle - w-8 (32px) */}
       <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 z-10 transition-all group-hover:scale-105 ${statusStyles[status as keyof typeof statusStyles]}`}>
         {icon}
       </div>
@@ -107,12 +104,12 @@ const TimelineStep = ({ icon, title, conclusion, time, absoluteTime, status, det
       <div className="pt-0.5 flex-1 min-w-0">
         <div className="flex items-start justify-between gap-4 mb-2">
            <div className="min-w-0">
-             <span className="fa-t7-mono font-black text-gray-400 uppercase tracking-[0.15em] block mb-1.5">{title}</span>
-             <div className={`fa-t5-strong leading-tight ${status === 'error' ? 'text-red-600' : 'text-gray-900'}`}>{conclusion}</div>
+             <span className="text-fa-t7 font-fa-semibold font-mono text-text-tertiary uppercase tracking-[0.15em] block mb-1.5">{title}</span>
+             <div className={`text-fa-t5 font-fa-semibold leading-tight ${status === 'error' ? 'text-error' : 'text-text-primary'}`}>{conclusion}</div>
            </div>
            <Tooltip title={absoluteTime} placement="left">
              <div className="shrink-0 text-right">
-                <span className="fa-t7-mono text-[11px] text-gray-400 font-bold tabular-nums bg-gray-50 border border-gray-100/50 px-2 py-0.5 rounded cursor-help hover:text-brand hover:border-brand/20 transition-all">
+                <span className="text-fa-t7 font-fa-semibold font-mono text-[11px] text-text-tertiary tabular-nums bg-bg-page border border-border px-2 py-0.5 rounded cursor-help hover:text-brand hover:border-brand/20 transition-all">
                   {time}
                 </span>
              </div>
@@ -123,18 +120,18 @@ const TimelineStep = ({ icon, title, conclusion, time, absoluteTime, status, det
           <div className="mt-3">
             <button 
               onClick={() => setExpanded(!expanded)}
-              className="flex items-center gap-1.5 fa-t6 font-bold text-gray-400 hover:text-brand transition-all uppercase tracking-widest"
+              className="flex items-center gap-1.5 text-fa-t6 font-fa-semibold text-text-tertiary hover:text-brand transition-all uppercase tracking-widest border-none bg-transparent cursor-pointer"
             >
               {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
               {t('runs.step.details')}
             </button>
             
             {expanded && (
-              <div className="mt-4 bg-gray-50 rounded-xl overflow-hidden shadow-sm border border-gray-200 animate-in slide-in-from-top-1 duration-200">
-                <div className="flex items-center justify-between px-4 h-9 bg-gray-100/50 border-b border-gray-200 group/toolbar">
+              <div className="mt-4 bg-bg-page rounded-control overflow-hidden shadow-sm border border-border animate-in slide-in-from-top-1 duration-200">
+                <div className="flex items-center justify-between px-4 h-9 bg-action-hover border-b border-border group/toolbar">
                   <div className="flex items-center gap-2">
                     <Terminal size={12} className="text-brand" />
-                    <span className="fa-t7-mono text-[9px] font-black text-gray-400 uppercase tracking-widest">METADATA PAYLOAD</span>
+                    <span className="text-fa-t7 font-fa-semibold font-mono text-[9px] text-text-tertiary uppercase tracking-widest">METADATA PAYLOAD</span>
                   </div>
                   <div className="flex items-center gap-1 opacity-0 group-hover/toolbar:opacity-100 transition-opacity">
                     <Tooltip title="复制 JSON">
@@ -143,17 +140,17 @@ const TimelineStep = ({ icon, title, conclusion, time, absoluteTime, status, det
                         size="small" 
                         icon={<Copy size={12} />} 
                         onClick={(e) => handleCopy(e, JSON.stringify(details))}
-                        className="text-gray-400 hover:text-brand flex items-center justify-center"
+                        className="text-text-tertiary hover:text-brand flex items-center justify-center p-0 h-6 w-6"
                       />
                     </Tooltip>
                   </div>
                 </div>
-                <div className="p-4 overflow-x-auto custom-scrollbar bg-white">
+                <div className="p-4 overflow-x-auto custom-scrollbar bg-bg-card">
                   <div className="space-y-3">
                     {Object.entries(details).map(([key, val]) => (
                       <div key={key} className="flex gap-4 items-start">
-                        <span className="fa-t7-mono text-[10px] text-gray-400 w-24 shrink-0 uppercase font-bold tracking-widest pt-0.5">{key}</span>
-                        <pre className="fa-t7-mono text-[11px] text-gray-600 m-0 leading-relaxed whitespace-pre font-mono">
+                        <span className="text-fa-t7 font-fa-semibold font-mono text-[10px] text-text-tertiary w-24 shrink-0 uppercase tracking-widest pt-0.5">{key}</span>
+                        <pre className="text-fa-t7 font-fa-medium font-mono text-[11px] text-text-secondary m-0 leading-relaxed whitespace-pre">
                           {String(val)}
                         </pre>
                       </div>

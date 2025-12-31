@@ -1,6 +1,6 @@
 import React from 'react';
 import { ColumnsType } from 'antd/es/table';
-import { Copy, GitBranch, Eye, MoreHorizontal, Activity, MapPin, ExternalLink, Link2 } from 'lucide-react';
+import { Copy, GitBranch, Eye, MoreHorizontal, MapPin, ExternalLink, Link2 } from 'lucide-react';
 import { Tooltip, message, Button, Dropdown, MenuProps } from 'antd';
 import { useI18n } from '../../../i18n/index';
 import FATable from '../../../ui/FATable';
@@ -45,13 +45,13 @@ const RunsTable: React.FC<RunsTableProps> = ({ data, density = 'comfort', onRowC
       align: 'left',
       render: (id: string) => (
         <div className="flex items-center gap-2 group/id">
-          <span className="fa-t7-mono text-gray-400 font-bold uppercase tracking-tighter tabular-nums truncate">
+          <span className="text-fa-t7 font-fa-semibold font-mono text-text-tertiary uppercase tracking-tighter tabular-nums truncate">
             {`#${id.slice(-8)}`}
           </span>
           <Tooltip title="复制运行 ID">
             <button 
               onClick={(e) => handleCopy(e, id)}
-              className="p-1 hover:bg-gray-100 rounded opacity-0 group-hover/id:opacity-100 transition-all text-gray-400 hover:text-brand"
+              className="p-1 hover:bg-bg-page rounded opacity-0 group-hover/id:opacity-100 transition-all text-text-tertiary hover:text-brand"
             >
               <Copy size={12} />
             </button>
@@ -67,8 +67,8 @@ const RunsTable: React.FC<RunsTableProps> = ({ data, density = 'comfort', onRowC
       align: 'left',
       render: (text: string) => (
         <div className="flex items-center gap-2">
-           <MapPin size={12} className="text-gray-300 shrink-0" />
-           <span className="fa-t5-strong text-gray-800 truncate">{text}</span>
+           <MapPin size={12} className="text-text-tertiary shrink-0" />
+           <span className="text-fa-t5 font-fa-semibold text-text-primary truncate">{text}</span>
         </div>
       )
     },
@@ -80,14 +80,14 @@ const RunsTable: React.FC<RunsTableProps> = ({ data, density = 'comfort', onRowC
       responsive: ['xl'],
       render: (_, record) => (
         <div className="flex items-center gap-2">
-          <div className="p-1 bg-gray-50 rounded text-gray-400 border border-gray-100 shrink-0">
+          <div className="p-1 bg-bg-page rounded text-text-tertiary border border-border shrink-0">
             <GitBranch size={12}/>
           </div>
           <div className="flex flex-col min-w-0">
-             <span className="fa-t6 font-bold text-gray-700 truncate">
+             <span className="text-fa-t6 font-fa-semibold text-text-secondary truncate">
                {getWorkflowDisplayName(record.workflowName)}
              </span>
-             <span className="fa-t7-mono text-[9px] text-brand font-black uppercase tracking-tighter">
+             <span className="text-fa-t7 font-fa-semibold font-mono text-[9px] text-brand uppercase tracking-tighter">
                {record.workflowVersion}
              </span>
           </div>
@@ -125,8 +125,8 @@ const RunsTable: React.FC<RunsTableProps> = ({ data, density = 'comfort', onRowC
         const parts = date.split(' ');
         return (
           <div className="flex flex-col items-end">
-            <span className="fa-t7-mono text-gray-600 font-bold tabular-nums leading-tight">{parts[1] || ''}</span>
-            <span className="fa-t7-mono text-gray-400 text-[10px] tabular-nums tracking-tighter">{parts[0] || ''}</span>
+            <span className="text-fa-t7 font-fa-semibold font-mono text-text-secondary tabular-nums leading-tight">{parts[1] || ''}</span>
+            <span className="text-fa-t7 font-fa-semibold font-mono text-text-tertiary text-[10px] tabular-nums tracking-tighter">{parts[0] || ''}</span>
           </div>
         );
       }
@@ -137,7 +137,7 @@ const RunsTable: React.FC<RunsTableProps> = ({ data, density = 'comfort', onRowC
       key: 'duration',
       width: 100,
       align: 'right',
-      render: (val: string) => <span className="fa-t7-mono text-[11px] text-gray-600 font-bold tabular-nums">{val}</span>
+      render: (val: string) => <span className="text-fa-t7 font-fa-semibold font-mono text-[11px] text-text-secondary tabular-nums">{val}</span>
     },
     {
       title: t('runs.col.outputs'),
@@ -160,7 +160,7 @@ const RunsTable: React.FC<RunsTableProps> = ({ data, density = 'comfort', onRowC
              <Button 
               type="text" 
               size="small" 
-              className="p-1 h-8 w-8 flex items-center justify-center text-gray-400 hover:text-brand hover:bg-brand/5"
+              className="p-1 h-8 w-8 flex items-center justify-center text-text-tertiary hover:text-brand hover:bg-brand-bg"
               icon={<Eye size={16} />}
               onClick={() => onRowClick(record.id)}
              />
@@ -170,7 +170,7 @@ const RunsTable: React.FC<RunsTableProps> = ({ data, density = 'comfort', onRowC
                <Button 
                 type="text" 
                 size="small" 
-                className="p-1 h-8 w-8 flex items-center justify-center text-gray-400 hover:text-gray-900"
+                className="p-1 h-8 w-8 flex items-center justify-center text-text-tertiary hover:text-text-primary"
                 icon={<MoreHorizontal size={16} />} 
                />
              </Tooltip>
@@ -193,12 +193,6 @@ const RunsTable: React.FC<RunsTableProps> = ({ data, density = 'comfort', onRowC
           className: 'cursor-pointer'
         })}
       />
-      <style>{`
-        /* 严格遵循 v0.8 Table 行交互态 */
-        .ant-table-tbody > tr.ant-table-row:hover > td {
-          background-color: rgba(0, 0, 0, 0.04) !important;
-        }
-      `}</style>
     </div>
   );
 };

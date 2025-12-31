@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ColumnsType } from 'antd/es/table';
 import { useI18n } from '../../../i18n/index';
@@ -18,7 +17,6 @@ const DeliveriesTable: React.FC<DeliveriesTableProps> = ({ data }) => {
   const navigate = useNavigate();
 
   const handleViewRun = (runId: string) => {
-    // Navigating to Page E (Run Detail) with query param for positioning
     navigate(`/run/${runId}?from=integration_trace`);
   };
 
@@ -29,7 +27,7 @@ const DeliveriesTable: React.FC<DeliveriesTableProps> = ({ data }) => {
       key: 'time',
       width: 100,
       fixed: 'left',
-      render: (text) => <span className="fa-t7-mono text-gray-400 tabular-nums">{text}</span>
+      render: (text) => <span className="text-fa-t7 font-fa-semibold font-mono text-text-tertiary tabular-nums uppercase">{text}</span>
     },
     {
       title: t('integrations.delivery.status'),
@@ -53,16 +51,16 @@ const DeliveriesTable: React.FC<DeliveriesTableProps> = ({ data }) => {
               {record.error && (
                 <Popover 
                   title={
-                    <span className="fa-t5-strong text-gray-900 px-1 py-1 block">
+                    <span className="text-fa-t5 font-fa-semibold text-text-primary px-1 py-1 block">
                       {t('integrations.delivery.errorDetail')}
                     </span>
                   }
                   content={
                     <div className="p-1 max-w-[280px]">
-                      <span className="fa-t7-mono text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-2">
+                      <span className="text-fa-t7 font-fa-semibold font-mono text-[10px] text-text-tertiary uppercase tracking-widest block mb-2">
                         {t('integrations.delivery.reason')}
                       </span>
-                      <div className="fa-t6 text-red-600 leading-relaxed bg-red-50/50 p-2.5 rounded-lg border border-red-100/50">
+                      <div className="text-fa-t6 text-error leading-relaxed bg-error/5 p-2.5 rounded-lg border border-error/10">
                         {record.error}
                       </div>
                     </div>
@@ -71,7 +69,7 @@ const DeliveriesTable: React.FC<DeliveriesTableProps> = ({ data }) => {
                   placement="top"
                   overlayClassName="fa-popover-v2"
                 >
-                  <button className="flex items-center justify-center p-1 hover:bg-red-50 rounded transition-colors text-red-400 border-none bg-transparent cursor-help">
+                  <button className="flex items-center justify-center p-1 hover:bg-error/5 rounded transition-colors text-error/60 border-none bg-transparent cursor-help">
                     <Info size={14} />
                   </button>
                 </Popover>
@@ -89,7 +87,7 @@ const DeliveriesTable: React.FC<DeliveriesTableProps> = ({ data }) => {
       responsive: ['md'],
       align: 'right',
       render: (code) => (
-        <span className={`fa-t7-mono font-bold tabular-nums ${code >= 200 && code < 300 ? 'text-green-500' : 'text-red-500'}`}>
+        <span className={`text-fa-t7 font-fa-semibold font-mono tabular-nums ${code >= 200 && code < 300 ? 'text-success' : 'text-error'}`}>
           {code || '—'}
         </span>
       )
@@ -101,7 +99,7 @@ const DeliveriesTable: React.FC<DeliveriesTableProps> = ({ data }) => {
       width: 80,
       responsive: ['lg'],
       align: 'right',
-      render: (text) => <span className="fa-t7-mono text-gray-400 tabular-nums">{text}</span>
+      render: (text) => <span className="text-fa-t7 font-fa-semibold font-mono text-text-tertiary tabular-nums uppercase">{text}</span>
     },
     {
       title: t('integrations.delivery.run'),
@@ -114,7 +112,7 @@ const DeliveriesTable: React.FC<DeliveriesTableProps> = ({ data }) => {
           <Tooltip title={`Jump to Evidence Trace ${id}`}>
             <span 
               onClick={() => handleViewRun(id)}
-              className="fa-t7-mono text-brand font-bold uppercase cursor-pointer hover:underline tabular-nums"
+              className="text-fa-t7 font-fa-semibold font-mono text-brand uppercase cursor-pointer hover:underline tabular-nums"
             >
               #{id.slice(-8)}
             </span>
@@ -122,7 +120,7 @@ const DeliveriesTable: React.FC<DeliveriesTableProps> = ({ data }) => {
           <Button 
             type="text" 
             size="small" 
-            className="h-6 w-6 p-0 flex items-center justify-center text-gray-300 hover:text-brand opacity-0 group-hover/run:opacity-100 transition-all"
+            className="h-6 w-6 p-0 flex items-center justify-center text-text-disabled hover:text-brand opacity-0 group-hover/run:opacity-100 transition-all"
             icon={<ExternalLink size={12}/>}
             onClick={() => handleViewRun(id)}
           />
@@ -132,7 +130,7 @@ const DeliveriesTable: React.FC<DeliveriesTableProps> = ({ data }) => {
   ];
 
   return (
-    <div className="fa-table-v2">
+    <div className="fa-table-container border-border">
       <FATable 
         dataSource={data} 
         columns={columns} 
@@ -140,7 +138,7 @@ const DeliveriesTable: React.FC<DeliveriesTableProps> = ({ data }) => {
         density="compact"
         pagination={{ pageSize: 8, size: 'small' }}
         scroll={{ x: 'max-content' }}
-        className="border-gray-100"
+        className="border-border shadow-none"
       />
     </div>
   );

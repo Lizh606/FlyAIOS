@@ -1,100 +1,108 @@
 :root {
-  /* Colors - Brand */
-  --fa-brand-primary: #2664FF;
-  --fa-brand-hover: #1E50CC;
-  --fa-brand-subtle: rgba(38, 100, 255, 0.08);
-  
-  /* Colors - Surface (Fixed FlyAIOS Shell Strategy) */
-  --fa-bg-shell: rgb(31, 31, 31);
-  --fa-bg-sidebar: #FFFFFF;
-  --fa-bg-page: #F8FAFC;
-  --fa-bg-card: #FFFFFF;
-  --fa-surface-header: rgba(0, 0, 0, 0.02);
-  
-  /* Sidebar Interactive Tokens */
-  --fa-sidebar-hover-bg: rgba(0, 0, 0, 0.04);
-  --fa-sidebar-selected-bg: rgba(38, 100, 255, 0.08);
-  
-  /* Colors - Text */
-  --fa-text-primary: #111827;
-  --fa-text-secondary: #4B5563;
-  --fa-text-tertiary: #9CA3AF;
-  --fa-text-on-shell: #FFFFFF;
-  --fa-text-on-shell-secondary: rgba(255, 255, 255, 0.65);
-  
-  /* Borders */
-  --fa-border-default: #E2E8F0;
-  --fa-border-divider: rgba(0, 0, 0, 0.06);
-  --fa-border-on-shell: rgba(255, 255, 255, 0.1);
-  --fa-border-focus: #2664FF;
-  
-  /* Dimensions */
-  --fa-topbar-height: 56px;
-  --fa-sidebar-expanded: 240px;
-  --fa-sidebar-collapsed: 72px;
+  /* --- Brand (Aviation Blue) --- */
+  --fa-brand: 37, 99, 235;        /* #2563EB */
+  --fa-brand-hover: 59, 130, 246; /* #3B82F6 */
+  --fa-brand-active: 29, 78, 216; /* #1D4ED8 */
+  --fa-brand-bg: 37, 99, 235;
+  --fa-brand-bg-alpha: 0.10;
 
-  /* Semantic Colors - RGB */
-  --fa-live-rgb: 20, 184, 166;
-  --fa-success-rgb: 16, 185, 129;
-  --fa-warning-rgb: 245, 158, 11;
-  --fa-error-rgb: 239, 68, 68;
-  --fa-info-rgb: 38, 100, 255;
-  --fa-neutral-rgb: 156, 163, 175;
+  /* --- Status --- */
+  --fa-live: 20, 184, 166;
+  --fa-info: 129, 140, 248;
+  --fa-success: 22, 163, 74;
+  --fa-warning: 245, 158, 11;
+  --fa-error: 239, 68, 68;
 
-  /* Semantic Colors - Direct */
-  --fa-status-live: rgb(var(--fa-live-rgb));
-  --fa-status-success: rgb(var(--fa-success-rgb));
-  --fa-status-warning: rgb(var(--fa-warning-rgb));
-  --fa-status-error: rgb(var(--fa-error-rgb));
-  --fa-status-info: rgb(var(--fa-info-rgb));
+  /* --- Surface --- */
+  --fa-bg-page: 255, 255, 255;    /* 修正为纯白色 */
+  --fa-bg-card: 255, 255, 255;    /* 纯白色 */
+  --fa-bg-raised: 255, 255, 255;
+  --fa-bg-overlay: 255, 255, 255;
+  --fa-bg-input: 255, 255, 255;
+  --fa-bg-input-alpha: 1;
 
-  /* Radius */
-  --fa-radius-base: 12px;
+  /* Shell Colors */
+  --fa-bg-topbar: 31, 31, 31;
+  --fa-bg-panel: 255, 255, 255;
+
+  /* --- Text --- */
+  --fa-text-primary: 15, 23, 42;
+  --fa-text-secondary: 71, 85, 105;
+  --fa-text-tertiary: 100, 116, 139;
+  --fa-text-disabled: 148, 163, 184;
+  --fa-text-inverse: 255, 255, 255;
+
+  /* --- Border + Divider --- */
+  --fa-border: 226, 232, 240;
+  --fa-border-alpha: 1;
+  --fa-border-strong: 203, 213, 225;
+  --fa-border-strong-alpha: 1;
+  --fa-divider: 226, 232, 240;
+  --fa-divider-alpha: 1;
+
+  /* --- Action overlays --- */
+  --fa-hover: 15, 23, 42;
+  --fa-hover-alpha: 0.05;
+  --fa-active: 15, 23, 42;
+  --fa-active-alpha: 0.08;
+
+  /* --- Radius --- */
   --fa-radius-tag: 6px;
+  --fa-radius-control: 8px;
+  --fa-radius-card: 12px;
 
-  /* Shadows */
-  --fa-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  /* --- Shadow --- */
+  --fa-shadow-card: 0 1px 3px rgba(0,0,0,0.06);
+  --fa-shadow-overlay: 0 10px 24px rgba(0,0,0,0.16);
+
+  /* --- Typography Atoms --- */
+  --fa-font-sans: 'Inter', -apple-system, system-ui, sans-serif;
+  --fa-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  
+  --fa-fs-t1: 28px; --fa-lh-t1: 36px;
+  --fa-fs-t2: 24px; --fa-lh-t2: 32px;
+  --fa-fs-t3: 20px; --fa-lh-t3: 28px;
+  --fa-fs-t4: 16px; --fa-lh-t4: 24px;
+  --fa-fs-t5: 14px; --fa-lh-t5: 22px;
+  --fa-fs-t6: 12px; --fa-lh-t6: 18px;
+  --fa-fs-t7: 13px; --fa-lh-t7: 20px;
+
+  --fa-fw-regular: 400;
+  --fa-fw-medium: 500;
+  --fa-fw-semibold: 600;
 }
 
-/* Typography tiers v0.2 */
-.fa-t1 { font-size: 28px; line-height: 36px; font-weight: 600; }
-.fa-t2 { font-size: 24px; line-height: 32px; font-weight: 600; }
-.fa-t3 { font-size: 20px; line-height: 28px; font-weight: 600; }
-.fa-t4 { font-size: 16px; line-height: 24px; font-weight: 600; }
-.fa-t5 { font-size: 14px; line-height: 22px; font-weight: 400; }
-.fa-t5-strong { font-size: 14px; line-height: 22px; font-weight: 500; }
-.fa-t6 { font-size: 12px; line-height: 18px; font-weight: 400; }
-.fa-t7-mono { font-size: 13px; line-height: 20px; font-family: ui-monospace, 'JetBrains Mono', monospace; }
+[data-theme="dark"] {
+  --fa-bg-page: 11, 15, 26;
+  --fa-bg-card: 17, 21, 34;
+  --fa-bg-raised: 30, 35, 48;
+  --fa-bg-overlay: 30, 35, 48;
+  --fa-bg-panel: 17, 21, 34;
 
-/* FACard System */
-.fa-card {
-  border-radius: var(--fa-radius-base);
-  background: var(--fa-bg-card);
-  border: 1px solid var(--fa-border-default);
-  overflow: hidden;
-  transition: all 0.2s ease;
-}
-.fa-card--comfort { padding: 16px; }
-.fa-card--compact { padding: 12px; }
-.fa-card--hover:hover {
-  border-color: var(--fa-brand-primary);
-  box-shadow: var(--fa-shadow-sm);
+  --fa-text-primary: 255, 255, 255;
+  --fa-text-secondary: 226, 232, 240;
+  --fa-text-tertiary: 203, 213, 225;
+  --fa-text-disabled: 148, 163, 184;
+
+  --fa-border: 255, 255, 255;
+  --fa-border-alpha: 0.14;
+  --fa-border-strong: 255, 255, 255;
+  --fa-border-strong-alpha: 0.22;
+  --fa-divider: 255, 255, 255;
+  --fa-divider-alpha: 0.14;
+
+  --fa-hover: 255, 255, 255;
+  --fa-hover-alpha: 0.06;
+  --fa-active: 255, 255, 255;
+  --fa-active-alpha: 0.10;
 }
 
 body {
-  background-color: var(--fa-bg-page);
-  color: var(--fa-text-primary);
-  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  background-color: rgba(var(--fa-bg-page), 1);
+  color: rgba(var(--fa-text-primary), 1);
+  font-family: var(--fa-font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.08);
-  border-radius: 10px;
-}
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(var(--fa-hover), 0.1); border-radius: 10px; }

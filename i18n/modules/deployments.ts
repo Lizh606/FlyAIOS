@@ -36,6 +36,15 @@ export const deployments: TranslationModule = {
   'deployments.detail.lastApplied': { zh: '最后下发', en: 'Last Applied' },
   'deployments.detail.viewHistory': { zh: '查看完整审计日志', en: 'View full audit log' },
 
+  // Preview Drawer Specific (New)
+  'deployments.preview.manifestLabel': { zh: 'Manifest DSL 声明', en: 'Manifest DSL Declaration' },
+  'deployments.preview.manifestDesc': { zh: '当前展示的是该部署版本的原始 Manifest 声明。此 JSON 定义了边缘节点如何加载 AI 模型及各处理节点间的拓扑路由。', en: 'Current view shows the raw Manifest for this deployment. This JSON defines AI model loading and node topology routing on edge devices.' },
+  'deployments.preview.copyBtn': { zh: '复制清单代码', en: 'Copy Manifest' },
+  'deployments.preview.copySuccess': { zh: 'Manifest DSL 已复制', en: 'Manifest DSL copied' },
+  'deployments.preview.syntaxLabel': { zh: '语法校验通过', en: 'Syntax Validated' },
+  'deployments.preview.activeLabel': { zh: '策略当前生效', en: 'Policy Active' },
+  'deployments.preview.sizeLabel': { zh: '{size} 字节', en: '{size} Bytes' },
+
   // Live Binding Labels (v0.2 Requirements - Read Only)
   'deployments.live.ingestStatus': { zh: 'Ingest 确认', en: 'Ingest Confirmed' },
   'deployments.live.heartbeat': { zh: '最后心跳', en: 'Last Heartbeat' },

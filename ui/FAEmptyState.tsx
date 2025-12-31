@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from 'antd';
 import { LucideIcon } from 'lucide-react';
@@ -30,26 +29,26 @@ const FAEmptyState: React.FC<FAEmptyStateProps> = ({
   className = ""
 }) => {
   return (
-    <div className={`flex flex-col items-center justify-center py-16 px-6 text-center bg-white border border-dashed border-[var(--fa-border-default)] rounded-xl ${className}`}>
+    <div className={`flex flex-col items-center justify-center py-16 px-6 text-center bg-bg-card border border-dashed border-border rounded-card ${className}`}>
       {Icon && (
-        <div className="mb-4 p-4 rounded-full bg-gray-50 text-gray-200">
+        <div className="mb-4 p-4 rounded-full bg-bg-page text-text-disabled">
           <Icon size={48} strokeWidth={1.5} />
         </div>
       )}
       
-      <h3 className="fa-t4 text-[var(--fa-text-primary)] mb-2">{title}</h3>
+      <h3 className="text-fa-t4 font-fa-semibold text-text-primary mb-2">{title}</h3>
       
       {(description || nextStep) && (
         <div className="max-w-md mb-8">
-          {description && <p className="fa-t6 text-[var(--fa-text-secondary)]">{description}</p>}
-          {nextStep && <p className="fa-t7-mono text-[var(--fa-text-tertiary)] mt-1 uppercase tracking-tight">{nextStep}</p>}
+          {description && <p className="text-fa-t5 text-text-secondary leading-relaxed">{description}</p>}
+          {nextStep && <p className="text-fa-t7 font-fa-medium font-mono text-text-tertiary mt-1 uppercase tracking-tight">{nextStep}</p>}
         </div>
       )}
 
       {(primaryAction || secondaryAction) && (
         <div className="flex items-center gap-3">
           {secondaryAction && (
-            <Button onClick={secondaryAction.onClick} className="h-10 px-6 fa-t5-strong">
+            <Button onClick={secondaryAction.onClick} className="h-10 px-6 font-fa-semibold">
               {secondaryAction.label}
             </Button>
           )}
@@ -58,7 +57,7 @@ const FAEmptyState: React.FC<FAEmptyStateProps> = ({
               type="primary" 
               icon={primaryAction.icon} 
               onClick={primaryAction.onClick} 
-              className="h-10 px-8 fa-t5-strong uppercase tracking-widest"
+              className="h-10 px-8 font-fa-semibold uppercase tracking-widest shadow-md"
             >
               {primaryAction.label}
             </Button>

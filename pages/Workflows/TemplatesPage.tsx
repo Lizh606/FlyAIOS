@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Search, Plus, RefreshCcw } from 'lucide-react';
 import { Input, Button, Tabs } from 'antd';
@@ -37,8 +36,8 @@ const TemplatesPage: React.FC = () => {
         subtitle={t('workflows.subtitle')}
       />
 
-      {/* 1. Standard Toolbar Layout (v0.8) */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-8 border-b border-[var(--fa-border-default)]">
+      {/* Standard Toolbar Layout (v0.8 6.2.1) */}
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-8 border-b border-border">
         <div className="fa-tabs-v2 shrink-0">
           <Tabs
             activeKey={activeTab}
@@ -54,9 +53,9 @@ const TemplatesPage: React.FC = () => {
         
         <div className="flex items-center gap-3 pb-3 w-full lg:w-auto">
           <Input 
-            prefix={<Search size={14} className="text-gray-400" />}
+            prefix={<Search size={14} className="text-text-tertiary" />}
             placeholder={t('workflows.searchPlaceholder')}
-            className="flex-1 md:w-72 lg:w-64 h-9 shadow-sm"
+            className="flex-1 md:w-64 lg:w-80 h-9 shadow-sm"
             allowClear
             value={searchText}
             onChange={e => setSearchText(e.target.value)}
@@ -64,14 +63,14 @@ const TemplatesPage: React.FC = () => {
           <Button 
             type="primary" 
             icon={<Plus size={16} />} 
-            className="h-9 font-bold uppercase tracking-widest shrink-0 shadow-md flex items-center"
+            className="h-9 font-fa-semibold uppercase tracking-widest shrink-0 shadow-md flex items-center"
           >
             {t('workflows.custom')}
           </Button>
         </div>
       </div>
 
-      {/* 2. Grid: v0.8 Spec - Desktop (>=1024) 3 columns, Gap 16px (gap-4) */}
+      {/* Grid View: v0.8 6.5.2 - Desktop 3 columns, Gap 16px (gap-4) */}
       {filteredTemplates.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredTemplates.map(tpl => (
@@ -95,7 +94,6 @@ const TemplatesPage: React.FC = () => {
         />
       )}
 
-      {/* 3. Detail Overlay (v0.8 Drawer Pattern) */}
       <TemplateDetailDrawer 
         template={selectedTemplate} 
         open={!!selectedTemplateId} 

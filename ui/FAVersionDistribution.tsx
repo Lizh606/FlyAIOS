@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Cpu } from 'lucide-react';
 import { Popover } from 'antd';
@@ -27,15 +26,15 @@ const FAVersionDistribution: React.FC<FAVersionDistributionProps> = ({
   const remainingItems = items.slice(limit);
 
   const popoverContent = (
-    <div className="w-[180px] p-1">
-      <div className="fa-t7-mono text-[10px] text-gray-400 font-bold uppercase tracking-[0.15em] mb-4">
+    <div className="w-[180px] p-fa-1">
+      <div className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tracking-[0.15em] mb-fa-4">
         {t('workflows.distribution.allStatus')}
       </div>
-      <div className="space-y-3">
+      <div className="space-y-fa-3">
         {items.map((item, idx) => (
           <div key={idx} className="flex items-center justify-between">
-            <span className="fa-t5 text-gray-600 font-mono">{item.version}</span>
-            <span className="fa-t5-strong text-gray-900 font-mono tabular-nums">{item.count}</span>
+            <span className="text-fa-t5 text-text-secondary font-mono">{item.version}</span>
+            <span className="text-fa-t5 font-fa-semibold text-text-primary font-mono tabular-nums">{item.count}</span>
           </div>
         ))}
       </div>
@@ -43,21 +42,21 @@ const FAVersionDistribution: React.FC<FAVersionDistributionProps> = ({
   );
 
   return (
-    <div className={`space-y-3 ${className}`}>
+    <div className={`space-y-fa-3 ${className}`}>
       {label && (
-        <h4 className="fa-t6 font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+        <h4 className="text-fa-t6 font-fa-semibold text-text-tertiary uppercase tracking-widest flex items-center gap-fa-2">
           {label}
         </h4>
       )}
-      <div className="flex items-center gap-2 flex-wrap">
+      <div className="flex items-center gap-fa-2 flex-wrap">
         {visibleItems.map((item, idx) => (
           <div 
             key={idx} 
-            className="flex items-center gap-2 px-2.5 py-1.5 bg-gray-50 border border-gray-100 rounded-lg shadow-sm"
+            className="flex items-center gap-fa-2 px-fa-2.5 py-fa-1.5 bg-bg-page border border-border rounded-lg shadow-sm"
           >
-            <Cpu size={12} className="text-gray-400" />
-            <span className="fa-t7-mono text-gray-600">{item.version}</span>
-            <span className="fa-t7-mono font-bold text-gray-900 ml-1 tabular-nums">{item.count}</span>
+            <Cpu size={12} className="text-text-tertiary" />
+            <span className="text-fa-t7 font-fa-medium text-text-secondary font-mono">{item.version}</span>
+            <span className="text-fa-t7 font-fa-semibold text-text-primary ml-fa-1 tabular-nums">{item.count}</span>
           </div>
         ))}
         
@@ -68,20 +67,12 @@ const FAVersionDistribution: React.FC<FAVersionDistributionProps> = ({
             placement="top"
             overlayClassName="fa-popover-v2"
           >
-            <div className="cursor-help flex items-center justify-center px-3 py-1.5 bg-blue-50 border border-blue-100 text-brand rounded-lg fa-t7-mono font-bold transition-all hover:bg-blue-100 shadow-sm">
+            <div className="cursor-help flex items-center justify-center px-fa-3 py-fa-1.5 bg-brand-bg border border-brand/20 text-brand rounded-lg text-fa-t7 font-fa-semibold transition-all hover:bg-brand/20 shadow-sm">
               +{remainingItems.length}
             </div>
           </Popover>
         )}
       </div>
-      <style>{`
-        .fa-popover-v2 .ant-popover-inner {
-          padding: 16px;
-          border-radius: 12px;
-          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-          border: 1px solid rgba(0,0,0,0.05);
-        }
-      `}</style>
     </div>
   );
 };

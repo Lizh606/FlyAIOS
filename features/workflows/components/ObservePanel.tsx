@@ -21,9 +21,9 @@ const MOCK_RUNS = [
 ];
 
 const StatusIcon = ({ status }: { status: string }) => {
-  if (status === 'success') return <CheckCircle2 size={14} className="text-green-500" />;
-  if (status === 'failure') return <AlertCircle size={14} className="text-red-500" />;
-  return <Clock size={14} className="text-blue-500" />;
+  if (status === 'success') return <CheckCircle2 size={14} className="text-success" />;
+  if (status === 'failure') return <AlertCircle size={14} className="text-error" />;
+  return <Clock size={14} className="text-info" />;
 };
 
 const ObservePanel: React.FC<ObservePanelProps> = ({ workflowId, open, onClose }) => {
@@ -35,7 +35,7 @@ const ObservePanel: React.FC<ObservePanelProps> = ({ workflowId, open, onClose }
       title={
         <div className="flex items-center gap-2">
           <Monitor size={18} className="text-brand" />
-          <span className="fa-t4 text-gray-900">{t('workflows.studio.observe')}</span>
+          <span className="text-fa-t4 font-fa-semibold text-text-primary">{t('workflows.studio.observe')}</span>
         </div>
       }
       open={open}
@@ -46,14 +46,18 @@ const ObservePanel: React.FC<ObservePanelProps> = ({ workflowId, open, onClose }
           type="link" 
           icon={<ExternalLink size={14}/>} 
           onClick={() => navigate('/runs')}
-          className="fa-t6 font-bold p-0"
+          className="text-fa-t6 font-fa-semibold p-0 hover:text-brand"
         >
           {t('workflows.observe.viewAll')}
         </Button>
       }
+      styles={{
+        header: { borderBottom: '1px solid rgba(var(--fa-divider), var(--fa-divider-alpha))', padding: '16px 24px' },
+        body: { padding: '24px', backgroundColor: 'rgba(var(--fa-bg-page), 1)' }
+      }}
     >
       <div className="h-full flex flex-col">
-        <h3 className="fa-t6 font-bold uppercase tracking-widest text-gray-400 mb-6">
+        <h3 className="text-fa-t6 font-fa-semibold uppercase tracking-widest text-text-tertiary mb-6 m-0">
           {t('workflows.observe.recentRuns')}
         </h3>
 
@@ -63,28 +67,28 @@ const ObservePanel: React.FC<ObservePanelProps> = ({ workflowId, open, onClose }
               <div 
                 key={run.id} 
                 onClick={() => navigate(`/run/${run.id}`)}
-                className="group p-4 bg-white border border-gray-100 rounded-xl hover:border-brand hover:shadow-md transition-all cursor-pointer"
+                className="group p-4 bg-bg-card border border-border rounded-xl hover:border-brand/40 hover:shadow-card transition-all cursor-pointer shadow-sm"
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <StatusIcon status={run.status} />
-                    <span className="fa-t7-mono text-gray-900 font-bold uppercase tracking-tighter">#{run.id}</span>
+                    <span className="text-fa-t7 font-fa-semibold text-text-primary uppercase tracking-tighter tabular-nums font-mono">#{run.id.toUpperCase().slice(-6)}</span>
                   </div>
-                  <span className="fa-t6 text-gray-400">{run.started}</span>
+                  <span className="text-fa-t6 text-text-tertiary font-fa-medium">{run.started}</span>
                 </div>
                 
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-1.5">
-                    <Tag className="m-0 fa-t7-mono text-[9px] uppercase border-none bg-gray-100">{run.trigger}</Tag>
+                    <span className="text-fa-t7 font-fa-semibold uppercase px-1.5 py-0.5 bg-bg-page border border-border text-text-secondary rounded text-[9px]">{run.trigger}</span>
                   </div>
-                  <span className="fa-t7-mono text-[10px] text-gray-400 uppercase font-medium">{run.duration}</span>
+                  <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tabular-nums">{run.duration}</span>
                 </div>
 
-                <div className="flex items-center gap-3 pt-3 border-t border-gray-50">
+                <div className="flex items-center gap-3 pt-3 border-t border-divider">
                   <div className="flex items-center gap-2">
-                    {run.outputs.includes('img') && <ImageIcon size={12} className="text-teal-500" />}
+                    {run.outputs.includes('img') && <ImageIcon size={12} className="text-live" />}
                     {run.outputs.includes('report') && <FileText size={12} className="text-brand" />}
-                    {run.outputs.includes('webhook') && <Webhook size={12} className="text-blue-400" />}
+                    {run.outputs.includes('webhook') && <Webhook size={12} className="text-info" />}
                   </div>
                   <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
                     <ExternalLink size={14} className="text-brand" />
@@ -95,12 +99,12 @@ const ObservePanel: React.FC<ObservePanelProps> = ({ workflowId, open, onClose }
           </div>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center opacity-40">
-             <Empty description={t('workflows.observe.noRuns')} />
+             <Empty description={<span className="text-fa-t6 font-fa-semibold uppercase tracking-widest text-text-tertiary">{t('workflows.observe.noRuns')}</span>} />
           </div>
         )}
 
-        <div className="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-100 border-dashed">
-           <p className="fa-t6 text-gray-500 text-center">
+        <div className="mt-8 p-4 bg-bg-card rounded-xl border border-border border-dashed shadow-inner">
+           <p className="text-fa-t6 text-text-secondary text-center m-0 leading-relaxed italic">
              {t('workflows.observe.activeDesc')}
            </p>
         </div>

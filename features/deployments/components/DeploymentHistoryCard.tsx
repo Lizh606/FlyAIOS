@@ -8,71 +8,60 @@ import { useI18n } from '../../../i18n';
 import FACard from '../../../ui/FACard';
 import { Deployment } from '../../../shared/mocks/deployments';
 
-/**
- * DeploymentHistoryCard - v0.2 Link Hub
- * Authority entry point to Runs (Evidence) and Executions (Monitoring).
- */
 const DeploymentHistoryCard: React.FC<{ deployment: Deployment }> = ({ deployment }) => {
   const { t } = useI18n();
 
-  const now = new Date();
-  const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
-  
-  const runsLink = `/runs?deploymentId=${deployment.id}`;
-  const executionsLink = `/executions?projectId=${deployment.projectId}&start=${yesterday}`;
-
   return (
-    <FACard title={t('deployments.detail.history')} density="comfort" className="bg-white border-gray-100 shadow-sm">
+    <FACard title={t('deployments.detail.history')} density="comfort" className="bg-bg-card border-border shadow-sm">
       <div className="space-y-6">
-        {/* Authoritative Entry Points */}
         <div className="space-y-3">
-          <Link to={runsLink} className="flex items-center justify-between p-4 bg-gray-50/50 hover:bg-white border border-gray-100 hover:border-brand rounded-xl transition-all group shadow-sm hover:shadow-md">
-            <div className="flex items-center gap-3.5">
-              <div className="w-10 h-10 rounded-lg bg-white border border-gray-100 flex items-center justify-center text-gray-400 group-hover:text-brand group-hover:bg-blue-50 transition-all">
+          <Link to={`/runs?deploymentId=${deployment.id}`} className="flex items-center justify-between p-4 bg-bg-page hover:bg-bg-card border border-border hover:border-brand/40 rounded-xl transition-all group shadow-sm">
+            <div className="flex items-center gap-4 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-bg-card border border-border flex items-center justify-center text-text-tertiary group-hover:text-brand group-hover:bg-brand-bg transition-all">
                 <Activity size={20} />
               </div>
-              <div className="flex flex-col">
-                <span className="fa-t5-strong text-gray-800">{t('deployments.links.recentRuns')}</span>
-                <span className="fa-t7-mono text-[9px] text-gray-400 font-bold uppercase">v{deployment.version} Logic Scope</span>
+              <div className="flex flex-col min-w-0">
+                <span className="text-fa-t5 font-fa-semibold text-text-primary truncate">{t('deployments.links.recentRuns')}</span>
+                <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase text-[9px]">v{deployment.version} 逻辑作用域</span>
               </div>
             </div>
-            <ExternalLink size={14} className="text-gray-300 group-hover:text-brand" />
+            <ExternalLink size={14} className="text-text-disabled group-hover:text-brand transition-colors" />
           </Link>
 
-          <Link to={executionsLink} className="flex items-center justify-between p-4 bg-gray-50/50 hover:bg-white border border-gray-100 hover:border-brand rounded-xl transition-all group shadow-sm hover:shadow-md">
-            <div className="flex items-center gap-3.5">
-              <div className="w-10 h-10 rounded-lg bg-white border border-gray-100 flex items-center justify-center text-gray-400 group-hover:text-brand group-hover:bg-blue-50 transition-all">
+          <Link to={`/executions?projectId=${deployment.projectId}`} className="flex items-center justify-between p-4 bg-bg-page hover:bg-bg-card border border-border hover:border-brand/40 rounded-xl transition-all group shadow-sm">
+            <div className="flex items-center gap-4 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-bg-card border border-border flex items-center justify-center text-text-tertiary group-hover:text-brand group-hover:bg-brand-bg transition-all">
                 <Clock size={20} />
               </div>
-              <div className="flex flex-col">
-                <span className="fa-t5-strong text-gray-800">{t('deployments.links.executions')}</span>
-                <span className="fa-t7-mono text-[9px] text-gray-400 font-bold uppercase">Last 24H Physical Window</span>
+              <div className="flex flex-col min-w-0">
+                <span className="text-fa-t5 font-fa-semibold text-text-primary truncate">{t('deployments.links.executions')}</span>
+                <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase text-[9px]">最近 24H 物理视窗</span>
               </div>
             </div>
-            <ExternalLink size={14} className="text-gray-300 group-hover:text-brand" />
+            <ExternalLink size={14} className="text-text-disabled group-hover:text-brand transition-colors" />
           </Link>
         </div>
 
-        <Divider className="my-0 opacity-5" />
+        <Divider className="my-0 opacity-10" />
 
         <div className="space-y-5">
-           <h5 className="fa-t6 font-bold uppercase tracking-widest text-gray-400 mb-2 px-1">Recent Policy Events</h5>
-           <div className="space-y-6 ml-2.5 pl-5 border-l border-gray-100 relative">
-              <EventItem time="14:20" text={`Policy ${deployment.version} Applied Successfully`} status="success" icon={<ShieldCheck size={10} />} />
+           <h5 className="text-fa-t6 font-fa-semibold uppercase tracking-widest text-text-tertiary mb-3 px-1">近期策略事件</h5>
+           <div className="space-y-6 ml-2.5 pl-6 border-l border-divider relative">
+              <EventItem time="14:20" text={`策略 ${deployment.version} 已成功生效`} status="success" icon={<ShieldCheck size={11} />} />
               {(deployment.status === 'failed' || deployment.status === 'partial') && (
                 <div className="relative">
-                  <div className="absolute -left-[21.5px] top-1.5 w-2.5 h-2.5 rounded-full border-2 border-white shadow-sm bg-red-500" />
-                  <div className="fa-t7-mono text-[10px] text-red-500 uppercase font-bold mb-0.5">09:15</div>
-                  <div className="fa-t6 font-bold text-red-700 leading-tight">Verification Failed on 2 Nodes</div>
+                  <div className="absolute -left-[29px] top-1.5 w-2.5 h-2.5 rounded-full border-2 border-bg-card shadow-sm bg-error" />
+                  <div className="text-fa-t7 font-fa-semibold text-error uppercase font-mono mb-1">09:15</div>
+                  <div className="text-fa-t6 font-fa-semibold text-text-primary leading-tight">2 个节点同步验证失败</div>
                 </div>
               )}
-              <EventItem time="Dec 18" text="New Deployment Manifest Generated" status="neutral" icon={<GitBranch size={10} />} />
+              <EventItem time="12-18" text="生成新部署清单 (Manifest)" status="neutral" icon={<GitBranch size={11} />} />
            </div>
            
            <div className="pt-2 px-1">
              <Button 
               type="link" 
-              className="p-0 h-auto fa-t6 font-bold uppercase tracking-widest text-brand hover:underline flex items-center gap-1.5 group"
+              className="p-0 h-auto text-fa-t6 font-fa-semibold uppercase tracking-widest text-brand hover:text-brand-hover flex items-center gap-1.5 group"
              >
                {t('deployments.detail.viewHistory')} 
                <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
@@ -86,13 +75,13 @@ const DeploymentHistoryCard: React.FC<{ deployment: Deployment }> = ({ deploymen
 
 const EventItem = ({ time, text, status, icon }: any) => (
   <div className="relative">
-    <div className={`absolute -left-[21.5px] top-1.5 w-2.5 h-2.5 rounded-full border-2 border-white shadow-sm ${
-      status === 'success' ? 'bg-green-500' : 'bg-gray-300'
+    <div className={`absolute -left-[29px] top-1.5 w-2.5 h-2.5 rounded-full border-2 border-bg-card shadow-sm ${
+      status === 'success' ? 'bg-success' : 'bg-text-disabled'
     }`} />
-    <div className="fa-t7-mono text-[10px] text-gray-400 uppercase font-bold mb-0.5 tabular-nums flex items-center gap-1.5">
+    <div className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase font-mono mb-1 tabular-nums flex items-center gap-1.5">
       {time} {icon && <span className="opacity-50">{icon}</span>}
     </div>
-    <div className="fa-t6 font-semibold text-gray-800 leading-tight">{text}</div>
+    <div className="text-fa-t6 font-fa-medium text-text-secondary leading-tight">{text}</div>
   </div>
 );
 

@@ -61,10 +61,9 @@ const DeploymentDetailPage: React.FC = () => {
 
           {/* Inspector (Right, span 4 equivalent) */}
           <aside className="w-full lg:w-[360px] space-y-8 shrink-0">
-             {/* Live Strategy Inspector */}
+             {/* Live Strategy Inspector - Fixed: Removed the onPreviewManifest prop which is not defined on LiveBindingCard */}
              <LiveBindingCard 
               deployment={deployment} 
-              onPreviewManifest={() => setShowDSL(true)} 
              />
 
              {/* History & Event Chain */}

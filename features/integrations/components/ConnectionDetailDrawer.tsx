@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Tabs, Tag, Divider, Empty, Button, message, Tooltip, Form, Input, Select, Popconfirm } from 'antd';
+import { Tabs, Tag, Divider, Empty, Button, message, Tooltip, Form, Input, Select } from 'antd';
 import { Settings, Activity, Link2, ShieldCheck, History, ExternalLink, RefreshCw, Copy, Clock, Globe, Save, XCircle, Plus } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import FADrawer from '../../../ui/FADrawer';
@@ -66,9 +65,6 @@ const ConnectionDetailDrawer: React.FC<ConnectionDetailDrawerProps> = ({ connect
   };
 
   const handleCancelEdit = () => {
-    if (hasChanges) {
-      // Logic for unsaved handled by close or inline cancel
-    }
     setIsEditing(false);
     form.resetFields();
   };
@@ -82,14 +78,14 @@ const ConnectionDetailDrawer: React.FC<ConnectionDetailDrawerProps> = ({ connect
   };
 
   const renderFooter = () => {
-    const commonBtnClass = "fa-t5-strong uppercase tracking-widest h-10 px-6 w-full md:w-auto";
+    const commonBtnClass = "text-fa-t5 font-fa-semibold uppercase tracking-widest h-10 px-6 w-full md:w-auto";
     
     if (isEditing) {
       return (
         <div className="flex flex-col md:flex-row items-center gap-3 w-full justify-end px-2">
           <Button 
             onClick={handleCancelEdit}
-            className={`${commonBtnClass} text-gray-500 order-2 md:order-1`}
+            className={`${commonBtnClass} text-text-secondary border-border order-2 md:order-1`}
           >
             {t('integrations.action.cancel')}
           </Button>
@@ -111,7 +107,7 @@ const ConnectionDetailDrawer: React.FC<ConnectionDetailDrawerProps> = ({ connect
         <Button 
           icon={<RefreshCw size={14}/>} 
           onClick={handleTestConnection}
-          className={`${commonBtnClass} text-gray-500 border-gray-200 hover:text-brand hover:border-brand/40 order-2 md:order-1`}
+          className={`${commonBtnClass} text-text-tertiary border-border hover:text-brand hover:border-brand/40 order-2 md:order-1`}
         >
           {t('integrations.action.test')}
         </Button>
@@ -135,22 +131,22 @@ const ConnectionDetailDrawer: React.FC<ConnectionDetailDrawerProps> = ({ connect
       title={
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <span className="fa-t2 text-gray-900 leading-none">{connection.name}</span>
+            <span className="text-fa-t2 font-fa-semibold text-text-primary leading-none">{connection.name}</span>
             <FAStatus 
               status={connection.status === 'connected' ? 'success' : connection.status === 'failed' ? 'error' : 'warning'} 
               label={t(`integrations.state.${connection.status}`)} 
             />
           </div>
-          <div className="flex items-center gap-4 text-gray-400">
+          <div className="flex items-center gap-4 text-text-tertiary">
              <div className="flex items-center gap-1.5 group cursor-pointer" onClick={() => handleCopy(connection.id, 'ID')}>
-                <span className="fa-t7-mono text-[10px] font-bold uppercase tracking-widest">{t('integrations.drawer.auditId')}:</span>
-                <span className="fa-t7-mono text-[11px] font-bold group-hover:text-brand transition-colors tabular-nums">#{connection.id.toUpperCase()}</span>
+                <span className="text-fa-t7 font-fa-semibold font-mono text-[10px] uppercase tracking-widest">{t('integrations.drawer.auditId')}:</span>
+                <span className="text-fa-t7 font-fa-semibold font-mono text-[11px] group-hover:text-brand transition-colors tabular-nums">#{connection.id.toUpperCase()}</span>
                 <Copy size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
              </div>
-             <Divider type="vertical" className="bg-gray-200 h-3" />
+             <Divider type="vertical" className="bg-divider h-3" />
              <div className="flex items-center gap-1.5">
                 <Globe size={12} className="opacity-50" />
-                <span className="fa-t6 font-semibold">{connection.type === 'Webhook' ? 'Webhook / HTTP' : 'Work Order / RFC'}</span>
+                <span className="text-fa-t6 font-fa-medium uppercase tracking-tight">{connection.type === 'Webhook' ? 'Webhook / HTTP' : 'Work Order / RFC'}</span>
              </div>
           </div>
         </div>
@@ -160,10 +156,11 @@ const ConnectionDetailDrawer: React.FC<ConnectionDetailDrawerProps> = ({ connect
       width={640}
       footerActions={renderFooter()}
     >
-      <div className="fa-tabs-v2">
+      <div className="fa-tabs-v2 h-full flex flex-col">
         <Tabs
           activeKey={isEditing ? 'basic' : undefined}
           defaultActiveKey="basic"
+          className="flex-1"
           items={[
             {
               key: 'basic',
@@ -177,19 +174,19 @@ const ConnectionDetailDrawer: React.FC<ConnectionDetailDrawerProps> = ({ connect
                 >
                   {/* Meta Section */}
                   <section>
-                    <h4 className="fa-t4 text-gray-900 mb-6 flex items-center gap-2">
+                    <h4 className="text-fa-t4 font-fa-semibold text-text-primary mb-6 flex items-center gap-2">
                       <Activity size={18} className="text-brand" />
                       {t('integrations.drawer.section.meta')}
                     </h4>
-                    <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
+                    <div className="bg-bg-page/50 p-6 rounded-2xl border border-border shadow-sm space-y-6">
                        <div className="grid grid-cols-1 gap-6">
                           <Form.Item 
                             name="endpoint" 
-                            label={<span className="fa-t7-mono text-[10px] text-gray-400 font-bold uppercase tracking-[0.15em]">{t('integrations.drawer.endpoint')}</span>}
+                            label={<span className="text-fa-t7 font-fa-semibold font-mono text-[10px] text-text-tertiary uppercase tracking-[0.15em]">{t('integrations.drawer.endpoint')}</span>}
                             className="m-0"
                           >
                             {isEditing ? (
-                              <Input className="h-10 fa-t5 font-mono" prefix={<Link2 size={14} className="text-gray-300" />} />
+                              <Input className="h-10 text-fa-t5 font-mono" prefix={<Link2 size={14} className="text-text-disabled" />} />
                             ) : (
                               <MetaBlock 
                                 label={t('integrations.drawer.endpoint')} 
@@ -203,7 +200,7 @@ const ConnectionDetailDrawer: React.FC<ConnectionDetailDrawerProps> = ({ connect
                             )}
                           </Form.Item>
                        </div>
-                       <div className="grid grid-cols-2 gap-8 pt-4 border-t border-gray-100">
+                       <div className="grid grid-cols-2 gap-8 pt-4 border-t border-divider">
                           <MetaBlock label={t('integrations.drawer.auth')} value={connection.authType} icon={<ShieldCheck size={12}/>} />
                           <MetaBlock label={t('integrations.col.updated')} value={connection.updatedAt} icon={<Clock size={12}/>} tabular />
                        </div>
@@ -212,8 +209,8 @@ const ConnectionDetailDrawer: React.FC<ConnectionDetailDrawerProps> = ({ connect
                   
                   {/* Events Section */}
                   <section>
-                    <h4 className="fa-t4 text-gray-900 mb-6 flex items-center gap-2">
-                      <ShieldCheck size={18} className="text-teal-500" />
+                    <h4 className="text-fa-t4 font-fa-semibold text-text-primary mb-6 flex items-center gap-2">
+                      <ShieldCheck size={18} className="text-live" />
                       {t('integrations.drawer.section.events')}
                     </h4>
                     {isEditing ? (
@@ -234,7 +231,7 @@ const ConnectionDetailDrawer: React.FC<ConnectionDetailDrawerProps> = ({ connect
                       <div className="flex flex-wrap gap-2.5">
                         {connection.mapping.map(m => (
                           <Tooltip key={m} title={`Code: ${m.toUpperCase()}`}>
-                            <Tag className="m-0 fa-t6 font-bold text-gray-700 bg-white border border-gray-200 rounded-lg px-3 py-1.5 shadow-sm hover:border-brand/40 transition-colors cursor-help">
+                            <Tag className="m-0 text-fa-t6 font-fa-semibold text-text-secondary bg-bg-card border border-border rounded-lg px-3 py-1.5 shadow-sm hover:border-brand/40 transition-colors cursor-help">
                               {t(`integrations.event.${m}`) || m}
                             </Tag>
                           </Tooltip>
@@ -255,14 +252,13 @@ const ConnectionDetailDrawer: React.FC<ConnectionDetailDrawerProps> = ({ connect
                     <div className="space-y-5 animate-in fade-in duration-500">
                       <div className="flex items-center justify-between px-1">
                          <div className="flex items-center gap-2">
-                            <span className="fa-t7-mono text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">
+                            <span className="text-fa-t7 font-fa-semibold font-mono text-[10px] text-text-tertiary uppercase tracking-widest leading-none">
                               审计流水线 • {connection.deliveries.length} 条记录
                             </span>
                          </div>
                          <div className="flex items-center gap-2">
-                           {/* Semantic fix: Use Live/Info color for monitoring status */}
-                           <div className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse shadow-[0_0_8px_rgba(20,184,166,0.4)]" />
-                           <span className="fa-t7-mono text-[9px] text-teal-600 font-bold uppercase">{t('integrations.delivery.listening')}</span>
+                           <div className="w-1.5 h-1.5 rounded-full bg-live animate-pulse shadow-[0_0_8px_rgba(var(--fa-live),0.4)]" />
+                           <span className="text-fa-t7 font-fa-semibold font-mono text-[9px] text-live uppercase">{t('integrations.delivery.listening')}</span>
                          </div>
                       </div>
                       <DeliveriesTable data={connection.deliveries} />
@@ -270,10 +266,10 @@ const ConnectionDetailDrawer: React.FC<ConnectionDetailDrawerProps> = ({ connect
                   ) : (
                     <div className="py-24 flex flex-col items-center justify-center grayscale opacity-40">
                       <Empty 
-                        image={<History size={48} className="text-gray-200" />} 
-                        description={<span className="fa-t6 font-bold uppercase tracking-widest text-gray-400">{t('integrations.drawer.emptyDeliveries')}</span>} 
+                        image={<History size={48} className="text-text-disabled" />} 
+                        description={<span className="text-fa-t6 font-fa-semibold uppercase tracking-widest text-text-tertiary">{t('integrations.drawer.emptyDeliveries')}</span>} 
                       />
-                      <Button type="link" icon={<ExternalLink size={14}/>} className="fa-t6 font-bold mt-2">查看完整审计流水</Button>
+                      <Button type="link" icon={<ExternalLink size={14}/>} className="text-fa-t6 font-fa-semibold mt-2">查看完整审计流水</Button>
                     </div>
                   )}
                 </div>
@@ -282,18 +278,25 @@ const ConnectionDetailDrawer: React.FC<ConnectionDetailDrawerProps> = ({ connect
           ]}
         />
       </div>
+      
+      <style>{`
+        .fa-tabs-v2 .ant-tabs-nav { margin-bottom: 0 !important; }
+        .fa-tabs-v2 .ant-tabs-nav::before { border-bottom: 1px solid rgba(var(--fa-divider), var(--fa-divider-alpha)) !important; }
+        .fa-tabs-v2 .ant-tabs-tab { padding: 12px 0 !important; margin-right: 24px !important; }
+        .fa-tabs-v2 .ant-tabs-tab-btn { font-size: 13px !important; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600 !important; }
+      `}</style>
     </FADrawer>
   );
 };
 
 const MetaBlock = ({ label, value, icon, mono, tabular, copyable, onCopy, noLabel }: any) => (
   <div className="flex flex-col gap-2 min-w-0 group/meta">
-    {!noLabel && <span className="fa-t7-mono text-[10px] text-gray-400 font-bold uppercase tracking-[0.15em] leading-none">{label}</span>}
+    {!noLabel && <span className="text-fa-t7 font-fa-semibold font-mono text-[10px] text-text-tertiary uppercase tracking-[0.15em] leading-none">{label}</span>}
     <div className="flex items-center justify-between gap-4">
       <div className="flex items-center gap-2.5 min-w-0">
-        <span className="text-gray-300 shrink-0">{icon}</span>
+        <span className="text-text-disabled shrink-0">{icon}</span>
         <Tooltip title={value}>
-          <span className={`fa-t5-strong text-gray-800 truncate ${mono ? 'font-mono tracking-tighter' : ''} ${tabular ? 'font-mono tabular-nums' : ''}`}>
+          <span className={`text-fa-t5 font-fa-semibold text-text-primary truncate ${mono ? 'font-mono tracking-tighter' : ''} ${tabular ? 'font-mono tabular-nums' : ''}`}>
             {value}
           </span>
         </Tooltip>
@@ -301,7 +304,7 @@ const MetaBlock = ({ label, value, icon, mono, tabular, copyable, onCopy, noLabe
       {copyable && (
         <button 
           onClick={onCopy}
-          className="p-1.5 hover:bg-gray-100 rounded-md text-gray-300 hover:text-brand opacity-0 group-hover/meta:opacity-100 transition-all shrink-0"
+          className="p-1.5 hover:bg-action-hover rounded-md text-text-tertiary hover:text-brand opacity-0 group-hover/meta:opacity-100 transition-all shrink-0 border-none bg-transparent cursor-pointer"
         >
           <Copy size={13} />
         </button>

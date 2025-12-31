@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button, Popover, Divider, Tooltip, Dropdown, message, Drawer } from 'antd';
 import { 
@@ -23,43 +22,42 @@ const DeploymentHeader: React.FC<DeploymentHeaderProps> = ({ deployment, onPrevi
 
   const handleCopy = (val: string) => {
     navigator.clipboard.writeText(val);
-    message.success('Copied to clipboard');
+    message.success('已复制到剪贴板');
   };
 
-  // Status Level 2 Content - Strictly following v0.8 6.1.1C template
+  // 严格遵循 v0.8 6.1.1C 状态解释面板模板
   const statusContent = (
-    <div className="w-[340px] md:w-full p-1 space-y-5">
-      <div className="flex items-center justify-between mb-2">
-        <div className="fa-t7-mono text-gray-400 font-bold uppercase tracking-[0.15em]">{t('deployments.status.panelTitle')}</div>
-        <HelpCircle size={14} className="text-gray-300" />
+    <div className="w-[340px] p-1 space-y-5">
+      <div className="flex items-center justify-between">
+        <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tracking-widest">{t('deployments.status.panelTitle')}</span>
+        <HelpCircle size={14} className="text-text-tertiary" />
       </div>
       <div className="space-y-4">
         <StatusField label={t('deployments.status.what')} value={deployment.status.toUpperCase()} highlight />
-        <StatusField label={t('deployments.status.why')} value={deployment.status === 'partial' ? 'Sync timeout on 2 nodes' : 'Policy verification success'} />
+        <StatusField label={t('deployments.status.why')} value={deployment.status === 'partial' ? '2 个节点同步超时' : '策略校验已通过'} />
         <StatusField label={t('deployments.status.when')} value={deployment.updatedAt} tabular />
-        <StatusField label={t('deployments.status.impact')} value={`${deployment.appliedNodes.length} Edge Nodes (Fleet Wide)`} />
+        <StatusField label={t('deployments.status.impact')} value={`${deployment.appliedNodes.length} 台边缘节点 (机队全局)`} />
         
-        <Divider className="my-0 opacity-10" />
+        <Divider className="my-1 opacity-10" />
         
-        <div className="space-y-2">
-          <div className="fa-t7-mono text-[10px] text-gray-400 font-bold uppercase mb-2">{t('deployments.status.next')}</div>
+        <div className="space-y-3">
+          <div className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tracking-widest">{t('deployments.status.next')}</div>
           <div className="flex flex-col gap-2">
             <Button 
-              size="small" 
               type="primary" 
               ghost 
+              block
               icon={<Activity size={14} />} 
-              className="justify-start h-9 fa-t6 font-bold uppercase"
+              className="h-9 text-fa-t6 font-fa-semibold uppercase text-left justify-start"
               onClick={() => navigate(`/runs?deploymentId=${deployment.id}`)}
             >
               {t('deployments.links.recentRuns')}
             </Button>
             <Button 
-              size="small" 
-              type="text" 
+              block
               icon={<ExternalLink size={14} />} 
-              className="justify-start h-9 fa-t6 text-gray-500 font-bold uppercase border border-gray-100"
-              onClick={() => navigate(`/executions?projectId=${deployment.projectId}&deploymentId=${deployment.id}`)}
+              className="h-9 text-fa-t6 font-fa-semibold uppercase text-left justify-start text-text-secondary border-border"
+              onClick={() => navigate(`/executions?projectId=${deployment.projectId}`)}
             >
               {t('deployments.links.executions')}
             </Button>
@@ -69,106 +67,76 @@ const DeploymentHeader: React.FC<DeploymentHeaderProps> = ({ deployment, onPrevi
     </div>
   );
 
-  const moreActions = [
-    {
-      key: 'rollback',
-      danger: true,
-      icon: <RefreshCcw size={14} />,
-      label: <span className="fa-t6 font-bold uppercase">{t('deployments.detail.rollback')}</span>,
-      onClick: onRollback
-    }
-  ];
-
   return (
     <div className="mb-8">
-      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
         <div className="min-w-0 flex-1">
-          <div className="flex items-center flex-wrap gap-4 mb-2">
+          <div className="flex items-center flex-wrap gap-4 mb-3">
             <button 
               onClick={() => navigate('/deployments')}
-              className="p-2 -ml-2 text-gray-400 hover:text-brand hover:bg-brand/5 rounded-lg transition-all"
+              className="p-2 -ml-2 text-text-tertiary hover:text-brand hover:bg-brand-bg rounded-lg transition-all"
             >
               <ArrowLeft size={20} />
             </button>
-            <h1 className="fa-t2 text-gray-900 truncate">{deployment.workflowName} @ {deployment.version}</h1>
+            <h1 className="text-fa-t2 font-fa-semibold text-text-primary truncate m-0 leading-none">
+              {deployment.workflowName} @ {deployment.version}
+            </h1>
             
-            {/* Status Level 2 Implementation */}
             <div className="hidden md:block">
               <Popover content={statusContent} trigger="hover" placement="bottomLeft" overlayClassName="fa-popover-v2">
-                <div className="cursor-help">
+                <div className="cursor-help inline-flex">
                   <FAStatus status={deployment.status === 'applied' ? 'online' : deployment.status === 'failed' ? 'failed' : 'queued'} label={deployment.status} />
                 </div>
               </Popover>
             </div>
-            <div className="md:hidden">
-              <div className="cursor-pointer" onClick={() => setStatusDrawerOpen(true)}>
-                <FAStatus status={deployment.status === 'applied' ? 'online' : deployment.status === 'failed' ? 'failed' : 'queued'} label={deployment.status} />
-              </div>
-            </div>
           </div>
 
-          <p className="fa-t6 text-gray-500 flex items-center gap-2 pl-10">
-            <span className="font-semibold text-gray-700">Project: {deployment.projectName}</span>
-            <Divider type="vertical" className="bg-gray-200" />
-            <span className="fa-t7-mono text-gray-400">Synced: <span className="tabular-nums">{deployment.updatedAt}</span></span>
-          </p>
+          <div className="flex items-center gap-3 text-fa-t6 text-text-secondary pl-10">
+            <span className="font-fa-semibold">项目: {deployment.projectName}</span>
+            <Divider type="vertical" className="bg-divider h-3" />
+            <span className="font-fa-medium tabular-nums text-text-tertiary">同步于 {deployment.updatedAt}</span>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
-          <Button icon={<FileCode size={16} />} onClick={onPreview} className="fa-t5-strong border-gray-200 hover:border-brand hover:text-brand shadow-sm">
+        <div className="flex items-center gap-3 shrink-0">
+          <Button 
+            icon={<FileCode size={16} />} 
+            onClick={onPreview} 
+            className="text-fa-t6 font-fa-semibold h-9 px-4 border-border shadow-sm text-text-secondary hover:text-brand hover:border-brand"
+          >
             {t('deployments.detail.preview')}
           </Button>
-          <Button type="primary" icon={<ShieldCheck size={16} />} className="fa-t5-strong shadow-lg uppercase tracking-widest px-6 h-9">
+          <Button 
+            type="primary" 
+            icon={<ShieldCheck size={16} />} 
+            className="text-fa-t6 font-fa-semibold h-9 px-6 shadow-lg uppercase tracking-widest"
+          >
             {t('deployments.detail.publish')}
           </Button>
-          <Dropdown menu={{ items: moreActions }} placement="bottomRight">
-            <Button icon={<MoreVertical size={16} />} className="border-gray-200" />
+          <Dropdown menu={{ items: [{ key: 'rollback', danger: true, icon: <RefreshCcw size={14} />, label: t('deployments.detail.rollback'), onClick: onRollback }] }} placement="bottomRight">
+            <Button icon={<MoreVertical size={16} />} className="border-border text-text-tertiary" />
           </Dropdown>
         </div>
       </div>
 
-      {/* Authority KPI Section (v0.8 Section 2.3.3) */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-10 mt-6 p-6 bg-white border border-gray-100 rounded-xl shadow-sm">
+      {/* KPI 卡片区 (v0.8 2.3.3) */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-10 mt-8 p-6 bg-bg-card border border-border rounded-card shadow-card">
         <KPICell 
           label={t('deployments.detail.targets')} 
           value={deployment.appliedNodes.length.toString()} 
-          subValue={`${deployment.appliedNodes.filter(n => n.status === 'online').length} Online`} 
+          subValue={`${deployment.appliedNodes.filter(n => n.status === 'online').length} 在线`} 
         />
-        <Divider type="vertical" className="hidden sm:block h-10 opacity-10" />
+        <Divider type="vertical" className="hidden sm:block h-10 bg-divider opacity-40" />
         <KPICell 
           label={t('deployments.detail.lastApplied')} 
           value={deployment.updatedAt.split(' ')[1]} 
           subValue={deployment.updatedAt.split(' ')[0]} 
           tabular
         />
-        <Divider type="vertical" className="hidden sm:block h-10 opacity-10" />
-        <div className="flex flex-col min-w-0">
-          <span className="fa-t7-mono text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1.5">Manifest ID</span>
-          <div className="flex items-center gap-2">
-            <Tooltip title={deployment.manifestVersion}>
-              <span className="fa-t3 font-mono tracking-tighter text-gray-900 truncate max-w-[140px] tabular-nums">
-                {deployment.manifestVersion}
-              </span>
-            </Tooltip>
-            <button onClick={() => handleCopy(deployment.manifestVersion)} className="p-1.5 hover:bg-gray-100 rounded text-gray-400 hover:text-brand transition-colors">
-              <Copy size={13} />
-            </button>
-          </div>
-        </div>
-        <Divider type="vertical" className="hidden sm:block h-10 opacity-10" />
-        <div className="flex flex-col min-w-0">
-          <span className="fa-t7-mono text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1.5">Policy Version</span>
-          <div className="flex items-center gap-2">
-            <Tooltip title={deployment.policyVersion}>
-              <span className="fa-t3 font-mono tracking-tighter text-brand truncate max-w-[140px] tabular-nums">
-                {deployment.policyVersion}
-              </span>
-            </Tooltip>
-            <button onClick={() => handleCopy(deployment.policyVersion)} className="p-1.5 hover:bg-gray-100 rounded text-gray-400 hover:text-brand transition-colors">
-              <Copy size={13} />
-            </button>
-          </div>
-        </div>
+        <Divider type="vertical" className="hidden sm:block h-10 bg-divider opacity-40" />
+        <MetaKPI label="Manifest ID" value={deployment.manifestVersion} onCopy={() => handleCopy(deployment.manifestVersion)} />
+        <Divider type="vertical" className="hidden sm:block h-10 bg-divider opacity-40" />
+        <MetaKPI label="策略版本" value={deployment.policyVersion} onCopy={() => handleCopy(deployment.policyVersion)} isBrand />
       </div>
 
       <Drawer
@@ -177,31 +145,43 @@ const DeploymentHeader: React.FC<DeploymentHeaderProps> = ({ deployment, onPrevi
         placement="bottom"
         height="auto"
         closable={false}
-        styles={{ body: { padding: '24px' } }}
+        styles={{ body: { padding: '24px', backgroundColor: 'rgba(var(--fa-bg-card), 1)' } }}
         className="md:hidden rounded-t-2xl"
       >
-        <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6" />
+        <div className="w-12 h-1.5 bg-border rounded-full mx-auto mb-6" />
         {statusContent}
       </Drawer>
     </div>
   );
 };
 
-const StatusField = ({ label, value, tabular, highlight }: { label: string; value: string; tabular?: boolean; highlight?: boolean }) => (
-  <div>
-    <div className="fa-t7-mono text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1.5">{label}</div>
-    <div className={`fa-t5 font-semibold ${tabular ? 'tabular-nums font-mono' : ''} ${highlight ? 'text-brand' : 'text-gray-800'}`}>
+const StatusField = ({ label, value, tabular, highlight }: any) => (
+  <div className="flex justify-between items-center">
+    <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tracking-widest">{label}</span>
+    <span className={`text-fa-t6 font-fa-semibold ${tabular ? 'tabular-nums font-mono' : ''} ${highlight ? 'text-brand' : 'text-text-primary'}`}>
       {value}
+    </span>
+  </div>
+);
+
+const KPICell = ({ label, value, subValue, tabular }: any) => (
+  <div className="flex flex-col gap-1.5">
+    <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tracking-widest">{label}</span>
+    <div className="flex items-baseline gap-2.5">
+      <span className={`text-fa-t2 font-fa-semibold text-text-primary leading-none ${tabular ? 'tabular-nums font-mono' : 'font-mono tracking-tight'}`}>{value}</span>
+      <span className="text-fa-t6 font-fa-semibold text-text-tertiary whitespace-nowrap">{subValue}</span>
     </div>
   </div>
 );
 
-const KPICell = ({ label, value, subValue, tabular }: { label: string; value: string; subValue: string; tabular?: boolean }) => (
-  <div className="flex flex-col">
-    <span className="fa-t7-mono text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1.5">{label}</span>
-    <div className="flex items-baseline gap-2.5">
-      <span className={`fa-t3 text-gray-900 leading-none ${tabular ? 'tabular-nums font-mono' : 'font-mono'}`}>{value}</span>
-      <span className="fa-t6 text-gray-400 font-semibold whitespace-nowrap">{subValue}</span>
+const MetaKPI = ({ label, value, onCopy, isBrand }: any) => (
+  <div className="flex flex-col gap-1.5 min-w-0">
+    <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tracking-widest">{label}</span>
+    <div className="flex items-center gap-2">
+      <span className={`text-fa-t3 font-fa-semibold font-mono truncate max-w-[140px] tabular-nums ${isBrand ? 'text-brand' : 'text-text-primary'}`}>{value}</span>
+      <button onClick={onCopy} className="p-1.5 hover:bg-action-hover rounded text-text-tertiary hover:text-brand transition-all shrink-0">
+        <Copy size={13} />
+      </button>
     </div>
   </div>
 );

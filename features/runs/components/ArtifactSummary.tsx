@@ -33,31 +33,31 @@ const ArtifactSummary: React.FC<ArtifactSummaryProps> = ({ artifacts, hasReceipt
   if (counts.receipt > 0) activeTypes.push({ type: 'receipt', icon: Link, label: t('runs.artifact.receipt'), count: counts.receipt });
 
   if (activeTypes.length === 0) {
-    return <span className="fa-t7-mono text-gray-300">—</span>;
+    return <span className="text-fa-t7 font-fa-semibold font-mono text-text-tertiary">—</span>;
   }
 
   const renderBadge = (item: ActiveTypeItem) => (
     <Tooltip key={item.type} title={`${item.label}: ${item.count}`} mouseEnterDelay={0.5}>
-      <div className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-gray-50 border border-gray-100 rounded-md fa-t7-mono text-[10px] font-bold text-gray-500 transition-colors cursor-help">
-        <item.icon size={11} className="text-gray-400" />
-        <span className="tabular-nums leading-none">{item.count}</span>
+      <div className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-bg-page border border-border rounded-tag text-fa-t7 font-fa-semibold font-mono text-[10px] text-text-secondary transition-colors cursor-help">
+        <item.icon size={11} className="text-text-tertiary" />
+        <span className="tabular-nums leading-none pt-0.5">{item.count}</span>
       </div>
     </Tooltip>
   );
 
   const popoverContent = (
     <div className="w-[180px] p-1" onClick={e => e.stopPropagation()}>
-      <div className="fa-t7-mono text-[10px] text-gray-400 font-bold uppercase tracking-[0.15em] border-b border-gray-50 pb-2 mb-2">
+      <div className="text-fa-t7 font-fa-semibold font-mono text-[10px] text-text-tertiary uppercase tracking-[0.15em] border-b border-border-divider pb-2 mb-2">
         {t('runs.artifact.detailsTitle')}
       </div>
       <div className="space-y-2">
         {activeTypes.map(item => (
           <div key={item.type} className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-gray-700">
+            <div className="flex items-center gap-2 text-text-secondary">
               <item.icon size={12} className="text-brand/60" />
-              <span className="fa-t6 font-medium">{item.label}</span>
+              <span className="text-fa-t6 font-fa-medium">{item.label}</span>
             </div>
-            <span className="fa-t7-mono font-bold text-gray-900">{item.count}</span>
+            <span className="text-fa-t7 font-fa-semibold font-mono text-text-primary tabular-nums">{item.count}</span>
           </div>
         ))}
       </div>
@@ -74,7 +74,7 @@ const ArtifactSummary: React.FC<ArtifactSummaryProps> = ({ artifacts, hasReceipt
         <div className="flex items-center gap-1 cursor-help">
           {visible.map(renderBadge)}
           {remaining > 0 && (
-            <div className="w-5 h-5 flex items-center justify-center bg-blue-50 border border-blue-100 text-brand rounded-md fa-t7-mono text-[10px] font-bold">
+            <div className="w-5 h-5 flex items-center justify-center bg-brand-bg border border-brand/20 text-brand rounded-tag text-fa-t7 font-fa-semibold font-mono text-[10px]">
               +{remaining}
             </div>
           )}

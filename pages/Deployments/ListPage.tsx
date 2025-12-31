@@ -5,7 +5,7 @@ import {
   Plus, Undo2, History, Activity, FileCode,
   Info, AlertCircle, CircleDashed, CheckCircle2, Copy
 } from 'lucide-react';
-import { Button, Tag, Tooltip, Popover, message } from 'antd';
+import { Button, Tooltip, Popover, message, Divider } from 'antd';
 import { useI18n } from '../../i18n';
 import FAPageHeader from '../../ui/FAPageHeader';
 import FATable from '../../ui/FATable';
@@ -37,13 +37,13 @@ const DeploymentsListPage: React.FC = () => {
     const remaining = nodes.length - limit;
 
     return (
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-2 flex-nowrap">
         {visible.map(node => (
           <Tooltip key={node.id} title={`${node.name} (${node.status})`}>
-            <div className={`flex items-center gap-1 px-1.5 py-0.5 rounded border fa-t7-mono text-[10px] font-bold uppercase ${
-              node.status === 'online' ? 'bg-teal-50 text-teal-600 border-teal-100' : 'bg-red-50 text-red-600 border-red-100'
+            <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded border text-fa-t7 font-fa-semibold uppercase tracking-tight shrink-0 ${
+              node.status === 'online' ? 'bg-brand-bg text-brand border-brand/10' : 'bg-error/5 text-error border-error/10'
             }`}>
-              <div className={`w-1 h-1 rounded-full ${node.status === 'online' ? 'bg-teal-500' : 'bg-red-500'}`} />
+              <div className={`w-1 h-1 rounded-full ${node.status === 'online' ? 'bg-brand' : 'bg-error'}`} />
               {node.name}
             </div>
           </Tooltip>
@@ -51,18 +51,18 @@ const DeploymentsListPage: React.FC = () => {
         {remaining > 0 && (
           <Popover 
             content={
-              <div className="p-2 space-y-1">
+              <div className="p-2 space-y-1.5">
                 {nodes.slice(limit).map(n => (
-                  <div key={n.id} className="flex items-center gap-2 fa-t6">
-                    <div className={`w-1.5 h-1.5 rounded-full ${n.status === 'online' ? 'bg-teal-500' : 'bg-red-500'}`} />
-                    <span className="font-mono text-[11px]">{n.name}</span>
-                    <span className="text-gray-400 text-[10px] uppercase">({n.status})</span>
+                  <div key={n.id} className="flex items-center gap-2 text-fa-t6">
+                    <div className={`w-1.5 h-1.5 rounded-full ${n.status === 'online' ? 'bg-brand' : 'bg-error'}`} />
+                    <span className="font-mono text-text-primary">{n.name}</span>
+                    <span className="text-text-tertiary uppercase text-[10px]">({n.status})</span>
                   </div>
                 ))}
               </div>
             }
           >
-            <div className="w-6 h-6 flex items-center justify-center bg-gray-100 border border-gray-200 text-gray-500 rounded fa-t7-mono text-[10px] font-bold cursor-help hover:bg-gray-200 transition-colors">
+            <div className="w-7 h-6 flex items-center justify-center bg-bg-page border border-border text-text-tertiary rounded font-fa-semibold text-fa-t7 cursor-help hover:border-brand/40 hover:text-brand transition-colors shrink-0">
               +{remaining}
             </div>
           </Popover>
@@ -79,12 +79,12 @@ const DeploymentsListPage: React.FC = () => {
       width: 140,
       render: (id) => (
         <div className="flex items-center gap-2 group/id">
-          <span className="fa-t7-mono text-gray-400 font-bold uppercase tracking-tighter tabular-nums truncate">
+          <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tracking-tighter tabular-nums truncate">
             {`#${id.slice(-8)}`}
           </span>
           <button 
             onClick={(e) => handleCopyId(e, id)}
-            className="p-1 hover:bg-gray-100 rounded opacity-0 group-hover/id:opacity-100 transition-all text-gray-400 hover:text-brand"
+            className="p-1 hover:bg-action-hover rounded opacity-0 group-hover/id:opacity-100 transition-all text-text-tertiary hover:text-brand"
           >
             <Copy size={12} />
           </button>
@@ -95,15 +95,15 @@ const DeploymentsListPage: React.FC = () => {
       title: t('deployments.col.workflow'),
       dataIndex: 'workflowName',
       key: 'workflow',
-      width: 280,
+      width: 260,
       render: (name, record) => (
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-brand shrink-0">
+          <div className="w-9 h-9 rounded-lg bg-brand-bg flex items-center justify-center text-brand shrink-0 shadow-sm border border-brand/5">
             <GitBranch size={16} />
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="fa-t5-strong text-gray-900 truncate">{name}</span>
-            <span className="fa-t7-mono text-[10px] text-gray-400">v{record.version}</span>
+            <span className="text-fa-t5 font-fa-semibold text-text-primary truncate">{name}</span>
+            <span className="text-fa-t7 font-fa-medium text-text-tertiary">v{record.version}</span>
           </div>
         </div>
       )
@@ -113,38 +113,38 @@ const DeploymentsListPage: React.FC = () => {
       dataIndex: 'policyVersion',
       key: 'policyVersion',
       width: 140,
-      render: (v) => <span className="fa-t7-mono text-brand font-bold uppercase text-[11px]">{v}</span>
+      render: (v) => <span className="text-fa-t7 font-fa-semibold text-brand font-mono uppercase">{v}</span>
     },
     {
       title: t('deployments.col.nodes'),
       dataIndex: 'appliedNodes',
       key: 'nodes',
-      width: 220,
+      width: 300,
       render: (nodes) => renderNodes(nodes)
     },
     {
       title: t('deployments.col.status'),
       dataIndex: 'status',
       key: 'status',
-      width: 140,
+      width: 160, // 增加列宽，防止状态文本换行
       render: (status, record) => {
         const config = {
-          applying: { icon: CircleDashed, color: 'processing', text: t('deployments.status.applying'), spin: true },
-          applied: { icon: CheckCircle2, color: 'success', text: t('deployments.status.applied'), spin: false },
-          failed: { icon: AlertCircle, color: 'error', text: t('deployments.status.failed'), spin: false },
-          partial: { icon: Info, color: 'warning', text: t('deployments.status.partial'), spin: false },
+          applying: { icon: CircleDashed, colorClass: 'text-brand bg-brand-bg', text: t('deployments.status.applying'), spin: true },
+          applied: { icon: CheckCircle2, colorClass: 'text-success bg-success/10', text: t('deployments.status.applied'), spin: false },
+          failed: { icon: AlertCircle, colorClass: 'text-error bg-error/10', text: t('deployments.status.failed'), spin: false },
+          partial: { icon: Info, colorClass: 'text-warning bg-warning/10', text: t('deployments.status.partial'), spin: false },
         };
         const s = config[status as keyof typeof config];
         const content = (
-          <Tag color={s.color} className="m-0 fa-t7-mono font-bold uppercase px-2 py-0.5 border-none flex items-center gap-1.5 w-fit">
+          <div className={`m-0 text-fa-t7 font-fa-semibold uppercase px-2.5 py-1 rounded-tag flex items-center gap-2 w-fit shadow-sm border border-transparent whitespace-nowrap ${s.colorClass}`}>
             <s.icon size={12} className={s.spin ? 'animate-spin' : ''} />
             {s.text}
-          </Tag>
+          </div>
         );
 
         if (status === 'failed' && record.errorSummary) {
           return (
-            <Tooltip title={record.errorSummary} color="#EF4444" placement="top">
+            <Tooltip title={record.errorSummary} placement="top">
               <div className="cursor-help">{content}</div>
             </Tooltip>
           );
@@ -159,8 +159,8 @@ const DeploymentsListPage: React.FC = () => {
       width: 180,
       render: (date) => (
         <div className="flex flex-col">
-          <span className="fa-t5 text-gray-600">{date.split(' ')[0]}</span>
-          <span className="fa-t7-mono text-gray-400 text-[11px]">{date.split(' ')[1]}</span>
+          <span className="text-fa-t5 text-text-secondary leading-tight">{date.split(' ')[0]}</span>
+          <span className="text-fa-t7 font-fa-medium text-text-tertiary tabular-nums mt-0.5">{date.split(' ')[1]}</span>
         </div>
       )
     },
@@ -169,40 +169,34 @@ const DeploymentsListPage: React.FC = () => {
       key: 'actions',
       fixed: 'right',
       align: 'right',
-      width: 200,
+      width: 160,
       render: (_, record) => (
-        <div className="flex items-center justify-end gap-1">
-          <Tooltip title={t('deployments.detail.preview')} placement="left" mouseEnterDelay={0.3}>
+        <div className="flex items-center justify-end gap-2" onClick={e => e.stopPropagation()}>
+          <Tooltip title={t('deployments.detail.preview')} mouseEnterDelay={0.3}>
             <Button 
               type="text" 
+              size="small"
               icon={<FileCode size={16} />} 
               onClick={(e) => { e.stopPropagation(); setSelectedPolicy(record); }}
-              className="text-gray-400 hover:text-brand"
+              className="text-text-tertiary hover:text-brand hover:bg-brand-bg rounded-lg h-8 w-8 flex items-center justify-center p-0 transition-all"
             />
           </Tooltip>
-          <Tooltip title={t('deployments.detail.rollback')} placement="left" mouseEnterDelay={0.3}>
+          <Tooltip title={t('deployments.detail.rollback')} mouseEnterDelay={0.3}>
             <Button 
               type="text" 
+              size="small"
               icon={<Undo2 size={16} />} 
               onClick={(e) => { e.stopPropagation(); handleRollback(record); }}
-              className="text-gray-400 hover:text-orange-500"
+              className="text-text-tertiary hover:text-warning hover:bg-warning/10 rounded-lg h-8 w-8 flex items-center justify-center p-0 transition-all"
             />
           </Tooltip>
-          <div className="w-[1px] h-4 bg-gray-100 mx-1" />
-          <Tooltip title={t('deployments.links.recentRuns')} placement="left" mouseEnterDelay={0.3}>
+          <Tooltip title={t('deployments.links.recentRuns')} mouseEnterDelay={0.3}>
             <Button 
               type="text" 
+              size="small"
               icon={<History size={16} />} 
               onClick={(e) => { e.stopPropagation(); navigate(`/runs?deploymentId=${record.id}`); }}
-              className="text-gray-400 hover:text-brand"
-            />
-          </Tooltip>
-          <Tooltip title={t('deployments.links.executions')} placement="left" mouseEnterDelay={0.3}>
-            <Button 
-              type="text" 
-              icon={<Activity size={16} />} 
-              onClick={(e) => { e.stopPropagation(); navigate(`/executions?projectId=${record.projectId}`); }}
-              className="text-gray-400 hover:text-brand"
+              className="text-text-tertiary hover:text-brand hover:bg-brand-bg rounded-lg h-8 w-8 flex items-center justify-center p-0 transition-all"
             />
           </Tooltip>
         </div>
@@ -216,7 +210,7 @@ const DeploymentsListPage: React.FC = () => {
         title={t('deployments.title')}
         subtitle={t('deployments.subtitle')}
         actions={
-          <Button type="primary" icon={<Plus size={16} />} className="font-bold uppercase tracking-widest h-10 shadow-lg">
+          <Button type="primary" icon={<Plus size={16} />} className="text-fa-t5 font-fa-semibold uppercase tracking-widest h-10 px-6 shadow-lg">
             {t('deployments.detail.publish')}
           </Button>
         }

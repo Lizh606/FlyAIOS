@@ -1,74 +1,54 @@
-
 import React from 'react';
 import { Table, ConfigProvider } from 'antd';
 import type { TableProps } from 'antd';
 import { useI18n } from '../i18n';
 
-/**
- * FATableProps - FlyAIOS specialized table properties
- */
 export type FATableProps<T> = TableProps<T> & {
   density?: 'comfort' | 'compact';
-  stickyHeader?: boolean;
 };
 
-/**
- * Internal FATable Implementation using Ant Design ConfigProvider for token injection
- * and custom CSS for FlyAIOS specific layout rules (Spec v0.8 Section 6.2).
- */
 function InternalFATable<T extends object>(
-  { density = 'comfort', stickyHeader = true, className = "", pagination, scroll, ...props }: FATableProps<T>,
+  { density = 'comfort', className = "", pagination, ...props }: FATableProps<T>,
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
   const { t } = useI18n();
-  // Map density to FlyAIOS padding tokens
   const paddingY = density === 'compact' ? '8px' : '11px';
-  const paddingX = '16px';
 
   return (
     <ConfigProvider
       theme={{
         components: {
           Table: {
-            headerBg: 'var(--fa-bg-card)',
-            headerColor: 'var(--fa-text-secondary)',
+            headerBg: 'rgba(var(--fa-bg-card), 1)', 
+            headerColor: 'rgba(var(--fa-text-secondary), 1)',
             headerSplitColor: 'transparent',
             headerBorderRadius: 0,
-            colorBgContainer: 'var(--fa-bg-card)',
-            colorText: 'var(--fa-text-primary)',
-            colorBorderSecondary: 'var(--fa-border-divider)',
-            rowHoverBg: 'var(--fa-sidebar-hover-bg)',
-            selectedRowBg: 'var(--fa-sidebar-selected-bg)',
+            colorBgContainer: 'rgba(var(--fa-bg-card), 1)',
+            colorText: 'rgba(var(--fa-text-primary), 1)',
+            colorBorderSecondary: 'rgba(var(--fa-divider), var(--fa-divider-alpha))', 
+            rowHoverBg: 'rgba(var(--fa-hover), var(--fa-hover-alpha))',
+            selectedRowBg: 'rgba(var(--fa-brand-bg), var(--fa-brand-bg-alpha))',
             padding: density === 'compact' ? 8 : 12,
-            paddingXS: 4,
           },
           Pagination: {
             itemSize: 32,
             borderRadius: 8,
-            colorPrimary: 'var(--fa-brand-primary)',
-            colorText: 'var(--fa-text-secondary)',
+            colorPrimary: 'rgba(var(--fa-brand), 1)',
+            colorText: 'rgba(var(--fa-text-secondary), 1)',
           }
         }
       }}
     >
-      <div 
-        ref={ref} 
-        className={`fa-table-wrapper rounded-[12px] border border-[var(--fa-border-default)] bg-[var(--fa-bg-card)] overflow-hidden shadow-sm ${className}`}
-      >
+      <div ref={ref} className={`fa-table-container rounded-card border border-border bg-bg-card overflow-hidden shadow-card ${className}`}>
         <Table<T>
           {...props}
           className="fa-standard-table"
           size="middle"
-          scroll={stickyHeader ? { x: 'max-content', ...scroll } : scroll}
           pagination={
             pagination !== false
               ? {
                   size: 'small',
-                  showSizeChanger: true,
                   showTotal: (total: number) => t('common.pagination.total', { total }),
-                  locale: {
-                    items_per_page: t('common.pagination.size', { size: '' }).trim(),
-                  },
                   position: ['bottomRight'],
                   ...(typeof pagination === 'object' ? (pagination as any) : {}),
                 }
@@ -76,37 +56,35 @@ function InternalFATable<T extends object>(
           }
         />
         <style>{`
-          /* === FlyAIOS Standard Table Typography & Layout Overrides === */
-          
-          /* Header Styling: T5 Body Strong (14/22, 500) */
+          /* 1. 基础容器背景锁定 */
+          .fa-standard-table {
+            background-color: rgba(var(--fa-bg-card), 1) !important;
+          }
+
+          /* 2. 表头样式隔离：使用 :not 排除测量行，防止被拉伸 */
           .fa-standard-table .ant-table-thead > tr:not(.ant-table-measure-row) > th {
-            padding: ${paddingY} ${paddingX} !important;
-            font-size: 14px !important;
-            line-height: 22px !important;
-            font-weight: 500 !important;
-            border-bottom: 1px solid var(--fa-border-divider) !important;
-            background-color: var(--fa-bg-card) !important;
+            padding: ${paddingY} 16px !important;
+            font-size: var(--fa-fs-t5) !important;
+            line-height: var(--fa-lh-t5) !important;
+            font-weight: var(--fa-fw-medium) !important;
+            border-bottom: 1px solid rgba(var(--fa-divider), var(--fa-divider-alpha)) !important;
+            background-color: rgba(var(--fa-bg-card), 1) !important;
+            color: rgba(var(--fa-text-secondary), 1) !important;
             vertical-align: middle !important;
-            color: var(--fa-text-secondary) !important;
           }
 
-          /* Body Styling: T5 Body (14/22, 400) */
+          /* 3. 内容行样式隔离：确保常规 td 的 padding 不会泄漏给测量行 */
           .fa-standard-table .ant-table-tbody > tr:not(.ant-table-measure-row) > td {
-            padding: ${paddingY} ${paddingX} !important;
-            font-size: 14px !important;
-            line-height: 22px !important;
-            font-weight: 400 !important;
-            color: var(--fa-text-primary) !important;
-            border-bottom: 1px solid var(--fa-border-divider) !important;
+            padding: ${paddingY} 16px !important;
+            font-size: var(--fa-fs-t5) !important;
+            line-height: var(--fa-lh-t5) !important;
+            font-weight: var(--fa-fw-regular) !important;
+            color: rgba(var(--fa-text-primary), 1) !important;
+            border-bottom: 1px solid rgba(var(--fa-divider), var(--fa-divider-alpha)) !important;
             vertical-align: middle !important;
           }
 
-          /* Tabular numbers for ID/Numeric columns */
-          .fa-standard-table td, .fa-standard-table th {
-            font-variant-numeric: tabular-nums;
-          }
-
-          /* CRITICAL RESET: Eliminate measure row spacing */
+          /* 4. 终极重置 (CRITICAL RESET): 彻底物理销毁 ant-table-measure-row */
           .fa-standard-table .ant-table-measure-row,
           .fa-standard-table .ant-table-measure-row td {
             padding: 0 !important;
@@ -115,14 +93,22 @@ function InternalFATable<T extends object>(
             border: 0 !important;
             visibility: hidden !important;
             font-size: 0 !important;
+            margin: 0 !important;
+            pointer-events: none !important;
           }
 
-          /* Row Feedback - Selected/Active */
+          /* 5. 移除固定列可能产生的多余线条 */
+          .fa-standard-table .ant-table-cell-fix-left-last::after,
+          .fa-standard-table .ant-table-cell-fix-right-first::after {
+            display: none !important;
+          }
+
+          /* 6. 交互：对接 FlyAIOS 品牌选中色 */
           .fa-standard-table .ant-table-row-selected > td {
-            background-color: var(--fa-sidebar-selected-bg) !important;
+            background-color: rgba(var(--fa-brand-bg), var(--fa-brand-bg-alpha)) !important;
           }
-
-          /* Pagination Alignment (Spec V0.8 Section 6.2.3D) */
+          
+          /* 7. 分页位置对齐 (符合 v0.8 规范) */
           .fa-standard-table .ant-table-pagination.ant-pagination {
             margin: 16px 24px !important; 
             padding: 0 !important;
@@ -132,7 +118,6 @@ function InternalFATable<T extends object>(
             .fa-standard-table .ant-table-pagination.ant-pagination {
               margin: 16px 16px !important;
               justify-content: center !important;
-              width: calc(100% - 32px);
             }
           }
         `}</style>
