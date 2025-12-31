@@ -1,0 +1,87 @@
+import React from 'react';
+import { FileText, Image as ImageIcon, Link, FileJson } from 'lucide-react';
+import { Popover, Tooltip } from 'antd';
+import { useI18n } from '../../../i18n/index';
+import { RunArtifact } from '../../../shared/mocks/runs';
+
+interface ArtifactSummaryProps {
+  artifacts: RunArtifact[];
+  hasReceipt?: boolean;
+}
+
+interface ActiveTypeItem {
+  type: string;
+  icon: any;
+  label: string;
+  count: number;
+}
+
+const ArtifactSummary: React.FC<ArtifactSummaryProps> = ({ artifacts, hasReceipt }) => {
+  const { t } = useI18n();
+
+  const counts = {
+    pdf: artifacts.filter(a => a.type === 'pdf').length,
+    image: artifacts.filter(a => a.type === 'image').length,
+    json: artifacts.filter(a => a.type === 'json').length,
+    receipt: hasReceipt ? 1 : 0
+  };
+
+  const activeTypes: ActiveTypeItem[] = [];
+  if (counts.pdf > 0) activeTypes.push({ type: 'pdf', icon: FileText, label: t('runs.artifact.pdf'), count: counts.pdf });
+  if (counts.image > 0) activeTypes.push({ type: 'image', icon: ImageIcon, label: t('runs.artifact.image'), count: counts.image });
+  if (counts.json > 0) activeTypes.push({ type: 'json', icon: FileJson, label: t('runs.artifact.log'), count: counts.json });
+  if (counts.receipt > 0) activeTypes.push({ type: 'receipt', icon: Link, label: t('runs.artifact.receipt'), count: counts.receipt });
+
+  if (activeTypes.length === 0) {
+    return <span className="fa-t7-mono text-gray-300">—</span>;
+  }
+
+  const renderBadge = (item: ActiveTypeItem) => (
+    <Tooltip key={item.type} title={`${item.label}: ${item.count}`} mouseEnterDelay={0.5}>
+      <div className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-gray-50 border border-gray-100 rounded-md fa-t7-mono text-[10px] font-bold text-gray-500 transition-colors cursor-help">
+        <item.icon size={11} className="text-gray-400" />
+        <span className="tabular-nums leading-none">{item.count}</span>
+      </div>
+    </Tooltip>
+  );
+
+  const popoverContent = (
+    <div className="w-[180px] p-1" onClick={e => e.stopPropagation()}>
+      <div className="fa-t7-mono text-[10px] text-gray-400 font-bold uppercase tracking-[0.15em] border-b border-gray-50 pb-2 mb-2">
+        {t('runs.artifact.detailsTitle')}
+      </div>
+      <div className="space-y-2">
+        {activeTypes.map(item => (
+          <div key={item.type} className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-gray-700">
+              <item.icon size={12} className="text-brand/60" />
+              <span className="fa-t6 font-medium">{item.label}</span>
+            </div>
+            <span className="fa-t7-mono font-bold text-gray-900">{item.count}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const displayLimit = 2;
+  const visible = activeTypes.slice(0, displayLimit);
+  const remaining = activeTypes.length - displayLimit;
+
+  return (
+    <div className="flex items-center justify-center lg:justify-end gap-1" onClick={e => e.stopPropagation()}>
+      <Popover content={popoverContent} trigger="hover" placement="topRight" overlayClassName="fa-popover-v2">
+        <div className="flex items-center gap-1 cursor-help">
+          {visible.map(renderBadge)}
+          {remaining > 0 && (
+            <div className="w-5 h-5 flex items-center justify-center bg-blue-50 border border-blue-100 text-brand rounded-md fa-t7-mono text-[10px] font-bold">
+              +{remaining}
+            </div>
+          )}
+        </div>
+      </Popover>
+    </div>
+  );
+};
+
+export default ArtifactSummary;

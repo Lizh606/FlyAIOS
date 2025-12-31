@@ -1,0 +1,7 @@
+{
+  "name": "FlyAIOS",
+  "description": "Professional drone dock management and execution platform following DroneDeploy visual standards.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

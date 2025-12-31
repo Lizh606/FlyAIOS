@@ -1,0 +1,28 @@
+{
+  "name": "flyaios",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "antd": "5.18.0",
+    "@ant-design/colors": "7.2.1",
+    "lucide-react": "0.378.0",
+    "dayjs": "1.11.10",
+    "react-router-dom": "7.11.0",
+    "@ant-design/icons": "5.3.7",
+    "@ant-design/cssinjs": "1.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}
