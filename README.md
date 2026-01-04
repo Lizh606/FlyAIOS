@@ -32,7 +32,7 @@ FlyAIOS 是一个面向无人机机场与任务执行的专业级前端控制台
 3. 启动开发环境：
    `npm run dev`
 
-默认访问：`http://localhost:3000`
+默认访问：`http://localhost:4000`
 
 ## 常用脚本
 
