@@ -1,5 +1,17 @@
 module.exports = {
   darkMode: ['class', '[data-theme="dark"]'],
+  content: [
+    './index.html',
+    './App.tsx',
+    './index.tsx',
+    './app/**/*.{js,ts,jsx,tsx}',
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './features/**/*.{js,ts,jsx,tsx}',
+    './layouts/**/*.{js,ts,jsx,tsx}',
+    './ui/**/*.{js,ts,jsx,tsx}',
+    './shared/**/*.{js,ts,jsx,tsx}',
+    './services/**/*.{js,ts,jsx,tsx}',
+  ],
   theme: {
     extend: {
       colors: {

@@ -18,6 +18,42 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
+      },
+      build: {
+        rollupOptions: {
+          output: {
+            manualChunks: (id: string) => {
+              if (!id.includes('node_modules')) return undefined;
+
+              if (
+                id.includes('react') ||
+                id.includes('react-dom') ||
+                id.includes('react-router-dom')
+              ) {
+                return 'react';
+              }
+
+              if (
+                id.includes('@ant-design/icons') ||
+                id.includes('@ant-design/colors') ||
+                id.includes('@ant-design/cssinjs')
+              ) {
+                return 'antd-utils';
+              }
+
+              if (id.includes('/node_modules/antd/es/')) {
+                const match = id.match(/node_modules\/antd\/es\/([^/]+)/);
+                return match ? `antd-${match[1]}` : 'antd';
+              }
+
+              if (id.includes('dayjs') || id.includes('lucide-react')) {
+                return 'utils';
+              }
+
+              return undefined;
+            }
+          }
+        }
       }
     };
 });
