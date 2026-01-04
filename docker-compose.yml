@@ -1,0 +1,16 @@
+services:
+  app:
+    build: .
+    ports:
+      - "4000:80"
+    profiles:
+      - build
+
+  app-dist:
+    image: nginx:alpine
+    ports:
+      - "4000:80"
+    volumes:
+      - ./dist:/usr/share/nginx/html:ro
+    profiles:
+      - dist

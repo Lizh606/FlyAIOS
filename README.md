@@ -40,6 +40,34 @@ FlyAIOS 是一个面向无人机机场与任务执行的专业级前端控制台
 - `npm run build`：构建生产包
 - `npm run preview`：预览生产构建
 
+## Docker 部署
+
+项目提供了基于 Nginx 的静态部署镜像与 `docker-compose` 的两种使用方式。
+
+### 方式一：直接构建镜像并运行
+
+```bash
+docker build -t flyaios .
+docker run --rm -p 4000:80 flyaios
+```
+
+访问：`http://localhost:4000`
+
+### 方式二：使用 docker-compose（两种模式）
+
+1) 构建镜像并运行（build profile）
+```bash
+docker compose --profile build up --build
+```
+
+2) 复用本地 `dist` 静态文件（dist profile）
+```bash
+npm run build
+docker compose --profile dist up
+```
+
+访问：`http://localhost:4000`
+
 ## 项目结构概览
 
 - `index.tsx`：应用入口，挂载 `app/App.tsx`。
