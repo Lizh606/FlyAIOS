@@ -7,7 +7,8 @@ import {
   FileArchive, HardDriveDownload, Box, ExternalLink, LayoutPanelLeft
 } from 'lucide-react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { ExecutionStatus } from '../types';
+// Fix: Updated import path from '../types' to '../shared/types'
+import { ExecutionStatus } from '../shared/types';
 import { useI18n } from '../i18n';
 
 const PLAYBACK_ROUTE = [

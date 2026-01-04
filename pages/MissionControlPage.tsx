@@ -8,7 +8,8 @@ import {
 } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useI18n } from '../i18n';
-import { ExecutionStatus, CaptureProfile } from '../types';
+// Fix: Updated import path from '../types' to '../shared/types'
+import { ExecutionStatus, CaptureProfile } from '../shared/types';
 import FACollapseHandle from '../ui/FACollapseHandle';
 import { links } from '../shared/linkBuilders';
 
