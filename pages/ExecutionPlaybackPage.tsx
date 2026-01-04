@@ -1,9 +1,10 @@
+
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { 
   Play, Pause, Download, Battery, Navigation2, 
   SignalHigh, Layers, Gauge, Activity,
   ChevronRight, Clock, Maximize2, MapPin, Camera, RotateCcw,
-  FileArchive, HardDriveDownload, Box
+  FileArchive, HardDriveDownload, Box, ExternalLink, LayoutPanelLeft
 } from 'lucide-react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { ExecutionStatus } from '../types';
@@ -19,12 +20,12 @@ const DroneMarker = ({ x, y, angle = 0, active = false }: { x: number, y: number
   <g transform={`translate(${x}, ${y}) rotate(${angle})`}>
     {active && <circle r="18" fill="rgba(var(--fa-brand), 0.2)" className="animate-pulse" />}
     <path d="M-12,-12 L12,12 M-12,12 L12,-12" stroke="white" strokeWidth="3" strokeLinecap="round" />
-    <circle cx="-12" cy="-12" r="4" fill="rgb(var(--fa-brand))" stroke="white" strokeWidth="1.5" />
-    <circle cx="12" cy="12" r="4" fill="rgb(var(--fa-brand))" stroke="white" strokeWidth="1.5" />
-    <circle cx="-12" cy="12" r="4" fill="rgb(var(--fa-brand))" stroke="white" strokeWidth="1.5" />
-    <circle cx="12" cy="-12" r="4" fill="rgb(var(--fa-brand))" stroke="white" strokeWidth="1.5" />
-    <rect x="-6" y="-6" width="12" height="12" fill="rgb(var(--fa-bg-topbar))" rx="2" stroke="white" strokeWidth="1" />
-    <circle cx="0" cy="-6" r="1.5" fill={active ? "rgb(var(--fa-error))" : "rgb(var(--fa-text-tertiary))"} />
+    <circle cx="-12" cy="-12" r="4" fill="rgba(var(--fa-brand), 1)" stroke="white" strokeWidth="1.5" />
+    <circle cx="12" cy="12" r="4" fill="rgba(var(--fa-brand), 1)" stroke="white" strokeWidth="1.5" />
+    <circle cx="-12" cy="12" r="4" fill="rgba(var(--fa-brand), 1)" stroke="white" strokeWidth="1.5" />
+    <circle cx="12" cy="-12" r="4" fill="rgba(var(--fa-brand), 1)" stroke="white" strokeWidth="1.5" />
+    <rect x="-6" y="-6" width="12" height="12" fill="rgba(var(--fa-bg-topbar), 1)" rx="2" stroke="white" strokeWidth="1" />
+    <circle cx="0" cy="-6" r="1.5" fill={active ? "rgba(var(--fa-error), 1)" : "rgba(var(--fa-text-tertiary), 1)"} />
   </g>
 );
 
@@ -88,33 +89,39 @@ const ExecutionPlaybackPage: React.FC = () => {
   }, [isFinished, isPlaying]);
 
   return (
-    <div className="h-[calc(100vh-56px)] flex flex-col bg-bgPage overflow-hidden relative">
-      <header className="bg-bgCard border-b border-borderDefault px-6 h-12 flex items-center justify-between z-30 shadow-sm shrink-0">
+    <div className="h-[calc(100vh-56px)] flex flex-col bg-bg-page overflow-hidden relative">
+      <header className="bg-bg-card border-b border-border px-6 h-12 flex items-center justify-between z-30 shadow-sm shrink-0">
         <div className="flex items-center gap-4">
           <nav className="flex items-center gap-2">
-            <Link to="/" className="flex items-center gap-1.5 text-textTertiary hover:text-brand transition-colors">
+            <Link to="/" className="flex items-center gap-1.5 text-text-tertiary hover:text-brand transition-colors">
               <Box size={14} />
-              <span className="fa-t6 font-bold uppercase tracking-widest">{t('nav.projects')}</span>
+              <span className="text-fa-t6 font-fa-semibold uppercase tracking-widest">{t('nav.projects')}</span>
             </Link>
-            <ChevronRight size={10} className="text-textTertiary/40" />
-            <div className="text-textTertiary fa-t6 font-bold uppercase tracking-widest">Alpha-01</div>
-            <ChevronRight size={10} className="text-textTertiary/40" />
+            <ChevronRight size={10} className="text-text-disabled/40" />
+            <div className="text-text-tertiary text-fa-t6 font-fa-semibold uppercase tracking-widest truncate max-w-[120px]">Alpha-X-01</div>
+            <ChevronRight size={10} className="text-text-disabled/40" />
             
             <div className="flex items-center gap-2">
-              <span className={`px-1.5 py-0.5 fa-t7-mono font-black rounded-tag flex items-center gap-1 tracking-widest uppercase transition-all
-                ${isLive ? 'bg-brand/10 text-brand border border-brand/20' : 'bg-bgPage text-textTertiary border border-borderDefault'}`}>
+              <span className={`px-2 py-0.5 text-fa-t7 font-fa-semibold font-mono rounded-tag border flex items-center gap-1.5 tracking-widest uppercase transition-all
+                ${isLive ? 'bg-brand-bg text-brand border-brand/20' : 'bg-bg-page text-text-tertiary border-border'}`}>
                 {isLive && <div className="w-1 h-1 bg-brand rounded-full animate-pulse"></div>}
                 {isLive ? t('playback.status.live') : t('playback.status.archived')}
               </span>
-              <span className="fa-t6 font-bold text-textPrimary uppercase font-mono tracking-tight">
+              <span className="text-fa-t6 font-fa-semibold text-text-primary uppercase font-mono tracking-tight m-0">
                 #{id?.slice(0, 8).toUpperCase() || '82731B'}
               </span>
             </div>
           </nav>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button className="h-8 px-4 bg-bgTopbar text-textOnTopbar rounded-control fa-t6 font-bold uppercase tracking-widest hover:bg-black flex items-center gap-2 shadow-sm transition-all active:scale-95">
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => navigate(`/execution/${id}/analysis`)}
+            className="h-8 px-4 bg-bg-card border border-border text-text-secondary rounded-control text-fa-t6 font-fa-semibold uppercase tracking-widest hover:text-brand hover:border-brand transition-all flex items-center gap-2"
+          >
+            <LayoutPanelLeft size={13} /> {t('mission.console')}
+          </button>
+          <button className="h-8 px-4 bg-bg-topbar text-text-inverse rounded-control text-fa-t6 font-fa-semibold uppercase tracking-widest hover:bg-black flex items-center gap-2 shadow-sm transition-all active:scale-95 border-none">
             <Download size={13} /> {t('playback.export')}
           </button>
         </div>
@@ -126,20 +133,20 @@ const ExecutionPlaybackPage: React.FC = () => {
           <div className="flex-1 relative">
              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1000 1000">
                 <polyline points={PLAYBACK_ROUTE.map(p => `${p.x},${p.y}`).join(' ')} fill="none" stroke="rgba(255, 255, 255, 0.05)" strokeWidth="2" strokeDasharray="5" />
-                <polyline points={historyPath.map(p => `${p.x},${p.y}`).join(' ')} fill="none" stroke="rgb(var(--fa-brand))" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                <polyline points={historyPath.map(p => `${p.x},${p.y}`).join(' ')} fill="none" stroke="rgba(var(--fa-brand), 1)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
                 <DroneMarker x={dronePos.x} y={dronePos.y} angle={dronePos.angle} active={isPlaying} />
              </svg>
              
              <div className="absolute top-4 left-4 flex flex-col gap-2">
-                <div className="bg-bgTopbar/80 backdrop-blur text-textOnTopbar px-3 py-1.5 rounded-control border border-white/10 flex items-center gap-4 shadow-overlay">
+                <div className="bg-bg-topbar/80 backdrop-blur text-text-inverse px-3 py-2 rounded-control border border-white/10 flex items-center gap-4 shadow-overlay">
                    <div className="flex flex-col">
-                      <span className="text-[8px] text-textOnTopbar/40 font-bold uppercase tracking-[0.1em]">{t('playback.metrics.altitude')}</span>
-                      <span className="fa-t7-mono text-[12px] font-bold leading-none tabular-nums">{progress > 0 ? (82.4 + Math.sin(progress/10)).toFixed(1) : "0.0"}m</span>
+                      <span className="text-[8px] text-text-inverse/40 font-fa-semibold uppercase tracking-[0.1em]">{t('playback.metrics.altitude')}</span>
+                      <span className="text-fa-t7 font-fa-semibold font-mono text-[12px] leading-none tabular-nums">{progress > 0 ? (82.4 + Math.sin(progress/10)).toFixed(1) : "0.0"}m</span>
                    </div>
                    <div className="w-[1px] h-5 bg-white/10"></div>
                    <div className="flex flex-col">
-                      <span className="text-[8px] text-textOnTopbar/40 font-bold uppercase tracking-[0.1em]">{t('playback.metrics.battery')}</span>
-                      <span className={`fa-t7-mono text-[12px] font-bold leading-none tabular-nums ${progress > 85 ? 'text-error' : 'text-success'}`}>
+                      <span className="text-[8px] text-text-inverse/40 font-fa-semibold uppercase tracking-[0.1em]">{t('playback.metrics.battery')}</span>
+                      <span className={`text-fa-t7 font-fa-semibold font-mono text-[12px] leading-none tabular-nums ${progress > 85 ? 'text-error' : 'text-success'}`}>
                         {Math.max(12, 98 - Math.round(progress * 0.8))}%
                       </span>
                    </div>
@@ -147,33 +154,33 @@ const ExecutionPlaybackPage: React.FC = () => {
              </div>
 
              <div className="absolute top-4 right-4 flex flex-col gap-2">
-                <button className="w-9 h-9 bg-bgTopbar/90 backdrop-blur-md rounded-control border border-white/10 text-textOnTopbar flex items-center justify-center hover:bg-black transition-colors shadow-overlay"><Layers size={16}/></button>
-                <button className="w-9 h-9 bg-bgTopbar/90 backdrop-blur-md rounded-control border border-white/10 text-textOnTopbar flex items-center justify-center hover:bg-black transition-colors shadow-overlay"><Maximize2 size={14}/></button>
+                <button className="w-9 h-9 bg-bg-topbar/90 backdrop-blur-md rounded-control border border-white/10 text-text-inverse flex items-center justify-center hover:bg-black transition-colors shadow-overlay border-none p-0 cursor-pointer"><Layers size={16}/></button>
+                <button className="w-9 h-9 bg-bg-topbar/90 backdrop-blur-md rounded-control border border-white/10 text-text-inverse flex items-center justify-center hover:bg-black transition-colors shadow-overlay border-none p-0 cursor-pointer"><Maximize2 size={14}/></button>
              </div>
           </div>
 
-          <div className="h-16 bg-bgCard border-t border-borderDefault px-6 flex items-center gap-5 shadow-sm shrink-0 z-20">
-            <button onClick={handlePlayToggle} className="w-9 h-9 bg-brand text-textOnTopbar rounded-full flex items-center justify-center hover:bg-brand-hover shadow-overlay transition-all active:scale-90 shrink-0">
+          <div className="h-16 bg-bg-card border-t border-border px-6 flex items-center gap-5 shadow-sm shrink-0 z-20">
+            <button onClick={handlePlayToggle} className="w-9 h-9 bg-brand text-text-inverse rounded-full flex items-center justify-center hover:bg-brand-hover shadow-overlay transition-all active:scale-90 shrink-0 border-none p-0 cursor-pointer">
               {isFinished ? <RotateCcw size={18} strokeWidth={3} /> : isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" className="ml-0.5" />}
             </button>
-            <div className="flex-1 space-y-1">
+            <div className="flex-1 flex flex-col gap-1.5">
               <div className="flex items-center justify-between">
-                 <span className="fa-t7-mono text-[9px] font-bold text-textTertiary uppercase tracking-widest">
+                 <span className="text-fa-t7 font-fa-semibold font-mono text-[9px] text-text-tertiary uppercase tracking-widest">
                    {isFinished ? t('playback.progress.complete') : t('playback.progress.label')}
                  </span>
-                 <span className="text-brand fa-t7-mono text-[10px] font-bold tabular-nums">{Math.round(progress)}%</span>
+                 <span className="text-brand text-fa-t7 font-fa-semibold font-mono text-[10px] tabular-nums">{Math.round(progress)}%</span>
               </div>
-              <div className="h-1 bg-bgPage rounded-full overflow-hidden relative">
+              <div className="h-1 bg-bg-page rounded-full overflow-hidden relative">
                 <div className="h-full bg-brand transition-all duration-100 ease-linear" style={{ width: `${progress}%` }}></div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="w-[300px] bg-bgPanel border-l border-borderDefault overflow-y-auto flex flex-col shrink-0 custom-scrollbar">
+        <aside className="w-[300px] bg-bg-panel border-l border-border overflow-y-auto flex flex-col shrink-0 custom-scrollbar">
           <div className="p-5 space-y-8">
-            <section className="space-y-3">
-              <h3 className="fa-t7-mono font-bold uppercase tracking-widest text-textTertiary flex items-center gap-2">
+            <section className="space-y-4">
+              <h3 className="text-fa-t7 font-fa-semibold font-mono uppercase tracking-widest text-text-tertiary flex items-center gap-2 m-0 leading-none">
                 <Activity size={14} className="text-brand"/> {t('playback.telemetry')}
               </h3>
               <div className="grid grid-cols-2 gap-2">
@@ -184,39 +191,39 @@ const ExecutionPlaybackPage: React.FC = () => {
               </div>
             </section>
 
-            <section className="space-y-3">
-              <h3 className="fa-t7-mono font-bold uppercase tracking-widest text-textTertiary flex items-center gap-2">
+            <section className="space-y-4">
+              <h3 className="text-fa-t7 font-fa-semibold font-mono uppercase tracking-widest text-text-tertiary flex items-center gap-2 m-0 leading-none">
                 <FileArchive size={14} className="text-warning"/> {t('playback.logTitle')}
               </h3>
-              <div className="bg-warning/5 rounded-control p-3 border border-warning/20 space-y-2">
+              <div className="bg-warning/5 rounded-control p-3 border border-warning/10 space-y-2">
                  <LogFileItem name="FLIGHT_RECORD_8273.dat" size="1.2 MB" />
                  <LogFileItem name="DOCK_SYSTEM_DUMP.json" size="2.4 MB" />
               </div>
             </section>
           </div>
-        </div>
+        </aside>
       </div>
     </div>
   );
 };
 
 const MetricCard = ({ label, value, icon, alert }: any) => (
-  <div className="bg-bgPage p-2.5 rounded-control border border-borderDefault flex flex-col gap-0.5 min-w-0">
-    <div className="flex items-center gap-1.5 fa-t7-mono text-textTertiary uppercase overflow-hidden font-bold">
+  <div className="bg-bg-page p-3 rounded-control border border-border flex flex-col gap-1 min-w-0">
+    <div className="flex items-center gap-1.5 text-fa-t7 font-fa-semibold font-mono text-text-tertiary uppercase overflow-hidden">
       <span className="shrink-0 flex items-center">{icon}</span>
       <span className="truncate tracking-wide flex-1">{label}</span>
     </div>
-    <span className={`font-bold leading-none fa-t7-mono text-[14px] tabular-nums ${alert ? 'text-error animate-pulse' : 'text-textPrimary'}`}>{value}</span>
+    <span className={`font-fa-semibold leading-none text-fa-t7 font-mono text-[14px] tabular-nums ${alert ? 'text-error animate-pulse' : 'text-text-primary'}`}>{value}</span>
   </div>
 );
 
 const LogFileItem = ({ name, size }: { name: string, size: string }) => (
-  <div className="flex items-center justify-between group cursor-pointer hover:bg-bgCard p-1 rounded-tag transition-all">
+  <div className="flex items-center justify-between group cursor-pointer hover:bg-bg-card p-1.5 rounded-tag transition-all">
     <div className="flex items-center gap-2 min-w-0">
-      <FileArchive size={11} className="text-textTertiary" />
-      <span className="fa-t7-mono text-[10px] text-textSecondary truncate">{name}</span>
+      <FileArchive size={11} className="text-text-tertiary" />
+      <span className="text-fa-t7 font-fa-semibold font-mono text-[10px] text-text-secondary truncate">{name}</span>
     </div>
-    <button className="text-brand shrink-0"><HardDriveDownload size={13} /></button>
+    <button className="text-brand shrink-0 bg-transparent border-none p-0 cursor-pointer"><HardDriveDownload size={13} /></button>
   </div>
 );
 

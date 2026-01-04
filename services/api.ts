@@ -3,10 +3,42 @@ import { ExecutionStatus } from '../shared/types';
 
 export const ProjectService = {
   getProjects: async () => [
-    { id: '1', name: 'Alpha Substation Inspection', status: 'active', missions: 12, date: '2025-12-19', thumb: 'https://picsum.photos/seed/1/400/225' },
-    { id: '2', name: 'Marina Solar Plant Phase II', status: 'idle', missions: 8, date: '2025-12-18', thumb: 'https://picsum.photos/seed/2/400/225' },
-    { id: '3', name: 'Downtown Mapping Project', status: 'syncing', missions: 4, date: '2025-12-17', thumb: '' },
-    { id: '4', name: 'South Pipeline Security Monitoring', status: 'active', missions: 15, date: '2025-12-16', thumb: 'https://picsum.photos/seed/4/400/225' },
+    { 
+      id: '1', 
+      name: 'Alpha Substation Inspection', 
+      status: 'active', 
+      missions: 12, 
+      date: '2025-12-19', 
+      thumb: 'https://picsum.photos/seed/1/400/225',
+      tags: ['Powerline', 'Inspection']
+    },
+    { 
+      id: '2', 
+      name: 'Marina Solar Plant Phase II', 
+      status: 'idle', 
+      missions: 8, 
+      date: '2025-12-18', 
+      thumb: 'https://picsum.photos/seed/2/400/225',
+      tags: ['Solar', 'Maintenance']
+    },
+    { 
+      id: '3', 
+      name: 'Downtown Mapping Project', 
+      status: 'syncing', 
+      missions: 4, 
+      date: '2025-12-17', 
+      thumb: '',
+      tags: ['Urban', 'Mapping']
+    },
+    { 
+      id: '4', 
+      name: 'South Pipeline Security Monitoring', 
+      status: 'active', 
+      missions: 15, 
+      date: '2025-12-16', 
+      thumb: 'https://picsum.photos/seed/4/400/225',
+      tags: ['Security', 'Patrol']
+    },
   ],
 };
 

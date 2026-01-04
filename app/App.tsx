@@ -11,6 +11,7 @@ import ProjectsPage from '../pages/ProjectsPage';
 import MissionControlPage from '../pages/MissionControlPage';
 import ExecutionsListPage from '../pages/Executions/ListPage';
 import ExecutionDetailPage from '../pages/Executions/DetailPage';
+import ExecutionPlaybackPage from '../pages/ExecutionPlaybackPage';
 import MarketplacePage from '../pages/MarketplacePage';
 import TemplatesPage from '../pages/Workflows/TemplatesPage';
 import WorkflowStudioPage from '../pages/Workflows/WorkflowStudioPage';
@@ -27,7 +28,7 @@ const App: React.FC = () => {
     <ConfigProvider theme={getAntdTheme()}>
       <I18nProvider>
         <HashRouter>
-          <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center bg-page animate-pulse">Loading...</div>}>
+          <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center bg-bg-page animate-pulse text-text-tertiary">FlyAIOS Loading...</div>}>
             <Routes>
               {/* 1. Immersive Full-Screen Pages (No Shell) */}
               <Route path="/workflows/:id" element={<WorkflowStudioPage />} />
@@ -38,7 +39,12 @@ const App: React.FC = () => {
                   <Routes>
                     <Route path="/" element={<ProjectsPage />} />
                     <Route path="/executions" element={<ExecutionsListPage />} />
-                    <Route path="/execution/:id" element={<ExecutionDetailPage />} />
+                    
+                    {/* 根据用户反馈：历史回放显示 PlaybackPage */}
+                    <Route path="/execution/:id" element={<ExecutionPlaybackPage />} />
+                    {/* 新增：分析/监控工作台路径 */}
+                    <Route path="/execution/:id/analysis" element={<ExecutionDetailPage />} />
+                    
                     <Route path="/project/:id/missions" element={<MissionControlPage />} />
                     <Route path="/workflows" element={<TemplatesPage />} />
                     <Route path="/deployments" element={<DeploymentsListPage />} />

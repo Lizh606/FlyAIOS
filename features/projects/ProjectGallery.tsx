@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Plus, LayoutGrid, List as ListIcon, Filter, Clock, MoreVertical, PlayCircle, Search, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -5,6 +6,7 @@ import { Button, Tooltip, Input, Tabs } from 'antd';
 import { useI18n } from '../../i18n';
 import FAStatus from '../../ui/FAStatus';
 import FACard from '../../ui/FACard';
+import FATag from '../../ui/FATag';
 import { ProjectService } from '../../services/api';
 
 const ProjectGallery: React.FC = () => {
@@ -33,14 +35,14 @@ const ProjectGallery: React.FC = () => {
 
   if (loading) return (
     <div className="p-6 flex flex-col items-center justify-center text-text-tertiary animate-pulse gap-4 bg-bg-page min-h-full">
-      <div className="w-12 h-12 rounded-full border-4 border-border-divider border-t-brand animate-spin"></div>
+      <div className="w-12 h-12 rounded-full border-4 border-border border-t-brand animate-spin"></div>
       <span className="text-fa-t5 font-fa-semibold uppercase tracking-widest">Loading Workspace...</span>
     </div>
   );
 
   return (
-    <div className="px-6 py-8 max-w-[1440px] mx-auto w-full animate-in fade-in duration-500">
-      {/* 1. Page Header: v0.8 Page Title (T2) + Body (T5) */}
+    <div className="px-6 py-8 max-w-[1440px] mx-auto w-full animate-in fade-in duration-500 bg-bg-page min-h-full">
+      {/* 1. Page Header */}
       <div className="flex flex-col md:flex-row md:items-start justify-between mb-8 gap-4">
         <div>
           <h1 className="text-fa-t2 font-fa-semibold text-text-primary mb-1 tracking-tight leading-none">{t('projects.title')}</h1>
@@ -51,13 +53,13 @@ const ProjectGallery: React.FC = () => {
           <div className="flex bg-bg-card border border-border rounded-control p-1 shadow-sm h-10">
             <button 
               onClick={() => setViewMode('grid')} 
-              className={`w-8 h-8 flex items-center justify-center rounded-md transition-all ${viewMode === 'grid' ? 'bg-brand-bg text-brand' : 'text-text-tertiary hover:text-text-primary'}`}
+              className={`w-8 h-8 flex items-center justify-center rounded-control transition-all ${viewMode === 'grid' ? 'bg-brand-bg text-brand shadow-sm' : 'text-text-tertiary hover:text-text-primary'}`}
             >
               <LayoutGrid size={14} />
             </button>
             <button 
               onClick={() => setViewMode('list')} 
-              className={`w-8 h-8 flex items-center justify-center rounded-md transition-all ${viewMode === 'list' ? 'bg-brand-bg text-brand' : 'text-text-tertiary hover:text-text-primary'}`}
+              className={`w-8 h-8 flex items-center justify-center rounded-control transition-all ${viewMode === 'list' ? 'bg-brand-bg text-brand shadow-sm' : 'text-text-tertiary hover:text-text-primary'}`}
             >
               <ListIcon size={14} />
             </button>
@@ -65,14 +67,14 @@ const ProjectGallery: React.FC = () => {
           <Button 
             type="primary" 
             icon={<Plus size={16} />} 
-            className="h-10 flex items-center px-5 font-fa-semibold uppercase tracking-widest shadow-md"
+            className="h-10 flex items-center px-5 font-fa-semibold uppercase tracking-widest shadow-card"
           >
             {t('projects.newProject')}
           </Button>
         </div>
       </div>
 
-      {/* 2. Tabs & Toolbar: Toolbar Pattern (v0.8 6.2.1) */}
+      {/* 2. Toolbar */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 border-b border-border">
         <div className="fa-tabs-v2 shrink-0">
           <Tabs
@@ -89,19 +91,19 @@ const ProjectGallery: React.FC = () => {
           <Input 
             prefix={<Search size={14} className="text-text-tertiary" />}
             placeholder={t('common.search')}
-            className="flex-1 sm:w-72 h-9 shadow-sm"
+            className="flex-1 sm:w-72 h-9 shadow-sm rounded-control"
             allowClear
           />
           <Button 
             icon={<Filter size={14} />} 
-            className="h-9 flex items-center text-text-secondary font-fa-medium"
+            className="h-9 flex items-center text-text-secondary font-fa-medium border-border"
           >
             {t('common.filter')}
           </Button>
         </div>
       </div>
 
-      {/* 3. Grid / List View: Card Pattern (v0.8 6.5) */}
+      {/* 3. Data View */}
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {projects.map((p) => (
@@ -109,10 +111,10 @@ const ProjectGallery: React.FC = () => {
               key={p.id} 
               hoverable
               onClick={() => handleProjectClick(p.id)}
-              className="group flex flex-col h-full bg-bg-card border-border shadow-card"
+              className="group flex flex-col h-full bg-bg-card border-border shadow-card overflow-hidden"
               density="comfort"
             >
-              <div className="aspect-video bg-bg-page relative overflow-hidden mb-4 rounded-lg border border-border shadow-inner">
+              <div className="aspect-video bg-bg-page relative overflow-hidden mb-4 rounded-control border border-border shadow-inner">
                 {p.thumb ? (
                   <img src={p.thumb} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="" />
                 ) : (
@@ -120,38 +122,52 @@ const ProjectGallery: React.FC = () => {
                     <LayoutGrid size={48} strokeWidth={1} />
                   </div>
                 )}
-                <div className="absolute top-3 left-3">
-                  <FAStatus status={p.status as any} label={t(`status.${p.status}`)} />
+                <div className="absolute top-2.5 left-2.5">
+                  <FAStatus status={p.status as any} label={t(`status.${p.status}`)} className="shadow-overlay border-border-strong/10 bg-bg-card/90 backdrop-blur-md" />
                 </div>
               </div>
               
               <div className="flex-1 flex flex-col min-h-[110px]">
-                <h3 className="text-fa-t4 font-fa-semibold text-text-primary mb-2 group-hover:text-brand transition-colors line-clamp-2 leading-tight">
+                <h3 className="text-fa-t4 font-fa-semibold text-text-primary group-hover:text-brand transition-colors line-clamp-2 leading-tight m-0 mb-2">
                   {p.name}
                 </h3>
-                <div className="flex items-center gap-2 text-text-tertiary mb-4 mt-1">
-                  <Clock size={12} className="shrink-0" />
-                  <span className="text-fa-t6 tabular-nums">{t('projects.lastCaptured')}: {p.date}</span>
+
+                {/* 新增标签行：填充标题下方空白 */}
+                <div className="flex flex-wrap gap-1.5 mb-auto">
+                  {p.tags?.map((tag: string) => (
+                    <FATag key={tag} className="bg-bg-page/50 border-border/60">{tag}</FATag>
+                  ))}
                 </div>
                 
-                <div className="mt-auto pt-4 border-t border-divider flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                     <Tooltip title={t('projects.viewPlayback')}>
-                       <button 
-                        onClick={(e) => handlePlaybackClick(e, p.id)} 
-                        className="text-brand hover:scale-110 transition-transform flex items-center"
-                       >
-                         <PlayCircle size={22} fill="rgba(var(--fa-brand), 0.1)" />
-                       </button>
-                     </Tooltip>
-                     <div className="flex items-center gap-1 text-text-tertiary">
-                       <Eye size={14} className="shrink-0" />
-                       <span className="text-fa-t6 font-fa-semibold tabular-nums">{p.missions}</span>
-                     </div>
-                  </div>
-                  <button className="text-text-tertiary hover:text-text-primary p-1.5 rounded-md hover:bg-action-hover transition-colors">
-                    <MoreVertical size={16} />
-                  </button>
+                {/* 底部功能区 */}
+                <div className="mt-4 pt-4 border-t border-divider flex items-center justify-between gap-1">
+                   {/* 左侧：统一字体的元数据 */}
+                   <div className="flex items-center gap-3 min-w-0">
+                      <div className="flex items-center gap-1.5 text-text-tertiary min-w-0">
+                         <Clock size={12} className="shrink-0" />
+                         <span className="text-fa-t6 font-fa-regular tabular-nums truncate">{p.date}</span>
+                      </div>
+                      <div className="w-1 h-1 bg-border rounded-full shrink-0 opacity-40"></div>
+                      <div className="flex items-center gap-1.2 text-text-tertiary shrink-0">
+                         <Eye size={12} className="mr-1" />
+                         <span className="text-fa-t6 font-fa-regular tabular-nums">{p.missions}</span>
+                      </div>
+                   </div>
+
+                   {/* 右侧：操作按钮 */}
+                   <div className="flex items-center gap-0.5 shrink-0">
+                      <Tooltip title={t('projects.viewPlayback')}>
+                        <button 
+                         onClick={(e) => handlePlaybackClick(e, p.id)} 
+                         className="w-8 h-8 flex items-center justify-center text-brand hover:bg-brand-bg rounded-control transition-all border-none bg-transparent cursor-pointer p-0"
+                        >
+                          <PlayCircle size={18} />
+                        </button>
+                      </Tooltip>
+                      <button className="w-8 h-8 flex items-center justify-center text-text-tertiary hover:text-text-primary hover:bg-action-hover rounded-control transition-colors border-none bg-transparent cursor-pointer">
+                        <MoreVertical size={18} />
+                      </button>
+                   </div>
                 </div>
               </div>
             </FACard>
@@ -165,27 +181,32 @@ const ProjectGallery: React.FC = () => {
               onClick={() => handleProjectClick(p.id)}
               className="group bg-bg-card border border-border rounded-card p-3 flex items-center gap-4 hover:border-brand/40 hover:shadow-card transition-all cursor-pointer"
             >
-              <div className="w-16 h-10 bg-bg-page rounded-lg overflow-hidden shrink-0 border border-border">
+              <div className="w-16 h-10 bg-bg-page rounded-control overflow-hidden shrink-0 border border-border">
                 {p.thumb ? <img src={p.thumb} className="w-full h-full object-cover transition-opacity group-hover:opacity-90" /> : <div className="w-full h-full flex items-center justify-center text-text-disabled/20"><LayoutGrid size={16}/></div>}
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-fa-t5 font-fa-semibold text-text-primary truncate group-hover:text-brand transition-colors mb-0.5">{p.name}</h3>
+                <div className="flex items-center gap-3">
+                  <h3 className="text-fa-t5 font-fa-semibold text-text-primary truncate group-hover:text-brand transition-colors mb-0.5">{p.name}</h3>
+                  {p.tags?.slice(0, 1).map((tag: string) => (
+                    <span key={tag} className="text-[10px] font-fa-semibold text-text-tertiary uppercase tracking-tighter opacity-60"># {tag}</span>
+                  ))}
+                </div>
                 <div className="flex items-center gap-3 mt-1">
-                  <span className="text-fa-t6 text-text-tertiary flex items-center gap-1.5"><Clock size={11} className="shrink-0" /> {p.date}</span>
-                  <div className="w-1 h-1 bg-border-divider rounded-full"></div>
-                  <span className="text-fa-t6 font-fa-medium text-text-secondary uppercase tracking-tight">{p.missions} Missions</span>
+                  <span className="text-fa-t6 text-text-tertiary flex items-center gap-1.5 font-fa-regular tabular-nums"><Clock size={11} className="shrink-0" /> {p.date}</span>
+                  <div className="w-1 h-1 bg-border rounded-full opacity-40"></div>
+                  <span className="text-fa-t6 font-fa-regular text-text-tertiary tabular-nums uppercase tracking-tight flex items-center gap-1.5"><Eye size={11} className="shrink-0" /> {p.missions} Missions</span>
                 </div>
               </div>
-              <div className="shrink-0 w-24 flex justify-center">
+              <div className="shrink-0 w-28 flex justify-center">
                 <FAStatus status={p.status as any} label={t(`status.${p.status}`)} />
               </div>
-              <div className="flex items-center gap-2 shrink-0 border-l border-divider pl-4 ml-1">
+              <div className="flex items-center gap-1 shrink-0 border-l border-divider pl-3 ml-1">
                 <Tooltip title={t('projects.viewPlayback')}>
-                  <button onClick={(e) => handlePlaybackClick(e, p.id)} className="p-2 text-brand hover:bg-brand-bg rounded-lg transition-colors">
+                  <button onClick={(e) => handlePlaybackClick(e, p.id)} className="w-8 h-8 flex items-center justify-center text-brand hover:bg-brand-bg rounded-control transition-colors border-none bg-transparent cursor-pointer">
                     <PlayCircle size={18} />
                   </button>
                 </Tooltip>
-                <button className="p-2 text-text-tertiary hover:text-text-primary transition-colors">
+                <button className="w-8 h-8 flex items-center justify-center text-text-tertiary hover:text-text-primary hover:bg-action-hover rounded-control transition-colors border-none bg-transparent cursor-pointer">
                   <MoreVertical size={18} />
                 </button>
               </div>
@@ -198,7 +219,7 @@ const ProjectGallery: React.FC = () => {
         .fa-tabs-v2 .ant-tabs-nav { margin-bottom: 0 !important; }
         .fa-tabs-v2 .ant-tabs-nav::before { border-bottom: none !important; }
         .fa-tabs-v2 .ant-tabs-tab { padding: 12px 0 !important; margin: 0 24px 0 0 !important; }
-        .fa-tabs-v2 .ant-tabs-tab-btn { font-size: 14px !important; font-weight: 500 !important; text-transform: uppercase; letter-spacing: 0.05em; }
+        .fa-tabs-v2 .ant-tabs-tab-btn { font-size: var(--fa-fs-t5) !important; font-weight: var(--fa-fw-semibold) !important; text-transform: uppercase; letter-spacing: 0.05em; }
         .fa-tabs-v2 .ant-tabs-ink-bar { height: 2px !important; bottom: 0 !important; }
       `}</style>
     </div>

@@ -4,7 +4,8 @@ import { TranslationModule } from '../types';
 export const nav: TranslationModule = {
   // Navigation Groups
   'nav.group.ops': { zh: '现场运营', en: 'OPERATIONS' },
-  'nav.group.automation': { zh: '自动化', en: 'AUTOMATION' },
+  'nav.group.build': { zh: '流程构建', en: 'BUILD' },
+  'nav.group.data': { zh: '证据链审计', en: 'EVIDENCE' },
   'nav.group.assets': { zh: '资产管理', en: 'ASSETS' },
   'nav.group.market': { zh: '应用市场', en: 'MARKET' },
   
@@ -19,18 +20,9 @@ export const nav: TranslationModule = {
   'nav.marketplace': { zh: '应用中心', en: 'Marketplace' },
   'nav.integrations': { zh: '外部集成', en: 'Integrations' },
   
-  // Legacy & Misc
-  'nav.map': { zh: '地图浏览器', en: 'Map Explorer' },
-  'nav.logs': { zh: '飞行日志', en: 'Flight Logs' },
-  'nav.equipment': { zh: '设备管理', en: 'Equipment' },
-  'nav.pilots': { zh: '飞行员', en: 'Pilots' },
   'nav.settings': { zh: '系统设置', en: 'Settings' },
   'nav.help': { zh: '帮助中心', en: 'Help' },
   'nav.logout': { zh: '退出登录', en: 'Log out' },
   'nav.searchPlaceholder': { zh: '搜索项目、执行 ID 或工作流...', en: 'Search projects, executions, workflows...' },
   'nav.role': { zh: '运维工程师', en: 'Ops Engineer' },
-  
-  // Layout Controls
-  'layout.collapseSidebar': { zh: '折叠侧边栏', en: 'Collapse Sidebar' },
-  'layout.expandSidebar': { zh: '展开侧边栏', en: 'Expand Sidebar' },
 };

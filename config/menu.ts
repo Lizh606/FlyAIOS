@@ -12,32 +12,40 @@ import {
   HelpCircle,
   LogOut,
   Webhook,
-  Briefcase,
   Zap,
   ShieldCheck,
-  Store
+  Store,
+  Database,
+  Search,
+  Bell
 } from 'lucide-react';
 
 export const NAV_GROUPS = (t: any) => [
   {
-    title: t('nav.group.ops'),
-    icon: Briefcase,
+    title: t('nav.group.ops'), // 现场运营
+    icon: Layout,
     items: [
       { icon: Layout, label: t('nav.projects'), path: '/' },
       { icon: Activity, label: t('nav.executions'), path: '/executions' },
     ]
   },
   {
-    title: t('nav.group.automation'),
+    title: t('nav.group.build'), // 编排与构建 (原 Automation)
     icon: Zap,
     items: [
-      { icon: GitBranch, label: t('nav.workflows'), path: '/workflows' },
+      { icon: Zap, label: t('nav.workflows'), path: '/workflows' },
       { icon: Calendar, label: t('nav.deployments'), path: '/deployments' },
+    ]
+  },
+  {
+    title: t('nav.group.data'), // 证据链数据
+    icon: FileText,
+    items: [
       { icon: FileText, label: t('nav.runs'), path: '/runs' },
     ]
   },
   {
-    title: t('nav.group.assets'),
+    title: t('nav.group.assets'), // 物理资产
     icon: ShieldCheck,
     items: [
       { icon: Cpu, label: t('nav.devices'), path: '/devices' },
@@ -45,7 +53,7 @@ export const NAV_GROUPS = (t: any) => [
     ]
   },
   {
-    title: t('nav.group.market'),
+    title: t('nav.group.market'), // 应用与集成
     icon: Store,
     items: [
       { icon: ShoppingBag, label: t('nav.marketplace'), path: '/marketplace' },

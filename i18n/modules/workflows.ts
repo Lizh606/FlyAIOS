@@ -21,12 +21,22 @@ export const workflows: TranslationModule = {
   // Drawer
   'workflows.drawer.useTemplate': { zh: '使用此模板', en: 'Use Template' },
   'workflows.drawer.overview': { zh: '方案概览', en: 'Overview' },
+  'workflows.drawer.overviewDesc': { zh: '本模板定义了从现场物理执行到逻辑证据链生成的完整自动化巡检链路。支持多模态数据输入，通过边缘AI与云端闭环逻辑，确保高价值告警的准确产出。', en: 'This template defines a complete automated inspection chain. It supports multi-modal data input and edge-to-cloud closed-loop logic.' },
   'workflows.drawer.flow': { zh: '流程预览', en: 'Workflow Preview' },
   'workflows.drawer.expectedOutputs': { zh: '预期产物', en: 'Expected Outputs' },
   'workflows.drawer.triggers': { zh: '触发器', en: 'Triggers' },
   'workflows.drawer.processingModes': { zh: '处理模式', en: 'Processing Modes' },
   'workflows.drawer.usedApps': { zh: '此模板用到的 Apps', en: 'Apps used in this template' },
   'workflows.drawer.official': { zh: 'FlyAIOS 官方', en: 'FlyAIOS Official' },
+  
+  'workflows.drawer.step.trigger.title': { zh: '触发源 (Trigger Source)', en: 'Trigger Source' },
+  'workflows.drawer.step.trigger.desc': { zh: '当巡检任务完成、边缘产生高风险告警或手动触发时自动启动流程。', en: 'Automatically starts the process when the mission completes or edge alerts are raised.' },
+  'workflows.drawer.step.edge.title': { zh: '边缘 AI 识别 (Edge Detection)', en: 'Edge Detection' },
+  'workflows.drawer.step.edge.desc': { zh: '在边缘侧进行缺陷、异物、鸟巢等 12 类典型目标的实时识别与初步过滤。', en: 'Performs real-time identification and filtering of typical targets at the edge.' },
+  'workflows.drawer.step.cloud.title': { zh: '云端人工复核 (Cloud Review)', en: 'Cloud Review' },
+  'workflows.drawer.step.cloud.desc': { zh: '针对低置信度识别结果自动推送至云端平台，由专业人员进行线上复核确认。', en: 'Automatically pushes low-confidence results to the cloud for manual verification.' },
+  'workflows.drawer.step.post.title': { zh: '自动化产物生成 (Post Processing)', en: 'Post Processing' },
+  'workflows.drawer.step.post.desc': { zh: '汇总全量证据链数据，自动生成多格式巡检报告并推送回执到工单系统。', en: 'Aggregates all evidence data to generate reports and push receipts to business systems.' },
 
   // Studio
   'workflows.studio.publish': { zh: '发布版本', en: 'Publish' },

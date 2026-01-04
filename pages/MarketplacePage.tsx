@@ -1,5 +1,6 @@
+
 import React, { useState, useMemo } from 'react';
-import { Search, ShoppingBag, RefreshCcw } from 'lucide-react';
+import { Search, ShoppingBag, RefreshCcw, Filter } from 'lucide-react';
 import { Input, Tabs, Switch, Button } from 'antd';
 import { useI18n } from '../i18n';
 import { MOCK_APPS } from '../shared/mocks/apps';
@@ -31,13 +32,11 @@ const MarketplacePage: React.FC = () => {
 
   return (
     <div className="px-6 py-8 max-w-[1440px] mx-auto w-full animate-in fade-in duration-500 bg-bg-page min-h-full">
-      {/* 1. Page Header (v0.8 T2/T5 Typography) */}
       <FAPageHeader 
         title={t('marketplace.title')}
         subtitle={t('marketplace.subtitle')}
       />
 
-      {/* 2. Standard Toolbar Layout (v0.8 6.2.1) */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 border-b border-border">
         <div className="fa-tabs-v2 shrink-0">
           <Tabs
@@ -71,14 +70,12 @@ const MarketplacePage: React.FC = () => {
           />
           
           <Button 
-            icon={<RefreshCcw size={14} />} 
+            icon={<Filter size={14} />} 
             className="h-9 w-9 p-0 flex items-center justify-center text-text-tertiary border-border hover:text-brand"
-            onClick={() => { setSearchText(''); setActiveTab('All'); setShowInstalledOnly(false); }}
           />
         </div>
       </div>
 
-      {/* 3. Grid View: v0.8 6.5.2 - Desktop 3 columns, Gap 16px (gap-4) */}
       {filteredApps.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredApps.map(app => (
@@ -102,7 +99,6 @@ const MarketplacePage: React.FC = () => {
         />
       )}
 
-      {/* Detail Overlay */}
       <AppDetailDrawer 
         app={selectedApp} 
         open={!!selectedAppId} 

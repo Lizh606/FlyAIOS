@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Zap, LayoutGrid, ArrowRight, Box } from 'lucide-react';
 import { Tooltip, Popover } from 'antd';
@@ -57,35 +58,35 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, onClick }) => {
     <FACard 
       hoverable 
       onClick={onClick}
-      className="group flex flex-col h-[280px] border-border shadow-sm hover:shadow-md transition-all duration-300"
+      className="group flex flex-col h-[280px] border-border shadow-card bg-bg-card transition-all duration-300"
       density="compact"
     >
-      {/* 1. Header: Icon + Title + Meta (T5 Strong + T6) */}
+      {/* 1. Header: Icon + Title + Meta (对齐 AppCard) */}
       <div className="flex items-start gap-3 mb-3 shrink-0">
         <div className="w-11 h-11 rounded-xl bg-brand-bg border border-brand/10 flex items-center justify-center text-brand shrink-0 group-hover:bg-bg-card group-hover:border-brand/20 transition-colors">
           <Zap size={20} fill="currentColor" className="opacity-70" />
         </div>
-        <div className="min-w-0 flex-1">
-          <h3 className="text-fa-t5 font-fa-semibold text-text-primary truncate group-hover:text-brand transition-colors mb-0.5">
+        <div className="min-w-0 flex-1 pt-0.5">
+          <h3 className="text-fa-t5 font-fa-semibold text-text-primary truncate group-hover:text-brand transition-colors leading-tight m-0 mb-0.5">
             {template.name}
           </h3>
-          <p className="text-fa-t6 text-text-tertiary truncate tracking-tight font-fa-medium uppercase">
+          <p className="text-fa-t6 font-fa-medium text-text-tertiary truncate tracking-tight m-0 uppercase">
             {template.industry}
           </p>
         </div>
       </div>
 
-      {/* 2. Body: Description (T6) + KV Tag Sections */}
-      <div className="flex-1 flex flex-col min-h-0 pb-4">
-        <Tooltip title={template.description} mouseEnterDelay={0.5}>
-          <p className="text-fa-t6 text-text-secondary truncate mb-1 h-[22px] leading-relaxed cursor-help">
+      {/* 2. Body: Description + Metadata Groups (space-y-3 对齐) */}
+      <div className="flex-1 flex flex-col min-h-0 space-y-3">
+        <Tooltip title={template.description}>
+          <p className="text-fa-t6 text-text-secondary truncate leading-relaxed m-0">
             {template.description}
           </p>
         </Tooltip>
 
-        <div className="space-y-4">
-          <div className="flex flex-col gap-1">
-            <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tracking-widest block">
+        <div className="space-y-3">
+          <div className="flex flex-col gap-1.5">
+            <span className="text-fa-t7 font-fa-semibold font-mono text-text-tertiary uppercase tracking-widest text-[9px] block">
               {t('workflows.drawer.triggers')}
             </span>
             <div className="flex items-center gap-1.5 h-6">
@@ -98,8 +99,8 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, onClick }) => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-1">
-            <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tracking-widest block">
+          <div className="flex flex-col gap-1.5">
+            <span className="text-fa-t7 font-fa-semibold font-mono text-text-tertiary uppercase tracking-widest text-[9px] block">
               {t('workflows.drawer.expectedOutputs')}
             </span>
             <div className="flex items-center gap-1.5 h-6">
@@ -114,28 +115,27 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, onClick }) => {
         </div>
       </div>
 
-      {/* 3. Footer: Metadata (T7 Mono) */}
-      <div className="mt-auto py-3 border-t border-border flex items-center justify-between shrink-0">
+      {/* 3. Footer: Stats + Action (对齐布局) */}
+      <div className="mt-auto py-3 border-t border-divider flex items-center justify-between shrink-0">
         <div className="flex items-center gap-4 text-text-tertiary">
           <Tooltip title={`${template.processingModes.length} Modes`}>
             <div className="flex items-center gap-1.5">
               <LayoutGrid size={13} className="opacity-60" />
-              <span className="text-fa-t7 font-fa-semibold tabular-nums">{template.processingModes.length}</span>
+              <span className="text-fa-t7 font-fa-semibold font-mono tabular-nums">{template.processingModes.length}</span>
             </div>
           </Tooltip>
           <Tooltip title={`${template.apps.length} Apps`}>
             <div className="flex items-center gap-1.5">
               <Box size={13} className="opacity-60" />
-              <span className="text-fa-t7 font-fa-semibold tabular-nums">{template.apps.length}</span>
+              <span className="text-fa-t7 font-fa-semibold font-mono tabular-nums">{template.apps.length}</span>
             </div>
           </Tooltip>
         </div>
 
-        <div className="flex items-center gap-2 text-text-disabled group-hover:text-brand transition-colors">
-          <span className="text-fa-t7 font-fa-semibold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
-            {t('common.viewDetail')}
-          </span>
-          <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+        <div className="flex items-center gap-2">
+          <button className="text-fa-t7 font-fa-semibold uppercase h-7 px-2.5 text-text-tertiary border border-border rounded-md hover:text-brand hover:border-brand/40 flex items-center gap-1 group/btn transition-all">
+            {t('common.view')} <ArrowRight size={12} className="transition-transform group-hover/btn:translate-x-0.5" />
+          </button>
         </div>
       </div>
 

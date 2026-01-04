@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button, Tooltip, Popover, Divider } from 'antd';
 import { 
@@ -137,7 +138,7 @@ const TemplateDetailDrawer: React.FC<TemplateDetailDrawerProps> = ({ template, o
               <Info size={14} className="text-text-disabled" /> {t('workflows.drawer.overview')}
             </h3>
             <p className="text-fa-t5 text-text-secondary leading-relaxed bg-white p-4 rounded-xl border border-border">
-              本模板定义了从现场物理执行到逻辑证据链生成的完整自动化巡检链路。支持多模态数据输入，通过边缘AI与云端闭环逻辑，确保高价值告警的准确产出。
+              {t('workflows.drawer.overviewDesc')}
             </p>
           </section>
 
@@ -148,26 +149,26 @@ const TemplateDetailDrawer: React.FC<TemplateDetailDrawerProps> = ({ template, o
             <div className="space-y-0 pl-1">
               <WorkflowStep 
                 icon={<Zap size={14} />} 
-                title="触发源 (Trigger Source)" 
-                desc="当巡检任务完成、边缘产生高风险告警或手动触发时自动启动流程。"
+                title={t('workflows.drawer.step.trigger.title')} 
+                desc={t('workflows.drawer.step.trigger.desc')}
                 isStart
               />
               <WorkflowStep 
                 icon={<ShieldCheck size={14} />} 
-                title="边缘 AI 识别 (Edge Detection)" 
-                desc="在边缘侧进行缺陷、异物、鸟巢等 12 类典型目标的实时识别与初步过滤。"
+                title={t('workflows.drawer.step.edge.title')} 
+                desc={t('workflows.drawer.step.edge.desc')}
                 app="Edge Defect Alert v1.2"
               />
               <WorkflowStep 
                 icon={<Globe size={14} />} 
-                title="云端人工复核 (Cloud Review)" 
-                desc="针对低置信度识别结果自动推送至云端平台，由专业人员进行线上复核确认。"
+                title={t('workflows.drawer.step.cloud.title')} 
+                desc={t('workflows.drawer.step.cloud.desc')}
                 app="Cloud Reviewer Pack"
               />
               <WorkflowStep 
                 icon={<FileText size={14} />} 
-                title="自动化产物生成 (Post Processing)" 
-                desc="汇总全量证据链数据，自动生成多格式巡检报告并推送回执到工单系统。"
+                title={t('workflows.drawer.step.post.title')} 
+                desc={t('workflows.drawer.step.post.desc')}
                 app="LLM Report Engine"
                 isEnd
               />

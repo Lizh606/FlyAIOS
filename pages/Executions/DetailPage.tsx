@@ -1,10 +1,12 @@
+
 import React, { useMemo } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { Tabs, Button, Divider, Dropdown, Tooltip, Popover } from 'antd';
 import { 
   ArrowLeft, Activity, Monitor, GitBranch, 
   Settings, Info, Clock, ExternalLink,
-  Copy, MoreVertical, HelpCircle, MapPin, ChevronDown
+  Copy, MoreVertical, HelpCircle, MapPin, ChevronDown,
+  AlertCircle, CheckCircle2, Timer, Zap, PlayCircle
 } from 'lucide-react';
 import { ColumnsType } from 'antd/es/table';
 import { useI18n } from '../../i18n';
@@ -114,7 +116,6 @@ const ExecutionDetailPage: React.FC = () => {
 
   return (
     <div className="h-screen flex flex-col bg-bg-page overflow-hidden">
-      {/* 优化后的 Header: 移除了外层 border-b，通过 Tabs 底部线分割 */}
       <div className="bg-bg-card shrink-0 z-20">
         <div className="max-w-[1440px] mx-auto w-full px-6 pt-6">
           <div className="flex items-center justify-between mb-6">
@@ -138,13 +139,20 @@ const ExecutionDetailPage: React.FC = () => {
                     <span className="text-fa-t6 font-fa-medium text-text-secondary">
                       {execution.projectName} • {execution.dockName || execution.deviceName}
                     </span>
-                    <Divider type="vertical" className="bg-divider h-3" />
+                    <Divider type="vertical" className="bg-border-divider h-3" />
                     <span className="text-fa-t7 font-fa-medium text-text-tertiary tabular-nums">启动于 {execution.startTime}</span>
                  </div>
               </div>
             </div>
 
             <div className="flex items-center gap-3 shrink-0">
+              <Button 
+                icon={<PlayCircle size={16}/>} 
+                onClick={() => navigate(`/execution/${id}`)}
+                className="text-fa-t6 font-fa-semibold uppercase tracking-widest h-9 px-4 flex items-center gap-2 border-border hover:border-brand hover:text-brand bg-bg-card text-text-secondary"
+              >
+                {t('common.replay')}
+              </Button>
               <Dropdown 
                 menu={{ items: [
                   { key: 'copy', label: '复制 ID', icon: <Copy size={14} />, onClick: () => navigator.clipboard.writeText(execution.id) },
@@ -204,20 +212,12 @@ const ExecutionDetailPage: React.FC = () => {
                       pagination={{ pageSize: 10, size: 'small' }}
                       scroll={{ y: 420 }}
                       className="border-divider"
-                      locale={{
-                        emptyText: (
-                          <div className="py-20 flex flex-col items-center justify-center grayscale opacity-30">
-                            <Clock size={40} className="text-text-tertiary mb-3" />
-                            <span className="text-fa-t6 font-fa-semibold uppercase tracking-widest text-text-tertiary">正在等待实时数据接入...</span>
-                          </div>
-                        )
-                      }}
                     />
                   </FACard>
                </div>
                
-               <div className="lg:col-span-4 space-y-4">
-                  <FACard title={t('executions.detail.device')} density="comfort">
+               <div className="lg:col-span-4 flex flex-col gap-4 min-h-0">
+                  <FACard title={t('executions.detail.device')} density="comfort" className="shrink-0">
                     <div className="space-y-3">
                       <InfoRow label={t('executions.label.model')} value="DJI M350 RTK" />
                       <InfoRow label={t('executions.label.serial')} value="1ZAX-992-00" tabular />
@@ -225,10 +225,16 @@ const ExecutionDetailPage: React.FC = () => {
                       <InfoRow label={t('executions.label.firmware')} value="v02.04.01" tabular />
                     </div>
                   </FACard>
-                  <FACard title={t('executions.detail.timeline')} density="comfort" className="flex-1 min-h-[300px]">
-                    <div className="space-y-6 ml-2 pl-6 border-l border-divider relative pt-1">
-                       <TimelineNode time={execution.startTime.split(' ')[1]} text="任务开始执行" status="success" />
-                       <TimelineNode time="实时" text="边缘心跳探测活跃" active />
+                  
+                  <FACard title={t('executions.detail.timeline')} density="comfort" className="flex-1 overflow-visible">
+                    <div className="relative space-y-10 pt-2 pb-6">
+                       <div className="absolute left-[7.25px] top-4 bottom-4 w-px bg-border-strong z-0 opacity-50" />
+                       <TimelineNode time="14:00" text="任务已进入排队 (Queued)" status="neutral" />
+                       <TimelineNode time="14:15" text="设备预检与就绪 (Preparing)" status="info" />
+                       <TimelineNode time="14:20" text="任务正式启动执行 (Executing)" status="active" />
+                       <TimelineNode time="14:32" text="检测到链路降级 (Degraded)" status="warning" />
+                       <TimelineNode time="14:35" text="边缘通信异常中断 (Failed)" status="error" />
+                       <TimelineNode time="14:40" text="任务已完整归档 (Completed)" status="success" />
                     </div>
                   </FACard>
                </div>
@@ -251,23 +257,10 @@ const ExecutionDetailPage: React.FC = () => {
 
       <style>{`
         .fa-popover-v2 .ant-popover-inner { border-radius: 12px; padding: 12px; box-shadow: var(--fa-shadow-overlay); }
-        
-        /* 强制覆盖 Tabs 样式以对齐 Header 底部 */
-        .fa-tabs-v2 .ant-tabs-nav {
-          margin-bottom: 0 !important;
-        }
-        .fa-tabs-v2 .ant-tabs-nav::before {
-          border-bottom: 1px solid rgba(var(--fa-divider), var(--fa-divider-alpha)) !important;
-        }
-        .fa-tabs-v2 .ant-tabs-tab {
-          padding: 12px 0 !important;
-          margin-right: 32px !important;
-        }
-        .fa-tabs-v2 .ant-tabs-tab-btn {
-          font-weight: 600 !important;
-          text-transform: uppercase;
-          letter-spacing: 0.02em;
-        }
+        .fa-tabs-v2 .ant-tabs-nav { margin-bottom: 0 !important; }
+        .fa-tabs-v2 .ant-tabs-nav::before { border-bottom: 1px solid rgba(var(--fa-divider), var(--fa-divider-alpha)) !important; }
+        .fa-tabs-v2 .ant-tabs-tab { padding: 12px 0 !important; margin-right: 32px !important; }
+        .fa-tabs-v2 .ant-tabs-tab-btn { font-weight: 600 !important; text-transform: uppercase; letter-spacing: 0.02em; }
       `}</style>
     </div>
   );
@@ -276,7 +269,7 @@ const ExecutionDetailPage: React.FC = () => {
 const StatusField = ({ label, value, tabular, highlight }: any) => (
   <div className="flex justify-between items-center">
     <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tracking-widest">{label}</span>
-    <span className={`text-fa-t6 font-fa-semibold ${tabular ? 'tabular-nums font-mono' : ''} ${highlight ? 'text-brand' : 'text-text-secondary'}`}>
+    <span className={`text-fa-t6 font-fa-semibold ${tabular ? 'tabular-nums font-mono' : ''} ${highlight ? 'text-brand' : 'text-text-primary'}`}>
       {value}
     </span>
   </div>
@@ -298,20 +291,41 @@ const InfoRow = ({ label, value, tabular }: any) => (
   </div>
 );
 
-const TimelineNode = ({ time, text, status, active }: any) => (
-  <div className="relative">
-    <div className={`absolute -left-[28.5px] top-1.5 w-2.5 h-2.5 rounded-full border-2 border-bg-card shadow-sm ${
-      active ? 'bg-brand ring-4 ring-brand-bg' : status === 'success' ? 'bg-success' : 'bg-text-disabled'
-    }`} />
-    <div className="flex items-center gap-3">
-      {active ? (
-        <span className="text-fa-t7 font-fa-semibold px-1.5 py-0.5 bg-brand-bg text-brand rounded leading-none uppercase">当前</span>
-      ) : (
-        <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tabular-nums">{time}</span>
-      )}
-      <p className="text-fa-t5 font-fa-semibold text-text-secondary leading-none m-0">{text}</p>
+const TimelineNode = ({ time, text, status }: { time: string, text: string, status: 'neutral' | 'info' | 'active' | 'warning' | 'error' | 'success' }) => {
+  const getStatusStyles = () => {
+    switch (status) {
+      case 'active': return 'bg-brand ring-4 ring-brand-bg animate-pulse';
+      case 'success': return 'bg-success';
+      case 'warning': return 'bg-warning';
+      case 'error': return 'bg-error shadow-[0_0_8px_rgba(var(--fa-error),0.4)]';
+      case 'info': return 'bg-info';
+      case 'neutral': 
+      default: return 'bg-text-disabled';
+    }
+  };
+
+  return (
+    <div className="relative z-10 pl-10 flex flex-col justify-center min-h-[32px]">
+      <div className="absolute left-0 top-1.5 w-[15.5px] flex justify-center">
+        <div className={`w-3 h-3 rounded-full border-2 border-bg-card shadow-sm transition-all duration-500 ${getStatusStyles()}`} />
+      </div>
+      <div className="flex flex-col gap-0.5">
+        <div className="flex items-center gap-2">
+           <span className={`text-fa-t7 font-fa-semibold font-mono tabular-nums leading-none ${status === 'active' ? 'text-brand' : 'text-text-tertiary'}`}>
+             {time}
+           </span>
+           {status === 'active' && (
+             <span className="text-[9px] font-fa-semibold px-1 py-0 bg-brand-bg text-brand rounded uppercase tracking-tighter animate-in fade-in slide-in-from-left-1">LIVE</span>
+           )}
+        </div>
+        <p className={`text-fa-t5 font-fa-semibold m-0 leading-tight transition-colors ${
+          status === 'error' ? 'text-error' : status === 'active' ? 'text-text-primary' : 'text-text-secondary'
+        }`}>
+          {text}
+        </p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default ExecutionDetailPage;

@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AlertCircle, Clock, Play, Copy, Eye, Monitor } from 'lucide-react';
 import { Button, Tooltip, Dropdown, Divider, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
@@ -10,19 +11,21 @@ import FAStatus from '../../ui/FAStatus';
 import FACard from '../../ui/FACard';
 import { MOCK_EXECUTIONS } from '../../shared/mocks/executions';
 import { Execution, ExecutionStatus, LiveState } from '../../shared/types/domain';
+import { links } from '../../shared/linkBuilders';
 
 /**
  * ExecutionsListPage - Centralized view for monitoring drone mission executions.
- * Fixed structural errors where the component was being closed prematurely,
- * resulting in scoping issues for variables like 't', 'navigate', and 'isTablet'.
  */
 const ExecutionsListPage: React.FC = () => {
   const { t } = useI18n();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   
   const [width, setWidth] = useState(window.innerWidth);
   const isMobile = width < 768;
   const isTablet = width >= 768 && width < 1200;
+
+  const projectIdFilter = searchParams.get('projectId');
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -57,6 +60,11 @@ const ExecutionsListPage: React.FC = () => {
       default: return 'neutral';
     }
   };
+
+  const filteredExecutions = useMemo(() => {
+    if (!projectIdFilter) return MOCK_EXECUTIONS;
+    return MOCK_EXECUTIONS.filter(ex => ex.projectId === projectIdFilter);
+  }, [projectIdFilter]);
 
   // Memoized columns definition for the table view
   const columns: ColumnsType<Execution> = useMemo(() => {
@@ -153,7 +161,7 @@ const ExecutionsListPage: React.FC = () => {
           const hasAlerts = count > 0;
           return (
             <div 
-              onClick={(e) => { if (hasAlerts) { e.stopPropagation(); navigate(`/execution/${record.id}?tab=live#alerts`); } }}
+              onClick={(e) => { if (hasAlerts) { e.stopPropagation(); navigate(links.execution(record.id, 'live')); } }}
               className={`inline-flex items-center gap-2 text-fa-t5 font-fa-semibold transition-colors ${hasAlerts ? 'text-error cursor-pointer hover:opacity-80' : 'text-text-disabled cursor-default'}`}
             >
               <AlertCircle size={14} />
@@ -191,12 +199,12 @@ const ExecutionsListPage: React.FC = () => {
         width: 88,
         render: (_, record) => (
           <div className="flex items-center justify-end gap-1" onClick={e => e.stopPropagation()}>
-            <Tooltip title={t('common.view')}>
+            <Tooltip title={t('common.viewDetail')}>
               <Button 
                 type="text" 
                 size="small" 
                 icon={<Eye size={16} />} 
-                onClick={() => navigate(`/execution/${record.id}`)}
+                onClick={() => navigate(links.execution(record.id))}
                 className="text-text-tertiary hover:text-brand"
               />
             </Tooltip>
@@ -205,7 +213,7 @@ const ExecutionsListPage: React.FC = () => {
                 type="text" 
                 size="small" 
                 icon={<Play size={14} fill="currentColor" />} 
-                onClick={() => navigate(`/execution/${record.id}?tab=live`)}
+                onClick={() => navigate(links.execution(record.id, 'live'))}
                 className="text-text-tertiary hover:text-brand"
               />
             </Tooltip>
@@ -223,8 +231,8 @@ const ExecutionsListPage: React.FC = () => {
       <div className="px-4 py-6 bg-bg-page min-h-full animate-in fade-in duration-500">
         <FAPageHeader title={t('executions.title')} subtitle={t('executions.subtitle')} className="mb-6" />
         <div className="space-y-4">
-          {MOCK_EXECUTIONS.map(ex => (
-            <FACard key={ex.id} density="compact" onClick={() => navigate(`/execution/${ex.id}`)} className="border-border shadow-card active:scale-[0.98] transition-all">
+          {filteredExecutions.map(ex => (
+            <FACard key={ex.id} density="compact" onClick={() => navigate(links.execution(ex.id))} className="border-border shadow-card active:scale-[0.98] transition-all">
               <div className="flex justify-between items-start mb-3">
                 <div className="min-w-0 pr-4">
                   <h3 className="text-fa-t5 font-fa-semibold text-text-primary truncate leading-tight">{ex.projectName}</h3>
@@ -237,8 +245,8 @@ const ExecutionsListPage: React.FC = () => {
                 <div onClick={e => e.stopPropagation()}>
                   <Dropdown menu={{ 
                     items: [
-                      { key: 'view', label: t('common.view'), icon: <Eye size={14} />, onClick: () => navigate(`/execution/${ex.id}`) },
-                      { key: 'live', label: t('common.live'), icon: <Monitor size={14} />, onClick: () => navigate(`/execution/${ex.id}?tab=live`) }
+                      { key: 'view', label: t('common.viewDetail'), icon: <Eye size={14} />, onClick: () => navigate(links.execution(ex.id)) },
+                      { key: 'live', label: t('common.live'), icon: <Monitor size={14} />, onClick: () => navigate(links.execution(ex.id, 'live')) }
                     ]
                   }} trigger={['click']}>
                     <Button type="text" size="small" icon={<Play size={18} className="text-text-tertiary" />} />
@@ -281,14 +289,14 @@ const ExecutionsListPage: React.FC = () => {
     <div className="px-6 py-8 bg-bg-page min-h-full max-w-[1440px] mx-auto w-full animate-in fade-in duration-500">
       <FAPageHeader title={t('executions.title')} subtitle={t('executions.subtitle')} />
       <FATable 
-        dataSource={MOCK_EXECUTIONS} 
+        dataSource={filteredExecutions} 
         columns={columns} 
         rowKey="id" 
         density="comfort"
         tableLayout="fixed"
         scroll={{ x: isTablet ? 900 : 1080 }}
         onRow={(record) => ({
-          onClick: () => navigate(`/execution/${record.id}`),
+          onClick: () => navigate(links.execution(record.id)),
           className: 'cursor-pointer group'
         })}
       />

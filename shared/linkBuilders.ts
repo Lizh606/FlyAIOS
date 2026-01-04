@@ -5,9 +5,13 @@
  */
 
 export const links = {
-  // 1. 现场执行 (Operations)
+  // 1. 现场执行 (Operations) - 修正：指向分析监控工作台
   execution: (id: string, tab: 'overview' | 'live' | 'automation' = 'overview') => 
-    `/execution/${id}?tab=${tab}`,
+    `/execution/${id}/analysis?tab=${tab}`,
+  
+  // 专门用于历史回放的路径
+  playback: (id: string) => `/execution/${id}`,
+
   executions: (filters?: { projectId?: string; deviceId?: string; status?: string }) => {
     const params = new URLSearchParams(filters as any).toString();
     return `/executions${params ? `?${params}` : ''}`;
