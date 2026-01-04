@@ -50,16 +50,16 @@ const ProjectGallery: React.FC = () => {
         </div>
         
         <div className="flex items-center gap-3">
-          <div className="flex bg-bg-card border border-border rounded-control p-1 shadow-sm h-10">
+          <div className="flex bg-bg-card border border-border rounded-control p-1 shadow-sm h-10 h-10-box">
             <button 
               onClick={() => setViewMode('grid')} 
-              className={`w-8 h-8 flex items-center justify-center rounded-control transition-all ${viewMode === 'grid' ? 'bg-brand-bg text-brand shadow-sm' : 'text-text-tertiary hover:text-text-primary'}`}
+              className={`w-8 h-8 flex items-center justify-center rounded-control transition-all border-none bg-transparent cursor-pointer ${viewMode === 'grid' ? 'bg-brand-bg text-brand shadow-sm' : 'text-text-tertiary hover:text-text-primary'}`}
             >
               <LayoutGrid size={14} />
             </button>
             <button 
               onClick={() => setViewMode('list')} 
-              className={`w-8 h-8 flex items-center justify-center rounded-control transition-all ${viewMode === 'list' ? 'bg-brand-bg text-brand shadow-sm' : 'text-text-tertiary hover:text-text-primary'}`}
+              className={`w-8 h-8 flex items-center justify-center rounded-control transition-all border-none bg-transparent cursor-pointer ${viewMode === 'list' ? 'bg-brand-bg text-brand shadow-sm' : 'text-text-tertiary hover:text-text-primary'}`}
             >
               <ListIcon size={14} />
             </button>
@@ -132,29 +132,26 @@ const ProjectGallery: React.FC = () => {
                   {p.name}
                 </h3>
 
-                {/* 新增标签行：填充标题下方空白 */}
                 <div className="flex flex-wrap gap-1.5 mb-auto">
                   {p.tags?.map((tag: string) => (
                     <FATag key={tag} className="bg-bg-page/50 border-border/60">{tag}</FATag>
                   ))}
                 </div>
                 
-                {/* 底部功能区 */}
-                <div className="mt-4 pt-4 border-t border-divider flex items-center justify-between gap-1">
-                   {/* 左侧：统一字体的元数据 */}
+                {/* 底部重构：填充左侧空白，统一字体 */}
+                <div className="mt-4 pt-4 border-t border-divider flex items-center justify-between">
                    <div className="flex items-center gap-3 min-w-0">
                       <div className="flex items-center gap-1.5 text-text-tertiary min-w-0">
-                         <Clock size={12} className="shrink-0" />
-                         <span className="text-fa-t6 font-fa-regular tabular-nums truncate">{p.date}</span>
+                         <Clock size={12} className="shrink-0 opacity-60" />
+                         <span className="text-fa-t6 font-fa-regular tabular-nums truncate tracking-tight">{p.date}</span>
                       </div>
-                      <div className="w-1 h-1 bg-border rounded-full shrink-0 opacity-40"></div>
+                      <div className="w-px h-2.5 bg-divider shrink-0"></div>
                       <div className="flex items-center gap-1.2 text-text-tertiary shrink-0">
-                         <Eye size={12} className="mr-1" />
-                         <span className="text-fa-t6 font-fa-regular tabular-nums">{p.missions}</span>
+                         <Eye size={12} className="mr-1 opacity-60" />
+                         <span className="text-fa-t6 font-fa-regular tabular-nums tracking-tight">{p.missions}</span>
                       </div>
                    </div>
 
-                   {/* 右侧：操作按钮 */}
                    <div className="flex items-center gap-0.5 shrink-0">
                       <Tooltip title={t('projects.viewPlayback')}>
                         <button 
@@ -164,9 +161,11 @@ const ProjectGallery: React.FC = () => {
                           <PlayCircle size={18} />
                         </button>
                       </Tooltip>
-                      <button className="w-8 h-8 flex items-center justify-center text-text-tertiary hover:text-text-primary hover:bg-action-hover rounded-control transition-colors border-none bg-transparent cursor-pointer">
-                        <MoreVertical size={18} />
-                      </button>
+                      <Tooltip title={t('common.more')}>
+                        <button className="w-8 h-8 flex items-center justify-center text-text-tertiary hover:text-text-primary hover:bg-action-hover rounded-control transition-colors border-none bg-transparent cursor-pointer">
+                          <MoreVertical size={18} />
+                        </button>
+                      </Tooltip>
                    </div>
                 </div>
               </div>
@@ -193,22 +192,25 @@ const ProjectGallery: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-3 mt-1">
                   <span className="text-fa-t6 text-text-tertiary flex items-center gap-1.5 font-fa-regular tabular-nums"><Clock size={11} className="shrink-0" /> {p.date}</span>
-                  <div className="w-1 h-1 bg-border rounded-full opacity-40"></div>
+                  <div className="w-px h-2.5 bg-divider opacity-40"></div>
                   <span className="text-fa-t6 font-fa-regular text-text-tertiary tabular-nums uppercase tracking-tight flex items-center gap-1.5"><Eye size={11} className="shrink-0" /> {p.missions} Missions</span>
                 </div>
               </div>
               <div className="shrink-0 w-28 flex justify-center">
                 <FAStatus status={p.status as any} label={t(`status.${p.status}`)} />
               </div>
-              <div className="flex items-center gap-1 shrink-0 border-l border-divider pl-3 ml-1">
+              {/* 列表模式下的分割线弱化 */}
+              <div className="flex items-center gap-1 shrink-0 border-l border-divider/40 pl-3 ml-1">
                 <Tooltip title={t('projects.viewPlayback')}>
                   <button onClick={(e) => handlePlaybackClick(e, p.id)} className="w-8 h-8 flex items-center justify-center text-brand hover:bg-brand-bg rounded-control transition-colors border-none bg-transparent cursor-pointer">
                     <PlayCircle size={18} />
                   </button>
                 </Tooltip>
-                <button className="w-8 h-8 flex items-center justify-center text-text-tertiary hover:text-text-primary hover:bg-action-hover rounded-control transition-colors border-none bg-transparent cursor-pointer">
-                  <MoreVertical size={18} />
-                </button>
+                <Tooltip title={t('common.more')}>
+                  <button className="w-8 h-8 flex items-center justify-center text-text-tertiary hover:text-text-primary hover:bg-action-hover rounded-control transition-colors border-none bg-transparent cursor-pointer">
+                    <MoreVertical size={18} />
+                  </button>
+                </Tooltip>
               </div>
             </div>
           ))}
@@ -221,6 +223,7 @@ const ProjectGallery: React.FC = () => {
         .fa-tabs-v2 .ant-tabs-tab { padding: 12px 0 !important; margin: 0 24px 0 0 !important; }
         .fa-tabs-v2 .ant-tabs-tab-btn { font-size: var(--fa-fs-t5) !important; font-weight: var(--fa-fw-semibold) !important; text-transform: uppercase; letter-spacing: 0.05em; }
         .fa-tabs-v2 .ant-tabs-ink-bar { height: 2px !important; bottom: 0 !important; }
+        .h-10-box { box-sizing: border-box; }
       `}</style>
     </div>
   );

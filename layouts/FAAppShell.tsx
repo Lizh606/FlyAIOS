@@ -1,7 +1,12 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
-import { Bell, User, Menu as MenuIcon, Languages, CheckCircle2 } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
-import { Drawer, Button, ConfigProvider, Modal } from 'antd';
+import { 
+  Bell, User, Menu as MenuIcon, Languages, CheckCircle2, 
+  Settings, HelpCircle, LogOut 
+} from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Drawer, Button, ConfigProvider, Modal, Dropdown, Tooltip, Divider } from 'antd';
+import type { MenuProps } from 'antd';
 import { useI18n } from '../i18n';
 import FACollapseHandle from '../ui/FACollapseHandle';
 import FASidebar from './FASidebar';
@@ -9,6 +14,7 @@ import { getAntdTheme } from '../design-system/antdTheme';
 
 const FAAppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { t, lang, setLang } = useI18n();
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -54,6 +60,26 @@ const FAAppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     if (isImmersivePage) setIsCollapsed(true);
   }, [isImmersivePage]);
 
+  const userMenuItems: MenuProps['items'] = [
+    {
+      key: 'profile',
+      label: (
+        <div className="py-1 px-1">
+          <p className="text-fa-t5 font-fa-semibold text-text-primary m-0">Administrator</p>
+          <p className="text-fa-t7 text-text-tertiary m-0 uppercase tracking-tighter tabular-nums">admin@flyaios.com</p>
+        </div>
+      ),
+    },
+    { type: 'divider' },
+    {
+      key: 'logout',
+      label: t('nav.logout'),
+      icon: <LogOut size={14} />,
+      danger: true,
+      onClick: () => navigate('/logout'),
+    },
+  ];
+
   return (
     <ConfigProvider theme={getAntdTheme(themeMode)}>
       <div className="h-screen flex flex-col overflow-hidden bg-bg-page text-text-primary selection:bg-brand/30">
@@ -72,14 +98,42 @@ const FAAppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </Link>
           </div>
 
-          <div className="flex items-center gap-4">
-            <button className="p-2 text-text-inverse/60 hover:text-text-inverse rounded-full transition-all relative">
-              <Bell size={18} />
-              <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-error rounded-full border border-bg-topbar" />
-            </button>
-            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-text-inverse/60 cursor-pointer hover:bg-brand hover:text-text-inverse transition-all">
-              <User size={16} />
+          <div className="flex items-center gap-1.5 md:gap-3">
+            <div className="flex items-center gap-1">
+              <Tooltip title={t('nav.help')}>
+                <button className="w-9 h-9 flex items-center justify-center text-text-inverse/60 hover:text-text-inverse hover:bg-white/5 rounded-lg transition-all border-none bg-transparent cursor-pointer">
+                  <HelpCircle size={18} />
+                </button>
+              </Tooltip>
+              
+              <Tooltip title={t('nav.settings')}>
+                <button 
+                  onClick={() => setSettingsOpen(true)}
+                  className="w-9 h-9 flex items-center justify-center text-text-inverse/60 hover:text-text-inverse hover:bg-white/5 rounded-lg transition-all border-none bg-transparent cursor-pointer"
+                >
+                  <Settings size={18} />
+                </button>
+              </Tooltip>
+
+              <Tooltip title={t('common.notifications')}>
+                <button className="w-9 h-9 flex items-center justify-center text-text-inverse/60 hover:text-text-inverse hover:bg-white/5 rounded-lg transition-all relative border-none bg-transparent cursor-pointer">
+                  <Bell size={18} />
+                  <div className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-error rounded-full border border-bg-topbar" />
+                </button>
+              </Tooltip>
             </div>
+
+            {/* 弱化分割线颜色 bg-white/5 */}
+            <Divider type="vertical" className="bg-white/5 h-6 mx-1 md:mx-2" />
+
+            <Dropdown menu={{ items: userMenuItems }} placement="bottomRight" trigger={['click']}>
+              <div className="h-9 px-1.5 rounded-lg hover:bg-white/5 flex items-center gap-2.5 cursor-pointer transition-all border border-transparent hover:border-white/5 group">
+                <div className="w-7 h-7 rounded-full bg-brand flex items-center justify-center text-text-inverse font-fa-semibold text-[11px] shadow-inner group-hover:scale-105 transition-transform">
+                  AD
+                </div>
+                <span className="text-fa-t6 font-fa-semibold text-text-inverse/80 hidden lg:inline tracking-tight pt-0.5">Admin</span>
+              </div>
+            </Dropdown>
           </div>
         </header>
 
@@ -109,7 +163,6 @@ const FAAppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </main>
         </div>
 
-        {/* --- 直接使用 antd Modal 并在内容区应用 FA Token --- */}
         <Modal
           title={t('settings.modalTitle')}
           open={settingsOpen}
@@ -125,13 +178,11 @@ const FAAppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         >
           <div className="py-2">
             <section className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-              {/* 分节标题: T6 Bold + Uppercase + Tertiary Text */}
               <div className="flex items-center gap-2.5 text-text-tertiary mb-6">
                 <Languages size={16} strokeWidth={2.5} className="text-text-disabled" />
                 <span className="text-fa-t6 font-fa-semibold uppercase tracking-[0.15em]">{t('settings.regionSection')}</span>
               </div>
               
-              {/* 语言选项网格: 2列 */}
               <div className="grid grid-cols-2 gap-5">
                 {['zh', 'en'].map((l) => {
                   const isSelected = lang === l;
@@ -148,17 +199,14 @@ const FAAppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                       `}
                     >
                       <div className="flex flex-col min-w-0 pr-4">
-                        {/* 选项标题: T5 Body Strong */}
                         <span className={`text-fa-t5 font-fa-semibold mb-1 leading-tight ${isSelected ? 'text-brand' : 'text-text-primary'}`}>
                           {l === 'zh' ? '简体中文' : 'English'}
                         </span>
-                        {/* 选项描述: T6 Caption + Tertiary Text */}
                         <span className="text-fa-t6 text-text-tertiary truncate opacity-80">
                           {t(`settings.lang${l === 'zh' ? 'Zh' : 'En'}Desc`)}
                         </span>
                       </div>
                       
-                      {/* 选中指示器 */}
                       <div className={`
                         w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300
                         ${isSelected ? 'bg-brand text-text-inverse scale-110 shadow-lg' : 'bg-bg-page border border-border text-transparent group-hover:border-brand/30'}
@@ -166,7 +214,6 @@ const FAAppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         <CheckCircle2 size={16} strokeWidth={3} />
                       </div>
 
-                      {/* 底部悬浮指示条 */}
                       {!isSelected && (
                         <div className="absolute inset-x-0 bottom-0 h-0.5 bg-brand scale-x-0 group-hover:scale-x-100 transition-transform origin-center rounded-b-xl" />
                       )}

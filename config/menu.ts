@@ -3,21 +3,13 @@ import {
   Layout, 
   Activity, 
   FileText, 
-  GitBranch, 
-  Calendar, 
   ShoppingBag,
   Cpu,
   Boxes,
-  Settings,
-  HelpCircle,
-  LogOut,
-  Webhook,
   Zap,
   ShieldCheck,
   Store,
-  Database,
-  Search,
-  Bell
+  Webhook
 } from 'lucide-react';
 
 export const NAV_GROUPS = (t: any) => [
@@ -30,11 +22,11 @@ export const NAV_GROUPS = (t: any) => [
     ]
   },
   {
-    title: t('nav.group.build'), // 编排与构建 (原 Automation)
+    title: t('nav.group.build'), // 编排与构建
     icon: Zap,
     items: [
       { icon: Zap, label: t('nav.workflows'), path: '/workflows' },
-      { icon: Calendar, label: t('nav.deployments'), path: '/deployments' },
+      { icon: FileText, label: t('nav.deployments'), path: '/deployments' },
     ]
   },
   {
@@ -60,10 +52,4 @@ export const NAV_GROUPS = (t: any) => [
       { icon: Webhook, label: t('nav.integrations'), path: '/integrations' },
     ]
   }
-];
-
-export const BOTTOM_ITEMS = (t: any, onSettings: () => void) => [
-  { icon: Settings, label: t('nav.settings'), action: onSettings },
-  { icon: HelpCircle, label: t('nav.help'), path: '/help' },
-  { icon: LogOut, label: t('nav.logout'), path: '/logout' },
 ];

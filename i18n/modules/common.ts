@@ -21,6 +21,7 @@ export const common: TranslationModule = {
   'common.retry': { zh: '重试', en: 'Retry' },
   'common.degraded': { zh: '降级模式', en: 'Degraded' },
   'common.observe': { zh: '运行观测', en: 'Observe' },
+  'common.notifications': { zh: '通知中心', en: 'Notifications' },
   'common.pagination.total': { zh: '共 {total} 条记录', en: 'Total {total} items' },
   'common.pagination.size': { zh: '{size} 条/页', en: '{size} / page' },
 };
