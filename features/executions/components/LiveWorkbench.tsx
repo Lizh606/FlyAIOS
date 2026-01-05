@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useOptimistic, useTransition } from 'react';
 import { 
   Radio, ShieldCheck, Activity, Maximize2, 
   Settings2, Square, RefreshCcw,
@@ -21,8 +21,25 @@ const LiveWorkbench: React.FC<LiveWorkbenchProps> = ({ execution }) => {
   const facts = MOCK_STREAM_FACTS[execution.id];
 
   const [overlayOn, setOverlayOn] = useState(true);
+  const [isPending, startTransition] = useTransition();
+
+  // React 19 Optimistic UI: Immediately update the switch visual state
+  const [optimisticOverlay, setOptimisticOverlay] = useOptimistic(
+    overlayOn,
+    (state, newValue: boolean) => newValue
+  );
+
   const [confidence, setConfidence] = useState(0.80);
   const [selectedClasses, setSelectedClasses] = useState<string[]>([]);
+
+  const handleOverlayToggle = (checked: boolean) => {
+    startTransition(async () => {
+      setOptimisticOverlay(checked); // Optimistic update
+      // Simulate remote network delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setOverlayOn(checked); // Real state update
+    });
+  };
 
   const renderLiveAlert = () => {
     if (execution.liveState === LiveState.STARTING) {
@@ -69,7 +86,7 @@ const LiveWorkbench: React.FC<LiveWorkbenchProps> = ({ execution }) => {
         <div className="flex h-full relative overflow-hidden items-center justify-center">
            <Activity size={80} strokeWidth={0.5} className="text-white/5 animate-pulse" />
            
-           {overlayOn && (
+           {optimisticOverlay && (
              <div className="absolute inset-0 z-10 pointer-events-none">
                 <div className="absolute top-1/3 left-1/3 border-2 border-brand w-24 h-24">
                   <span className="bg-brand text-text-inverse text-fa-t7 font-fa-semibold px-1.5 py-0.5 rounded-r absolute -top-5 left-[-2px]">INSULATOR 0.94</span>
@@ -121,6 +138,7 @@ const LiveWorkbench: React.FC<LiveWorkbenchProps> = ({ execution }) => {
          </div>
          
          <div className="flex items-center gap-3">
+            {/* Fix: Changed RefreshCw to RefreshCcw to match imported icon */}
             <Button size="small" icon={<RefreshCcw size={14}/>} className="text-fa-t6 font-fa-semibold uppercase h-8 px-3 rounded-lg">{t('executions.live.retry')}</Button>
             <Button size="small" icon={<LayoutTemplate size={14}/>} className="text-fa-t6 font-fa-semibold uppercase h-8 px-3 rounded-lg">{t('executions.live.switchTarget')}</Button>
             <Button 
@@ -148,12 +166,12 @@ const LiveWorkbench: React.FC<LiveWorkbenchProps> = ({ execution }) => {
           <FACard title="识别叠加配置" density="comfort" className="bg-bg-card border-border shadow-card shrink-0">
              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center py-1">
                 <div className="md:col-span-3">
-                   <div className="flex items-center justify-between px-4 py-2 bg-bg-page border border-border rounded-xl">
+                   <div className={`flex items-center justify-between px-4 py-2 bg-bg-page border border-border rounded-xl ${isPending ? 'opacity-50' : ''}`}>
                       <div className="flex items-center gap-2">
-                        <Layers size={14} className={overlayOn ? 'text-brand' : 'text-text-tertiary'} />
+                        <Layers size={14} className={optimisticOverlay ? 'text-brand' : 'text-text-tertiary'} />
                         <span className="text-fa-t6 font-fa-semibold text-text-secondary">实时叠加</span>
                       </div>
-                      <Switch size="small" checked={overlayOn} onChange={setOverlayOn} />
+                      <Switch size="small" checked={optimisticOverlay} onChange={handleOverlayToggle} loading={isPending} />
                    </div>
                 </div>
                 
@@ -162,7 +180,7 @@ const LiveWorkbench: React.FC<LiveWorkbenchProps> = ({ execution }) => {
                       <span className="text-fa-t7 font-fa-semibold text-text-tertiary uppercase tracking-widest">{t('executions.live.threshold')}</span>
                       <span className="text-fa-t7 font-fa-semibold text-brand">{confidence.toFixed(2)}</span>
                    </div>
-                   <Slider min={0} max={1} step={0.01} value={confidence} onChange={setConfidence} disabled={!overlayOn} className="m-0" />
+                   <Slider min={0} max={1} step={0.01} value={confidence} onChange={setConfidence} disabled={!optimisticOverlay} className="m-0" />
                 </div>
                 
                 <div className="md:col-span-5 flex flex-col">
@@ -171,7 +189,7 @@ const LiveWorkbench: React.FC<LiveWorkbenchProps> = ({ execution }) => {
                      mode="multiple"
                      placeholder="选择识别类别..."
                      className="w-full h-9"
-                     disabled={!overlayOn}
+                     disabled={!optimisticOverlay}
                      value={selectedClasses}
                      onChange={setSelectedClasses}
                      maxTagCount="responsive"
@@ -193,7 +211,7 @@ const LiveWorkbench: React.FC<LiveWorkbenchProps> = ({ execution }) => {
              <DetectionsStream 
               executionId={execution.id} 
               isActive={execution.liveState === LiveState.LIVE} 
-              overlayOn={overlayOn} 
+              overlayOn={optimisticOverlay} 
               confidence={confidence}
              />
            </div>

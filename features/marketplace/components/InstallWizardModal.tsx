@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useActionState } from 'react';
 import { Steps, Checkbox, Select, Input, message, Button } from 'antd';
 import { Database, SlidersHorizontal, CheckCircle2, ChevronRight, Info, Lock, Globe } from 'lucide-react';
 import { AppPack } from '../../../shared/mocks/apps';
@@ -16,7 +15,30 @@ const InstallWizardModal: React.FC<InstallWizardModalProps> = ({ app, open, onCl
   const { t } = useI18n();
   const [current, setCurrent] = useState(0);
   const [agreed, setAgreed] = useState(false);
-  const [installing, setInstalling] = useState(false);
+
+  // React 19 Actions: useActionState replaces manual isPending logic
+  const [state, installAction, isPending] = useActionState(async (prevState: any) => {
+    // Simulate API Call
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    return { success: true };
+  }, null);
+
+  const handleNext = () => {
+    if (current === 2) {
+      // Trigger the action
+      installAction();
+    } else {
+      setCurrent(current + 1);
+    }
+  };
+
+  // Observe action success
+  React.useEffect(() => {
+    if (state?.success) {
+      message.success(t('marketplace.wizard.success', { name: app.name }));
+      onClose();
+    }
+  }, [state, app.name, onClose, t]);
 
   const steps = [
     { title: t('marketplace.wizard.step.scopes'), icon: <Lock size={16} /> },
@@ -24,27 +46,13 @@ const InstallWizardModal: React.FC<InstallWizardModalProps> = ({ app, open, onCl
     { title: t('marketplace.wizard.step.config'), icon: <SlidersHorizontal size={16} /> },
   ];
 
-  const handleNext = () => {
-    if (current === 2) handleInstall();
-    else setCurrent(current + 1);
-  };
-
-  const handleInstall = () => {
-    setInstalling(true);
-    setTimeout(() => {
-      setInstalling(false);
-      message.success(t('marketplace.wizard.success', { name: app.name }));
-      onClose();
-    }, 2000);
-  };
-
   return (
     <FAModal
       open={open}
       onCancel={onClose}
       size="M"
       footer={null}
-      closable={!installing}
+      closable={!isPending}
       maskClosable={false}
       styles={{ body: { padding: 0 } }}
     >
@@ -155,7 +163,7 @@ const InstallWizardModal: React.FC<InstallWizardModalProps> = ({ app, open, onCl
         {/* Wizard Footer */}
         <div className="p-6 bg-bg-page border-t border-border flex justify-between items-center shrink-0">
           <Button 
-            disabled={current === 0 || installing} 
+            disabled={current === 0 || isPending} 
             onClick={() => setCurrent(current - 1)}
             className="h-10 px-6 font-fa-semibold text-text-tertiary border-none"
           >
@@ -163,16 +171,16 @@ const InstallWizardModal: React.FC<InstallWizardModalProps> = ({ app, open, onCl
           </Button>
           
           <div className="flex gap-3">
-            <Button onClick={onClose} disabled={installing} className="h-10 px-6 font-fa-semibold text-text-secondary">{t('common.cancel')}</Button>
+            <Button onClick={onClose} disabled={isPending} className="h-10 px-6 font-fa-semibold text-text-secondary">{t('common.cancel')}</Button>
             <Button 
               type="primary" 
               disabled={current === 0 && !agreed}
-              loading={installing}
+              loading={isPending}
               onClick={handleNext}
               className="h-10 px-8 font-fa-semibold uppercase tracking-widest shadow-lg flex items-center gap-2"
             >
-              {installing ? t('marketplace.wizard.installing') : (current === 2 ? t('marketplace.wizard.installNow') : t('common.next'))}
-              {!installing && current < 2 && <ChevronRight size={16} />}
+              {isPending ? t('marketplace.wizard.installing') : (current === 2 ? t('marketplace.wizard.installNow') : t('common.next'))}
+              {!isPending && current < 2 && <ChevronRight size={16} />}
             </Button>
           </div>
         </div>
