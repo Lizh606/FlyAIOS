@@ -5,11 +5,15 @@ import { useI18n } from '../i18n';
 
 export type FATableProps<T> = TableProps<T> & {
   density?: 'comfort' | 'compact';
+  ref?: React.Ref<HTMLDivElement>;
 };
 
-function InternalFATable<T extends object>(
-  { density = 'comfort', className = "", pagination, ...props }: FATableProps<T>,
-  ref: React.ForwardedRef<HTMLDivElement>
+/**
+ * FATable - FlyAIOS Standard Table Component
+ * Refactored for React 19: ref is now a standard prop.
+ */
+function FATable<T extends object>(
+  { density = 'comfort', className = "", pagination, ref, ...props }: FATableProps<T>
 ) {
   const { t } = useI18n();
   const paddingY = density === 'compact' ? '8px' : '11px';
@@ -61,7 +65,7 @@ function InternalFATable<T extends object>(
             background-color: rgba(var(--fa-bg-card), 1) !important;
           }
 
-          /* 2. 表头样式隔离：使用 :not 排除测量行，防止被拉伸 */
+          /* 2. 表头样式隔离：使用 :not 排除测量行 */
           .fa-standard-table .ant-table-thead > tr:not(.ant-table-measure-row) > th {
             padding: ${paddingY} 16px !important;
             font-size: var(--fa-fs-t5) !important;
@@ -73,7 +77,7 @@ function InternalFATable<T extends object>(
             vertical-align: middle !important;
           }
 
-          /* 3. 内容行样式隔离：确保常规 td 的 padding 不会泄漏给测量行 */
+          /* 3. 内容行样式隔离 */
           .fa-standard-table .ant-table-tbody > tr:not(.ant-table-measure-row) > td {
             padding: ${paddingY} 16px !important;
             font-size: var(--fa-fs-t5) !important;
@@ -84,7 +88,7 @@ function InternalFATable<T extends object>(
             vertical-align: middle !important;
           }
 
-          /* 4. 终极重置 (CRITICAL RESET): 彻底物理销毁 ant-table-measure-row */
+          /* 4. 终极重置 (CRITICAL RESET) */
           .fa-standard-table .ant-table-measure-row,
           .fa-standard-table .ant-table-measure-row td {
             padding: 0 !important;
@@ -97,18 +101,10 @@ function InternalFATable<T extends object>(
             pointer-events: none !important;
           }
 
-          /* 5. 移除固定列可能产生的多余线条 */
-          .fa-standard-table .ant-table-cell-fix-left-last::after,
-          .fa-standard-table .ant-table-cell-fix-right-first::after {
-            display: none !important;
-          }
-
-          /* 6. 交互：对接 FlyAIOS 品牌选中色 */
           .fa-standard-table .ant-table-row-selected > td {
             background-color: rgba(var(--fa-brand-bg), var(--fa-brand-bg-alpha)) !important;
           }
           
-          /* 7. 分页位置对齐 (符合 v0.8 规范) */
           .fa-standard-table .ant-table-pagination.ant-pagination {
             margin: 16px 24px !important; 
             padding: 0 !important;
@@ -125,9 +121,5 @@ function InternalFATable<T extends object>(
     </ConfigProvider>
   );
 }
-
-export const FATable = React.forwardRef(InternalFATable) as <T extends object>(
-  props: FATableProps<T> & { ref?: React.ForwardedRef<HTMLDivElement> }
-) => React.ReactElement;
 
 export default FATable;
