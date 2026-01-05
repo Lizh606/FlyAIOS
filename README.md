@@ -70,18 +70,27 @@ docker compose --profile dist up
 
 ## 项目结构概览
 
-- `index.tsx`：应用入口，挂载 `app/App.tsx`。
-- `app/`：主路由与应用 Shell（顶部栏、侧边栏、设置弹窗）。
-- `pages/`：业务页面（Projects / Executions / Workflows / Deployments / Runs / Devices / Docks / Marketplace / Integrations）。
-- `features/`：页面级功能模块与复杂组件（工作流、部署、运行、市场、集成）。
-- `ui/`：通用 UI 组件（卡片、表格、状态标签、抽屉、弹窗等）。
-- `shared/`：共享类型、mock 数据、链接构造、主题 token。
-- `services/`：数据服务层（当前为 mock/本地数据）。
-- `design-system/`：设计系统 CSS 变量与 Ant Design 主题映射。
-- `i18n/`：多语言资源与 `I18nProvider`。
-- `config/`：导航配置与路由组织。
-- `theme/`：设计 token 备份/参考。
-- `src/`：保留的原型代码（含 Vue 版本 Marketplace 示例），未接入当前入口。
+```
+.
+├── index.html
+├── index.tsx                # 历史/兼容入口
+├── src
+│   ├── main.tsx             # Vite 应用入口
+│   ├── app                  # 主路由与应用 Shell
+│   ├── layouts              # 布局与骨架
+│   ├── pages                # 业务页面
+│   ├── features             # 页面级功能模块
+│   ├── ui                   # 通用 UI 组件
+│   ├── shared               # 共享类型、mock、主题 token
+│   ├── services             # 数据服务层（当前为 mock/本地）
+│   ├── design-system        # 设计系统与 Ant Design 主题映射
+│   ├── i18n                 # 多语言资源与 Provider
+│   ├── config               # 导航配置与路由组织
+│   └── styles               # 全局样式与 Tailwind 注入
+├── vite.config.ts
+├── tsconfig.json
+└── Dockerfile
+```
 
 ## 路由速览
 
@@ -119,6 +128,6 @@ docker compose --profile dist up
 
 ## 开发提示
 
-- UI 入口为 `index.tsx` + `app/App.tsx`。
+- UI 入口为 `src/main.tsx` + `src/app/App.tsx`。
 - 主题切换通过 `data-theme="dark"` 控制，`FAAppShell` 会监听并同步 Ant Design 主题。
 - 项目仍保留部分早期原型（`src/` 目录），如需精简可另行清理。
