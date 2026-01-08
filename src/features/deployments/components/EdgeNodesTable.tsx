@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { 
   HardDrive, CheckCircle2, AlertCircle, Zap, Search, Filter, 
@@ -175,9 +174,9 @@ const EdgeNodesTable: React.FC = () => {
                   itemColor: 'var(--fa-text-tertiary)',
                   itemHoverColor: 'var(--fa-text-primary)',
                   itemHoverBg: 'rgba(0, 0, 0, 0.02)',
-                  controlHeight: 28, // Reduced from 36px to 28px for a compact look
-                  borderRadius: 6,   // Slightly tighter radius for small size
-                  paddingXXS: 2,     // Tighter internal padding
+                  controlHeight: 28, 
+                  borderRadius: 6,   
+                  paddingXXS: 2,     
                 }
               }
             }}
@@ -225,27 +224,6 @@ const EdgeNodesTable: React.FC = () => {
           onRow={() => ({ className: 'cursor-pointer group' })}
         />
       ) : renderGridView()}
-
-      <style>{`
-        /* Standard height for list items */
-        .ant-table-tbody > tr > td {
-          height: 44px;
-        }
-
-        /* Standardized Segmented thumb transition */
-        .ant-segmented-thumb {
-          transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
-        }
-        
-        /* Adjust segment height consistency */
-        .ant-segmented-item-label {
-          min-height: 24px !important;
-          line-height: 24px !important;
-          display: flex !important;
-          align-items: center;
-          justify-content: center;
-        }
-      `}</style>
     </div>
   );
 };

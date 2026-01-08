@@ -278,13 +278,6 @@ const ConnectionDetailDrawer: React.FC<ConnectionDetailDrawerProps> = ({ connect
           ]}
         />
       </div>
-      
-      <style>{`
-        .fa-tabs-v2 .ant-tabs-nav { margin-bottom: 0 !important; }
-        .fa-tabs-v2 .ant-tabs-nav::before { border-bottom: 1px solid rgba(var(--fa-divider), var(--fa-divider-alpha)) !important; }
-        .fa-tabs-v2 .ant-tabs-tab { padding: 12px 0 !important; margin-right: 24px !important; }
-        .fa-tabs-v2 .ant-tabs-tab-btn { font-size: 13px !important; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600 !important; }
-      `}</style>
     </FADrawer>
   );
 };

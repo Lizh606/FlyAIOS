@@ -14,7 +14,7 @@
   --fa-error: 239, 68, 68;
 
   /* --- Surface --- */
-  --fa-bg-page: 255, 255, 255;    /* 修正为纯白色 */
+  --fa-bg-page: 255, 255, 255;    /* 修正为规范要求的纯白画布 */
   --fa-bg-card: 255, 255, 255;    /* 纯白色 */
   --fa-bg-raised: 255, 255, 255;
   --fa-bg-overlay: 255, 255, 255;
@@ -106,3 +106,7 @@ body {
 
 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(var(--fa-hover), 0.1); border-radius: 10px; }
+
+.ant-menu-inline-collapsed {
+  width: 72px !important;
+}

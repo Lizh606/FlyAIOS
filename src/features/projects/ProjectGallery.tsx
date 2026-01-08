@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Plus, LayoutGrid, List as ListIcon, Filter, Clock, MoreVertical, PlayCircle, Search, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -50,7 +49,7 @@ const ProjectGallery: React.FC = () => {
         </div>
         
         <div className="flex items-center gap-3">
-          <div className="flex bg-bg-card border border-border rounded-control p-1 shadow-sm h-10 h-10-box">
+          <div className="flex bg-bg-card border border-border rounded-control p-1 shadow-sm h-10">
             <button 
               onClick={() => setViewMode('grid')} 
               className={`w-8 h-8 flex items-center justify-center rounded-control transition-all border-none bg-transparent cursor-pointer ${viewMode === 'grid' ? 'bg-brand-bg text-brand shadow-sm' : 'text-text-tertiary hover:text-text-primary'}`}
@@ -138,7 +137,6 @@ const ProjectGallery: React.FC = () => {
                   ))}
                 </div>
                 
-                {/* 底部重构：填充左侧空白，统一字体 */}
                 <div className="mt-4 pt-4 border-t border-divider flex items-center justify-between">
                    <div className="flex items-center gap-3 min-w-0">
                       <div className="flex items-center gap-1.5 text-text-tertiary min-w-0">
@@ -199,7 +197,6 @@ const ProjectGallery: React.FC = () => {
               <div className="shrink-0 w-28 flex justify-center">
                 <FAStatus status={p.status as any} label={t(`status.${p.status}`)} />
               </div>
-              {/* 列表模式下的分割线弱化 */}
               <div className="flex items-center gap-1 shrink-0 border-l border-divider/40 pl-3 ml-1">
                 <Tooltip title={t('projects.viewPlayback')}>
                   <button onClick={(e) => handlePlaybackClick(e, p.id)} className="w-8 h-8 flex items-center justify-center text-brand hover:bg-brand-bg rounded-control transition-colors border-none bg-transparent cursor-pointer">
@@ -216,15 +213,6 @@ const ProjectGallery: React.FC = () => {
           ))}
         </div>
       )}
-
-      <style>{`
-        .fa-tabs-v2 .ant-tabs-nav { margin-bottom: 0 !important; }
-        .fa-tabs-v2 .ant-tabs-nav::before { border-bottom: none !important; }
-        .fa-tabs-v2 .ant-tabs-tab { padding: 12px 0 !important; margin: 0 24px 0 0 !important; }
-        .fa-tabs-v2 .ant-tabs-tab-btn { font-size: var(--fa-fs-t5) !important; font-weight: var(--fa-fw-semibold) !important; text-transform: uppercase; letter-spacing: 0.05em; }
-        .fa-tabs-v2 .ant-tabs-ink-bar { height: 2px !important; bottom: 0 !important; }
-        .h-10-box { box-sizing: border-box; }
-      `}</style>
     </div>
   );
 };

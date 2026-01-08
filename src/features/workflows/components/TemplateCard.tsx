@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Zap, LayoutGrid, ArrowRight, Box } from 'lucide-react';
 import { Tooltip, Popover } from 'antd';
@@ -138,16 +137,6 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, onClick }) => {
           </button>
         </div>
       </div>
-
-      <style>{`
-        .fa-popover-v2 .ant-popover-inner {
-          padding: 12px;
-          border-radius: 12px;
-          background: rgba(var(--fa-bg-card), 1);
-          box-shadow: var(--fa-shadow-overlay);
-          border: 1px solid rgba(var(--fa-border), var(--fa-border-alpha));
-        }
-      `}</style>
     </FACard>
   );
 };

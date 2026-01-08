@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { Tabs, Button, Divider, Dropdown, Tooltip, Popover } from 'antd';
@@ -254,14 +253,6 @@ const ExecutionDetailPage: React.FC = () => {
           )}
         </div>
       </div>
-
-      <style>{`
-        .fa-popover-v2 .ant-popover-inner { border-radius: 12px; padding: 12px; box-shadow: var(--fa-shadow-overlay); }
-        .fa-tabs-v2 .ant-tabs-nav { margin-bottom: 0 !important; }
-        .fa-tabs-v2 .ant-tabs-nav::before { border-bottom: 1px solid rgba(var(--fa-divider), var(--fa-divider-alpha)) !important; }
-        .fa-tabs-v2 .ant-tabs-tab { padding: 12px 0 !important; margin-right: 32px !important; }
-        .fa-tabs-v2 .ant-tabs-tab-btn { font-weight: 600 !important; text-transform: uppercase; letter-spacing: 0.02em; }
-      `}</style>
     </div>
   );
 };

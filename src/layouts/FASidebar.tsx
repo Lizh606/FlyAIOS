@@ -13,14 +13,18 @@ interface FASidebarProps {
   isMobile?: boolean;
 }
 
-const FASidebar: React.FC<FASidebarProps> = ({ isCollapsed, onSettingsClick, isMobile }) => {
+/**
+ * FASidebar - FlyAIOS 标准侧边栏导航
+ * 严格遵循 v0.8 3.2 章节规范：浅色面板策略，品牌色选中态
+ */
+const FASidebar: React.FC<FASidebarProps> = ({ isCollapsed, isMobile }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useI18n();
 
   const groups = NAV_GROUPS(t);
 
-  // 映射主菜单
+  // 映射导航分组
   const menuItems: MenuProps['items'] = groups.map((group, gIdx) => ({
     key: `sub-${gIdx}`,
     icon: group.icon ? <group.icon size={18} /> : null,
@@ -40,54 +44,13 @@ const FASidebar: React.FC<FASidebarProps> = ({ isCollapsed, onSettingsClick, isM
           mode="inline"
           inlineCollapsed={isMobile ? false : isCollapsed}
           selectedKeys={[location.pathname]}
+          // 默认展开所有分组以提高效率 (原则 1.2)
           defaultOpenKeys={isCollapsed ? [] : ['sub-0', 'sub-1', 'sub-2', 'sub-3', 'sub-4']}
           items={menuItems}
-          className="fa-sidebar-menu"
+          className="fa-sidebar-menu border-none"
           expandIcon={<ChevronDown size={14} className="text-text-tertiary" />}
         />
       </div>
-
-      <style>{`
-        .fa-sidebar-menu.ant-menu {
-          background: transparent !important;
-          border-inline-end: none !important;
-        }
-
-        .fa-sidebar-menu .ant-menu-item, 
-        .fa-sidebar-menu .ant-menu-submenu-title {
-          border-radius: var(--fa-radius-control) !important;
-          margin-block: 4px !important;
-          transition: all 0.2s ease !important;
-        }
-
-        .fa-sidebar-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
-          color: rgba(var(--fa-brand), 1) !important;
-          background-color: transparent !important;
-        }
-        
-        .fa-sidebar-menu .ant-menu-submenu-selected > .ant-menu-submenu-title .ant-menu-item-icon,
-        .fa-sidebar-menu .ant-menu-submenu-selected > .ant-menu-submenu-title .ant-menu-submenu-arrow {
-          color: rgba(var(--fa-brand), 1) !important;
-        }
-
-        .fa-sidebar-menu .ant-menu-item-selected {
-          background-color: rgba(var(--fa-brand-bg), var(--fa-brand-bg-alpha)) !important;
-          color: rgba(var(--fa-brand), 1) !important;
-        }
-
-        .fa-sidebar-menu .ant-menu-item:hover,
-        .fa-sidebar-menu .ant-menu-submenu-title:hover {
-          background-color: rgba(var(--fa-hover), var(--fa-hover-alpha)) !important;
-        }
-
-        .ant-menu-inline-collapsed {
-          width: 72px !important;
-        }
-
-        .ant-menu-item-selected::after {
-          display: none !important;
-        }
-      `}</style>
     </div>
   );
 };
